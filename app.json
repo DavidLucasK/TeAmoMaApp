@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "TeAmoMaApp1",
-    "slug": "TeAmoMaApp1",
+    "name": "TeAmoMaApp",
+    "slug": "TeAmoMaApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,7 +21,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon-49.png"
     }
   }
 }
