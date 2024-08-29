@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'; // Importando LinearGradient
-import HeaderStyles from './HeaderStyles'; // Importando os estilos do cabeçalho
+import HeaderStyles from '../styles/HeaderStyles'; // Importando os estilos do cabeçalho
 import { useNavigation } from '@react-navigation/native'; // Importando useNavigation
 import { HomeScreenNavigationProp } from '../navigation'; // Importando os tipos de navegação
 
@@ -12,20 +12,27 @@ interface HeaderProps {
     onRightIconPress?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ leftIcon, rightIcon, onRightIconPress }) => {
+const Header: React.FC<HeaderProps> = ({ leftIcon, rightIcon }) => {
     const navigation = useNavigation<HomeScreenNavigationProp>(); // Usando o tipo de navegação
 
     const handleLogoPress = () => {
-        navigation.navigate('Home'); // Navegando para a tela "Home"
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }], // Redefine a navegação para a tela Home
+        });
     };
 
     const onLeftIconPress = () => {
         navigation.navigate('Store');
     }
 
+    const onRightIconPress = () => {
+        navigation.navigate('Profile');
+    }
+
     return (
         <LinearGradient
-            colors={['#e41d69', '#ff6767', '#fe8277', '#ff6767', '#e41d69']}
+            colors={['#e41d69', '#fe8277']}
             start={{ x: 0, y: 0 }} // Início do gradiente (canto superior esquerdo)
             end={{ x: 1, y: 0 }}
             style={[HeaderStyles.header]} // Usando o estilo do cabeçalho

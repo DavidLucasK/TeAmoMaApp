@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
-import StoreStyles from './StoreStyles'; // Importando os estilos
-import Header from './Header';
+import StoreStyles from '../styles/StoreStyles'; // Importando os estilos
+import Header from '../components/Header';
 
 interface Reward {
   id: string;

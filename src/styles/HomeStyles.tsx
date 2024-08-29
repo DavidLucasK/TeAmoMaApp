@@ -16,13 +16,20 @@ const HomeStyles = StyleSheet.create({
         alignItems: 'center',
     },
     textos: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        textAlign:'center',
         alignItems: 'center',
         marginBottom: 20,
+        paddingHorizontal: 20,
     },
     homeText: {
+        textAlign: 'center',
         fontSize: 24, // 1.5rem em pixels
         fontWeight: '600',
         color: '#fff', // Cor do texto
+        lineHeight: 50,
     },
     imagesHome: {
         display: 'flex',
