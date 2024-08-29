@@ -27,20 +27,23 @@ const StoreStyles = StyleSheet.create({
     fontSize: 18,
     marginTop: -20,
   },
+  rightSide: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   redeemButton: {
     backgroundColor: '#e41d69',
     color: 'white',
-    borderRadius: 5,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginTop: 10,
+    padding: 7,
+    paddingHorizontal: 12,
+    borderRadius: 15,
   },
   redeemButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 24,
   },
   storeSection: {
     flexDirection: 'column',
@@ -77,16 +80,12 @@ const StoreStyles = StyleSheet.create({
   rewardPoints: {
     marginVertical: 4,
   },
-  profileIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 20,
+  leftSide: {
   },
-  profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 50,
-  },
+  itemImage: {
+    width: 200,
+    height: 100,
+  }
 });
 
 export default StoreStyles;

@@ -4,7 +4,7 @@
     "slug": "TeAmoMaApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "src/assets/heart.png",
+    "icon": "src/screens/assets/heart.png",
     "userInterfaceStyle": "dark",
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,12 +17,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "src/assets/heart.png",
+        "foregroundImage": "src/screens/assets/heart.png",
         "backgroundColor": "transparent"
       }
     },
     "web": {
-      "favicon": "src/assets/heart.png"
+      "favicon": "src/screens/assets/heart.png"
     }
   }
 }

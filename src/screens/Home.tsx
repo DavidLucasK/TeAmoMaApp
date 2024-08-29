@@ -169,8 +169,8 @@ const Home: React.FC<HomeProps> = ({
     return (
         <View style={HomeStyles.container}>
             <Header
-                leftIcon={require('../assets/store.png')}
-                rightIcon={require('../assets/profile-user.png')}
+                leftIcon={require('./assets/store.png')}
+                rightIcon={require('./assets/profile-user.png')}
                 onLeftIconPress={onHeaderLeftIconPress}
                 onRightIconPress={onHeaderRightIconPress}
             />
@@ -189,7 +189,7 @@ const Home: React.FC<HomeProps> = ({
                         </View>
                         <View style={HomeStyles.imagesHome}>
                             <Image
-                                source={require('../assets/avatar.png')}
+                                source={require('./assets/avatar.png')}
                                 style={HomeStyles.avatarImage}
                             />
                         </View>

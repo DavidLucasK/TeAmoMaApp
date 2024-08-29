@@ -83,8 +83,8 @@ const Profile: React.FC<ProfileProps> = ({
     return (
         <View style={ProfileStyles.container}>
             <Header
-                leftIcon={require('../assets/store.png')}
-                rightIcon={require('../assets/profile-user.png')}
+                leftIcon={require('./assets/store.png')}
+                rightIcon={require('./assets/profile-user.png')}
                 onLeftIconPress={onHeaderLeftIconPress}
                 onRightIconPress={onHeaderRightIconPress}
             />
