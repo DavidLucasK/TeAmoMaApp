@@ -4,7 +4,7 @@
     "slug": "TeAmoMaApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "src/screens/assets/heart.png",
+    "icon": "src/screens/assets/HeartIcon1024.png",
     "userInterfaceStyle": "dark",
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,13 +17,13 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "src/screens/assets/heart.png",
+        "foregroundImage": "src/screens/assets/HeartIcon1080.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.davidlucask.TeAmoMaApp"
     },
     "web": {
-      "favicon": "src/screens/assets/heart.png"
+      "favicon": "src/screens/assets/HeartIcon512png"
     },
     "plugins": [
       "expo-font"
