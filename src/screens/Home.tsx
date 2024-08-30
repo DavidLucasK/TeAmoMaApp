@@ -81,25 +81,24 @@ const Home: React.FC = () => {
     ];
 
     useEffect(() => {
-        // Verifica se o usuário já acessou o app
         const checkViappd = async () => {
             try {
                 const viappd = await AsyncStorage.getItem('hasViappd');
                 if (viappd) {
                     setHasViappd(true);
                 } else {
-                    await AsyncStorage.setItem('hasViappd', 'true'); // Marca como visitado
+                    await AsyncStorage.setItem('hasViappd', 'true'); // Marca como visitado após a primeira visita
                 }
             } catch (error) {
                 console.error('Erro ao acessar AsyncStorage:', error);
             }
         };
-
+    
         checkViappd();
     }, []); // Executa apenas uma vez ao montar o componente
 
     useEffect(() => {
-        if (hasViappd && !isTyping) { // Inicia a digitação apenas se o usuário já visitou e não está digitando
+        if (!isTyping) { // Inicia a digitação apenas se o usuário já visitou e não está digitando
             const selectedTextos = getRandomTextos(); // Seleciona textos aleatórios
             let currentLine = 0;
 
@@ -120,29 +119,30 @@ const Home: React.FC = () => {
 
     // Função para selecionar um array de textos aleatório
     const getRandomTextos = () => {
-        const randomIndex = Math.floor(Math.random() * 11); // Gera um número aleatório entre 0 e 10
+        if (!hasViappd) {
+            return textos1; // Retorna textos1 se for a primeira visita
+        }
+        const randomIndex = Math.floor(Math.random() * 10); // Gera um número aleatório entre 0 e 9
         switch (randomIndex) {
             case 0:
-                return textos1;
-            case 1:
                 return textos2;
-            case 2:
+            case 1:
                 return textos3;
-            case 3:
+            case 2:
                 return textos4;
-            case 4:
+            case 3:
                 return textos5;
-            case 5:
+            case 4:
                 return textos6;
-            case 6:
+            case 5:
                 return textos7;
-            case 7:
+            case 6:
                 return textos8;
-            case 8:
+            case 7:
                 return textos9;
-            case 9:
+            case 8:
                 return textos10;
-            case 10:
+            case 9:
                 return textos11;
             default:
                 return textos1; // Fallback

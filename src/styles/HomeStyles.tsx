@@ -4,6 +4,18 @@ const HomeStyles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    resetButton: {
+        backgroundColor: '#e41d69',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginTop: 20,
+    },
+    resetButtonText: {
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
     home: {
         color: '#fff',
         width: '100%',

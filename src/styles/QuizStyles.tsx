@@ -26,15 +26,37 @@ card: {
     elevation: 5,
 },
 question: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontFamily: 'Poppins_700Bold',
     fontSize: 18,
     marginBottom: 20,
+},
+button: {
+    backgroundColor: '#e41d69',
+    padding: 10,
+    borderRadius: 10,
+    alignSelf: 'center',
+    minWidth: 150,
+},
+disabledButton: {
+    backgroundColor: '#00000047',
+    padding: 10,
+    borderRadius: 10,
+    alignSelf: 'center',
+    minWidth: 150,
+},
+buttonText: {
+    color: '#FFF',
+    fontFamily: 'Poppins_700Bold',
+    textAlign: 'center',
 },
 options: {
     marginBottom: 20,
 },
 option: {
-    padding: 10,
     backgroundColor: '#f0f0f0',
+    padding: 10,
     borderRadius: 5,
     marginVertical: 5,
 },
@@ -54,11 +76,17 @@ voltar: {
 },
 correct: {
     backgroundColor: '#a4dbb1',
-    borderBlockColor: '#00a727'
+    borderBlockColor: '#00a727',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 13,
 },
 incorrect: {
     backgroundColor: '#ffb4ba',
-    borderBlockColor: '#db0419'
+    borderBlockColor: '#db0419',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 13,
 },
 loadingImage: {
     alignSelf: 'center',

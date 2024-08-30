@@ -8,6 +8,7 @@ export type RootStackParamList = {
     Home: undefined;
     Store: undefined;
     Profile: undefined; 
+    EarnPoints: undefined;
     Quiz: undefined;
 };
 
