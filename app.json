@@ -18,14 +18,20 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "src/screens/assets/heart.png",
-        "backgroundColor": "transparent"
-      }
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.davidlucask.TeAmoMaApp"
     },
     "web": {
       "favicon": "src/screens/assets/heart.png"
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "de8f1cef-abd3-4a83-a389-7df83b92000b"
+      }
+    }
   }
 }

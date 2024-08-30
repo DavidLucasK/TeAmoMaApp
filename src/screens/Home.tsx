@@ -98,7 +98,7 @@ const Home: React.FC = () => {
     }, []); // Executa apenas uma vez ao montar o componente
 
     useEffect(() => {
-        if (!isTyping) { // Inicia a digitação apenas se o usuário já visitou e não está digitando
+        if (hasViappd && !isTyping) { // Inicia a digitação apenas se o usuário já visitou e não está digitando
             const selectedTextos = getRandomTextos(); // Seleciona textos aleatórios
             let currentLine = 0;
 
