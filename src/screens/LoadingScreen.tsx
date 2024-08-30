@@ -29,7 +29,7 @@ export default function LoadingScreen({ onComplete }: Props) {
         <Video
         style={StyleSheet.absoluteFill}
         resizeMode={ResizeMode.COVER}
-        source={require('./assets/SplashLightBig.mp4')}
+        source={require('./assets/SplashColor.mp4')}
         isLooping={false}
         onPlaybackStatusUpdate={onPlaybackStatusUpdate}
         shouldPlay={true}

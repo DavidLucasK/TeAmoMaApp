@@ -3,20 +3,16 @@ import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import HomeStyles from '../styles/HomeStyles'; // Importando os estilos do Home
 import { LinearGradient } from 'expo-linear-gradient'; // Importando LinearGradient
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Importando AsyncStorage
+import { useNavigation } from '@react-navigation/native'; // Importando useNavigation
+import { HomeNavigationProp } from '../navigation'; // Importando o tipo de navegação
 import Header from '../components/Header';
 
-interface HomeProps {
-    onHeaderLeftIconPress?: () => void;
-    onHeaderRightIconPress?: () => void;
-}
 
-const Home: React.FC<HomeProps> = ({
-    onHeaderLeftIconPress,
-    onHeaderRightIconPress,
-}) => {
+const Home: React.FC = () => {
+    const navigation = useNavigation<HomeNavigationProp>(); // Usando o tipo de navegação para HomeScreen
     const [typedText, setTypedText] = useState<string>('');
     const [hasViappd, setHasViappd] = useState<boolean>(false);
-    const [isTyping, setIsTyping] = useState<boolean>(false); // Novo estado para controlar a digitação
+    const [isTyping, setIsTyping] = useState<boolean>(false);
 
     const textos1 = [
         'Oi gatinha!',
@@ -57,7 +53,7 @@ const Home: React.FC<HomeProps> = ({
     const textos7 = [
         'Ei, amorzinho!',
         'Seu sorriso é o que me inspira.',
-        'Me avisa se quiser algo diferente no app!'
+        'Me avisa se tiver alguma idéia diferente pro app!'
     ];
     
     const textos8 = [
@@ -171,8 +167,9 @@ const Home: React.FC<HomeProps> = ({
             <Header
                 leftIcon={require('./assets/store.png')}
                 rightIcon={require('./assets/profile-user.png')}
-                onLeftIconPress={onHeaderLeftIconPress}
-                onRightIconPress={onHeaderRightIconPress}
+                onLeftIconPress={() => navigation.navigate('Store')} // Passando a função
+                onRightIconPress={() => navigation.navigate('Profile')}
+                isStoreScreen={false}
             />
             <ScrollView contentContainerStyle={HomeStyles.scrollContainer}>
                 <LinearGradient

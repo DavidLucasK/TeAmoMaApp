@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient'; // Importando LinearGradient
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Importando AsyncStorage
 import ProfileStyles from '../styles/ProfileStyles'; // Importando os estilos
 import Header from '../components/Header';
+import { useNavigation } from '@react-navigation/native';
+import { ProfileNavigationProp } from '../navigation';
 
-interface ProfileProps {
-    onHeaderLeftIconPress?: () => void;
-    onHeaderRightIconPress?: () => void;
-}
-
-const Profile: React.FC<ProfileProps> = ({
-    onHeaderLeftIconPress,
-    onHeaderRightIconPress,
-}) => {
+const Profile: React.FC = () => {
     const [profileImage, setProfileImage] = useState('assets/profile_ma.png'); // Imagem padrão
+    const [points, setPoints] = useState<number>(0);
+    const navigation = useNavigation<ProfileNavigationProp>();
+
 
     useEffect(() => {
+        fetchPoints();
+
         const loadProfileImage = async () => {
             const savedImage = await AsyncStorage.getItem('profileImage');
             if (savedImage) {
@@ -27,6 +27,28 @@ const Profile: React.FC<ProfileProps> = ({
 
         loadProfileImage();
     }, []);
+
+    const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
+
+  const fetchPoints = async () => {
+    console.log('Iniciando a requisição para buscar pontos...');
+    try {
+      const response = await axios.get(`${backendUrl}/points`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error('Erro ao buscar pontos: ' + response.statusText);
+      }
+
+      console.log('Pontos recebidos:', response.data.points);
+      setPoints(response.data.points);
+    } catch (error: any) {
+      console.error('Erro ao buscar pontos:', error);
+    }
+  };
 
     const handleChangePhoto = async () => {
         // Solicitar permissão para acessar a galeria e a câmera
@@ -85,38 +107,35 @@ const Profile: React.FC<ProfileProps> = ({
             <Header
                 leftIcon={require('./assets/store.png')}
                 rightIcon={require('./assets/profile-user.png')}
-                onLeftIconPress={onHeaderLeftIconPress}
-                onRightIconPress={onHeaderRightIconPress}
+                onLeftIconPress={() => navigation.navigate('Store')} // Passando a função
+                onRightIconPress={() => navigation.navigate('Profile')}
+                isStoreScreen={false}
             />
             <LinearGradient
                     colors={['#e41d69', '#fe8277']}
                     start={{ x: 0, y: 0 }} // Início do gradiente (canto superior esquerdo)
                     end={{ x: 1, y: 0 }}
-                    style={ProfileStyles.content} // Usando o estilo do cabeçalho
+                    style={ProfileStyles.container} // Usando o estilo do cabeçalho
             >
             <View style={ProfileStyles.content}>
                 <View style={ProfileStyles.profileInfo}>
                     <View style={ProfileStyles.photoContainer}>
+                        <View style={ProfileStyles.photoBefore}></View>
                         <Image source={{ uri: profileImage }} style={ProfileStyles.profileImage} />
                         <TouchableOpacity onPress={handleChangePhoto}>
                             <Text style={ProfileStyles.changePhotoButton}>Mudar Foto</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={ProfileStyles.textContainer}>
-                        <Text style={ProfileStyles.infoText}>
-                            <Text style={ProfileStyles.bold}>Nome:</Text> Marcela Zaglia Montagner
-                        </Text>
-                        <Text style={ProfileStyles.infoText}>
-                            <Text style={ProfileStyles.bold}>Email:</Text> marcela-montagner@gmail.com
-                        </Text>
-                        <Text style={ProfileStyles.infoText}>
-                            <Text style={ProfileStyles.bold}>Telefone:</Text> +55 (19) 99990-0180
-                        </Text>
+                        <Text style={ProfileStyles.info}>Nome:</Text>
+                        <Text style={ProfileStyles.variable}>Marcela Zaglia Montagner</Text>
+                        <Text style={ProfileStyles.info}>Email:</Text>
+                        <Text style={ProfileStyles.variable}>marcela-montagner@gmail.com</Text>
+                        <Text style={ProfileStyles.info}>Telefone:</Text>
+                        <Text style={ProfileStyles.variable}>+55 (19) 99990-0180</Text>
                         <View style={ProfileStyles.pointsContainer}>
-                            <Text style={ProfileStyles.infoText}>
-                                <Text style={ProfileStyles.bold}>Você tem:</Text>
-                            </Text>
-                            <Text style={ProfileStyles.points}>0 LovePoints</Text>
+                            <Text style={ProfileStyles.info}>Você tem:</Text>
+                            <Text style={ProfileStyles.points}>{points} LovePoints</Text>
                         </View>
                     </View>
                 </View>

@@ -6,6 +6,7 @@ const HeaderStyles = StyleSheet.create({
         height: 150,
         justifyContent: 'center',
         alignItems: 'center',
+        paddingTop: 20,
         paddingLeft: 20,
     },
     headerContent: {
@@ -15,9 +16,10 @@ const HeaderStyles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     logo: {
+        fontFamily: 'Poppins_700Bold',
         color: 'white',
         fontSize: 26,
-        fontWeight: 'bold',
+        
     },
     icons: {
         display: 'flex',

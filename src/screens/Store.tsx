@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import StoreStyles from '../styles/StoreStyles'; // Importando os estilos
-import Header from '../components/Header';
+import { LinearGradient } from 'expo-linear-gradient'; // Importando LinearGradient
 
+import StoreStyles from '../styles/StoreStyles';
+import Header from '../components/Header';
+import CustomAlert from '../components/CustomAlert';
+import { StoreNavigationProp } from '../navigation'; // Importando o tipo de navegação
 
 interface Item {
   id: string;
@@ -13,14 +17,17 @@ interface Item {
   imageUrl: string;
 }
 
-interface HeaderProps {
-  onLeftIconPress?: () => void;
-  onRightIconPress?: () => void;
-}
+type ImageKeys = 'combo_lanche' | 'cinema' | 'massagem' | 'lovenight' | 'cupom' | 'presente' | 'assistir' | 'sobremesa';
 
-const Store: React.FC<HeaderProps> = ({ onLeftIconPress, onRightIconPress }) => {
+
+const Store: React.FC = () => {
   const [points, setPoints] = useState<number>(0);
   const [items, setItems] = useState<Item[]>([]); // Inicializa como um array vazio
+  const [isRedeeming, setIsRedeeming] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [alertTitle, setAlertTitle] = useState<string>('');
+  const [alertMessage, setAlertMessage] = useState<string>('');
+  const navigation = useNavigation<StoreNavigationProp>();
 
   useEffect(() => {
     fetchPoints();
@@ -28,7 +35,6 @@ const Store: React.FC<HeaderProps> = ({ onLeftIconPress, onRightIconPress }) => 
   }, []);
 
   const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
-  const apiKey = 'YOUR_API_KEY_HERE'; // Substitua pela sua chave de API
 
   const fetchPoints = async () => {
     console.log('Iniciando a requisição para buscar pontos...');
@@ -36,7 +42,6 @@ const Store: React.FC<HeaderProps> = ({ onLeftIconPress, onRightIconPress }) => 
       const response = await axios.get(`${backendUrl}/points`, {
         headers: {
           'Content-Type': 'application/json',
-          'apiKey': apiKey,
         },
       });
 
@@ -50,6 +55,27 @@ const Store: React.FC<HeaderProps> = ({ onLeftIconPress, onRightIconPress }) => 
       console.error('Erro ao buscar pontos:', error);
     }
   };
+  
+  const updatePoints = async (username: string, pointsEarned: number) => {
+    try {
+      const response = await axios.post(`${backendUrl}/update-points`, {
+        username,
+        pointsEarned,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        console.log('Pontos atualizados com sucesso!');
+      } else {
+        console.error('Erro ao atualizar pontos:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Erro ao enviar a requisição:', error);
+    }
+  };
 
   const fetchItems = async () => {
     console.log('Iniciando a requisição para buscar itens...');
@@ -57,7 +83,6 @@ const Store: React.FC<HeaderProps> = ({ onLeftIconPress, onRightIconPress }) => 
       const response = await axios.get(`${backendUrl}/items`, {
         headers: {
           'Content-Type': 'application/json',
-          'apiKey': apiKey,
         },
       });
 
@@ -70,17 +95,12 @@ const Store: React.FC<HeaderProps> = ({ onLeftIconPress, onRightIconPress }) => 
         console.log('Itens recebidos:', items);
         const formattedItems = items.map(item => ({
           id: item.id,
-          title: item.title,
+          title: item.name,
           description: item.description,
-          points: item.points,
-          imageUrl: `'${item.image_url}'`, // Mapeia image_url para imageUrl
+          points: item.points_required,
+          imageUrl: item.image_url, // Mapeia image_url para imageUrl
         }
       ));
-
-      formattedItems.forEach(item => {
-        console.log('Image URL:', item.imageUrl); // Mostra cada imageUrl
-    });
-        
         setItems(formattedItems); // Atualiza o estado com os itens formatados
       } else {
         console.error('A resposta não contém um array de itens.');
@@ -89,29 +109,76 @@ const Store: React.FC<HeaderProps> = ({ onLeftIconPress, onRightIconPress }) => 
       console.error('Erro ao buscar itens:', error);
     }
   };
+  
+  const handleRedemption = async (item: Item) => {
+    const currentPoints = points;
 
-  const redeemReward = async (itemId: string) => {
-    console.log(`Tentando resgatar o item com ID: ${itemId}`);
+    if (currentPoints >= item.points) {
+        try {
+            setIsRedeeming(true);
+            await updatePoints('amor', -item.points);
+            await insertRedemption('1', item.id, item.points);
+            console.log("Resgate feito com sucesso");
+
+            // Exibir alerta personalizado
+            setAlertTitle("Parabéns gatinha");
+            setAlertMessage("Resgate feito com sucesso!");
+            setShowAlert(true);
+            await fetchPoints();
+            await fetchItems();
+        } catch (error) {
+            console.error('Erro ao processar resgate:', error);
+            setAlertTitle("Erro");
+            setAlertMessage("Algo deu errado durante o resgate. Tente novamente.");
+            setShowAlert(true);
+        } finally {
+            setIsRedeeming(false);
+        }
+    } else {
+        console.log("Erro: pontos insuficientes");
+        setAlertTitle("Oops");
+        setAlertMessage("Você não tem pontos suficientes espertinha kkk");
+        setShowAlert(true);
+    }
+};
+
+
+  const insertRedemption = async (userId: string, rewardId: string, pointsRequired: number) => {
     try {
-      await axios.post(`${backendUrl}/redeem/${itemId}`, null, {
+      const response = await axios.post(`${backendUrl}/insert-redemption`, {
+        userId,
+        rewardId,
+        pointsRequired,
+      }, {
         headers: {
           'Content-Type': 'application/json',
-          'apiKey': apiKey,
         },
       });
 
-      console.log('Item resgatado com sucesso!');
-      fetchPoints();
-      fetchItems(); // Atualiza os itens após resgatar
-      showAlert('Item resgatado com sucesso!');
+      if (response.status === 200) {
+        console.log('Resgate registrado com sucesso!');
+      } else {
+        console.error('Erro ao registrar resgate:', response.data.message);
+      }
     } catch (error) {
-      console.error('Erro ao resgatar item:', error);
-      showAlert('Erro ao resgatar item. Tente novamente mais tarde.');
+      console.error('Erro ao enviar a requisição:', error);
     }
   };
 
-  const showAlert = (message: string) => {
-    Alert.alert('Loja de Itens', message);
+  const imageMap: Record<ImageKeys, any> = {
+    combo_lanche: require('./assets/combo_lanche.png'),
+    cinema: require('./assets/cinema.png'),
+    massagem: require('./assets/massagem.png'),
+    lovenight: require('./assets/lovenight.png'),
+    cupom: require('./assets/cupom.png'),
+    presente: require('./assets/presente.png'),
+    assistir: require('./assets/assistir.png'),
+    sobremesa: require('./assets/sobremesa.png'),
+  };
+
+  const getImageSource = (imageUrl: string): any => {
+    const imageName = imageUrl.split('/').pop()?.split('.')[0]; // Extrai o nome da imagem sem a extensão
+    return imageName && imageMap[imageName as ImageKeys]; // Cast para ImageKeys
   };
 
   return (
@@ -119,30 +186,36 @@ const Store: React.FC<HeaderProps> = ({ onLeftIconPress, onRightIconPress }) => 
       <Header
         leftIcon={require('./assets/game.png')}
         rightIcon={require('./assets/profile-user.png')}
-        onLeftIconPress={onLeftIconPress}
-        onRightIconPress={onRightIconPress}
+        onLeftIconPress={() => navigation.navigate('EarnPoints')}
+        onRightIconPress={() => navigation.navigate('Profile')}
+        isStoreScreen={true}
       />
       <View style={StoreStyles.pointsSection}>
         <Text style={StoreStyles.pointsTitle}>Você tem:</Text>
         <Text style={StoreStyles.points}>{points} LovePoints</Text>
-        <TouchableOpacity onPress={() => {/* Navegar para a tela de como ganhar pontos */}}>
+        <LinearGradient
+                colors={['transparent', '#00000057', '#FFFFFFFF']} // Gradiente esfumaçado
+                style={StoreStyles.border}
+            ></LinearGradient>
+        <TouchableOpacity onPress={() => navigation.navigate('EarnPoints')}>
           <Text style={StoreStyles.howToEarn}>Como consigo LovePoints?</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView style={StoreStyles.storeSection}>
+      <ScrollView style={StoreStyles.storeSection} showsVerticalScrollIndicator={false}>
         {Array.isArray(items) && items.length > 0 ? ( 
           items.map((item) => (
-            <View key={item.id} style={StoreStyles.item}>
+            <View key={item.id}>
+              <Text style={StoreStyles.itemTitle}>{item.title}</Text>
               <View style={StoreStyles.leftSide}>
-                <Image source={requireditem.imageUrl} style={StoreStyles.itemImage} />
+                <Image source={getImageSource(item.imageUrl)} style={StoreStyles.itemImage} />
               </View>
               <View style={StoreStyles.rightSide}>
-                <Text style={StoreStyles.itemTitle}>{item.title}</Text>
                 <Text style={StoreStyles.itemDescription}>{item.description}</Text>
                 <Text style={StoreStyles.itemPoints}>LovePoints necessários: {item.points}</Text>
                 <TouchableOpacity
                   style={StoreStyles.redeemButton}
-                  onPress={() => redeemReward(item.id)}
+                  onPress={() => handleRedemption(item)}
+                  disabled={isRedeeming}
                 >
                   <Text style={StoreStyles.redeemButtonText}>Resgatar</Text>
                 </TouchableOpacity>
@@ -150,9 +223,41 @@ const Store: React.FC<HeaderProps> = ({ onLeftIconPress, onRightIconPress }) => 
             </View>
           ))
         ) : (
-          <Text style={StoreStyles.noItemsText}>Nenhum item disponível no momento.</Text>
+          <View style={StoreStyles.containerLoading}>
+            <Image
+                  source={require('./assets/loading.gif')} // Caminho para o seu GIF
+                  style={StoreStyles.loadingImage}
+                  resizeMode="contain" // Ajusta o modo de redimensionamento
+              />
+            <Image
+                  source={require('./assets/loading.gif')} // Caminho para o seu GIF
+                  style={StoreStyles.loadingImage}
+                  resizeMode="contain" // Ajusta o modo de redimensionamento
+              />
+            <Image
+                  source={require('./assets/loading.gif')} // Caminho para o seu GIF
+                  style={StoreStyles.loadingImage}
+                  resizeMode="contain" // Ajusta o modo de redimensionamento
+              />
+            <Image
+                  source={require('./assets/loading.gif')} // Caminho para o seu GIF
+                  style={StoreStyles.loadingImage}
+                  resizeMode="contain" // Ajusta o modo de redimensionamento
+              />
+            <Image
+                  source={require('./assets/loading.gif')} // Caminho para o seu GIF
+                  style={StoreStyles.loadingImage}
+                  resizeMode="contain" // Ajusta o modo de redimensionamento
+              />
+          </View>
         )}
       </ScrollView>
+      <CustomAlert
+                visible={showAlert}
+                title={alertTitle}
+                message={alertMessage}
+                onClose={() => setShowAlert(false)}
+            />
     </View>
   );
 };

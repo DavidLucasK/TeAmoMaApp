@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { preventAutoHideAsync } from 'expo-splash-screen';
 
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold, Poppins_600SemiBold } from '@expo-google-fonts/poppins'; // Importando as fontes Poppins
 
 import LoadingScreen from './src/screens/LoadingScreen'; // Importando a tela de carregamento
 import Home from './src/screens/Home'; // Importando o componente Home
-import Store from './src/screens/Store'; // Importando o componente Home
-import Profile from './src/screens/Profile';
-
-
+import Store from './src/screens/Store'; // Importando o componente Store
+import Profile from './src/screens/Profile'; // Importando o componente Profile
+import EarnPoints from './src/screens/EarnPoints';
+import Quiz from './src/screens/Quiz';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,13 @@ preventAutoHideAsync();
 
 const App: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true); // Estado para controlar a tela de carregamento
+
+    const [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+        Poppins_500Medium,
+        Poppins_600SemiBold,
+        Poppins_700Bold, // Certifique-se de incluir todas as variantes que você deseja usar
+    });
 
     const handleLoadingComplete = (status: boolean) => {
         if (status) {
@@ -53,6 +61,16 @@ const App: React.FC = () => {
                     <Stack.Screen 
                         name="Profile"
                         component={Profile}
+                        options={{ headerShown: false }} // Removendo o cabeçalho padrão
+                    />
+                    <Stack.Screen 
+                        name="EarnPoints"
+                        component={EarnPoints}
+                        options={{ headerShown: false }} // Removendo o cabeçalho padrão
+                    />
+                    <Stack.Screen 
+                        name="Quiz"
+                        component={Quiz}
                         options={{ headerShown: false }} // Removendo o cabeçalho padrão
                     />
                 </Stack.Navigator>

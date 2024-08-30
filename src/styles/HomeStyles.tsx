@@ -25,9 +25,9 @@ const HomeStyles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     homeText: {
+        fontFamily: 'Poppins_700Bold',
         textAlign: 'center',
-        fontSize: 24, // 1.5rem em pixels
-        fontWeight: '600',
+        fontSize: 20, // 1.5rem em pixels
         color: '#fff', // Cor do texto
         lineHeight: 50,
     },

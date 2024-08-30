@@ -1,19 +1,21 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'; // Importando LinearGradient
-import HeaderStyles from '../styles/HeaderStyles'; // Importando os estilos do cabeçalho
+import { HomeNavigationProp } from '../navigation'; // Importando os tipos de navegação
 import { useNavigation } from '@react-navigation/native'; // Importando useNavigation
-import { HomeScreenNavigationProp } from '../navigation'; // Importando os tipos de navegação
+
+import HeaderStyles from '../styles/HeaderStyles'; // Importando os estilos do cabeçalho
 
 interface HeaderProps {
     leftIcon?: any; 
     rightIcon?: any;
     onLeftIconPress?: () => void;
     onRightIconPress?: () => void;
+    isStoreScreen?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ leftIcon, rightIcon }) => {
-    const navigation = useNavigation<HomeScreenNavigationProp>(); // Usando o tipo de navegação
+const Header: React.FC<HeaderProps> = ({ leftIcon, rightIcon, onLeftIconPress, onRightIconPress, isStoreScreen }) => {
+    const navigation = useNavigation<HomeNavigationProp>(); // Usando o tipo de navegação
 
     const handleLogoPress = () => {
         navigation.reset({
@@ -22,13 +24,15 @@ const Header: React.FC<HeaderProps> = ({ leftIcon, rightIcon }) => {
         });
     };
 
-    const onLeftIconPress = () => {
-        navigation.navigate('Store');
-    }
-
-    const onRightIconPress = () => {
-        navigation.navigate('Profile');
-    }
+    const handleLeftIconPress = () => {
+        if (isStoreScreen) {
+            if (onLeftIconPress) {
+                onLeftIconPress(); // Chama a função de callback se isStoreScreen for true e onLeftIconPress estiver definido
+            }
+        } else {
+            navigation.navigate('Store');
+        }
+    };
 
     return (
         <LinearGradient
@@ -39,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ leftIcon, rightIcon }) => {
         >
             <View style={HeaderStyles.headerContent}>
                 <TouchableOpacity onPress={handleLogoPress}>
-                    <Text style={HeaderStyles.logo}>TeAmoMa</Text>
+                    <Text style={HeaderStyles.logo}>Te amo Ma</Text>
                 </TouchableOpacity>
                 <View style={HeaderStyles.icons}>
                     {leftIcon && (
