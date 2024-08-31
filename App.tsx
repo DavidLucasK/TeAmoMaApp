@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { preventAutoHideAsync } from 'expo-splash-screen';
+import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold, Poppins_600SemiBold } from '@expo-google-fonts/poppins'; // Importando as fontes Poppins
 
@@ -31,6 +32,13 @@ const App: React.FC = () => {
             setIsLoading(false); // Oculta a tela de carregamento
         }
     };
+
+    useEffect(() => {
+        // Ocultar a StatusBar após o carregamento completo das fontes
+        if (!isLoading && fontsLoaded) {
+            hideAsync();
+        }
+    }, [isLoading, fontsLoaded]);
 
     return (
         <NavigationContainer>
@@ -75,6 +83,7 @@ const App: React.FC = () => {
                     />
                 </Stack.Navigator>
             )}
+            <StatusBar style="light" backgroundColor="transparent" translucent={true} />
         </NavigationContainer>
     );
 };
