@@ -166,8 +166,10 @@ const Home: React.FC = () => {
         <View style={HomeStyles.container}>
             <Header
                 leftIcon={require('./assets/store.png')}
+                middleIcon={require('./assets/posts.png')}
                 rightIcon={require('./assets/profile-user.png')}
                 onLeftIconPress={() => navigation.navigate('Store')} // Passando a função
+                onMiddleIconPress={() => navigation.navigate('Posts')}
                 onRightIconPress={() => navigation.navigate('Profile')}
                 isStoreScreen={false}
             />

@@ -26,9 +26,14 @@ const HeaderStyles = StyleSheet.create({
         flexDirection: 'row',
     },
     icon: {
-        width: 40,
-        height: 40,
+        width: 32,
+        height: 32,
         marginRight: 20,
+    },
+    middleicon: {
+        width: 32,
+        height: 32,
+        marginRight: 10,
     },
 });
 

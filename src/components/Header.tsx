@@ -8,13 +8,15 @@ import HeaderStyles from '../styles/HeaderStyles'; // Importando os estilos do c
 
 interface HeaderProps {
     leftIcon?: any; 
+    middleIcon?:any;
     rightIcon?: any;
     onLeftIconPress?: () => void;
+    onMiddleIconPress?: () => void;
     onRightIconPress?: () => void;
     isStoreScreen?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ leftIcon, rightIcon, onLeftIconPress, onRightIconPress, isStoreScreen }) => {
+const Header: React.FC<HeaderProps> = ({ leftIcon, middleIcon, rightIcon, onLeftIconPress, onMiddleIconPress, onRightIconPress, isStoreScreen }) => {
     const navigation = useNavigation<HomeNavigationProp>(); // Usando o tipo de navegação
 
     const handleLogoPress = () => {
@@ -49,6 +51,11 @@ const Header: React.FC<HeaderProps> = ({ leftIcon, rightIcon, onLeftIconPress, o
                     {leftIcon && (
                         <TouchableOpacity onPress={onLeftIconPress}>
                             <Image source={leftIcon} style={HeaderStyles.icon} />
+                        </TouchableOpacity>
+                    )}
+                    {middleIcon && (
+                        <TouchableOpacity onPress={onMiddleIconPress}>
+                            <Image source={middleIcon} style={HeaderStyles.middleicon} />
                         </TouchableOpacity>
                     )}
                     {rightIcon && (

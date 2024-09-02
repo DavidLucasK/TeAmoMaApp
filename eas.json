@@ -2,7 +2,12 @@
   "build": {
     "preview": {
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "experimental": {
+          "androidWidget": {
+            "enabled": true
+          }
+        }
       }
     },
     "production": {}

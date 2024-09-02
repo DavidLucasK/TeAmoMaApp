@@ -185,8 +185,10 @@ const Store: React.FC = () => {
     <View style={StoreStyles.container}>
       <Header
         leftIcon={require('./assets/game.png')}
+        middleIcon={require('./assets/posts.png')}
         rightIcon={require('./assets/profile-user.png')}
         onLeftIconPress={() => navigation.navigate('EarnPoints')}
+        onMiddleIconPress={() => navigation.navigate('Posts')}
         onRightIconPress={() => navigation.navigate('Profile')}
         isStoreScreen={true}
       />

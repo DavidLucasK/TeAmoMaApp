@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "TeAmoMaApp",
-    "slug": "TeAmoMaApp",
+    "name": "TeAmo",
+    "slug": "TeAmo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "src/screens/assets/HeartIcon1024.png",
@@ -20,7 +20,7 @@
         "foregroundImage": "src/screens/assets/HeartIcon1080.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.davidlucask.TeAmoMaApp"
+      "package": "com.davidlucask.TeAmo"
     },
     "web": {
       "favicon": "src/screens/assets/HeartIcon512png"
@@ -30,7 +30,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "de8f1cef-abd3-4a83-a389-7df83b92000b"
+        "projectId": "c3656e6f-df8a-4642-bbc6-3a833810c546"
       }
     }
   }

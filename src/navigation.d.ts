@@ -10,6 +10,7 @@ export type RootStackParamList = {
     Profile: undefined; 
     EarnPoints: undefined;
     Quiz: undefined;
+    Posts: undefined;
 };
 
 //Aqui também
@@ -18,3 +19,4 @@ export type StoreNavigationProp = StackNavigationProp<RootStackParamList, 'Store
 export type ProfileNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
 export type EarnPointsNavigationProp = StackNavigationProp<RootStackParamList, 'EarnPoints'>;
 export type QuizNavigationProp = StackNavigationProp<RootStackParamList, 'Quiz'>;
+export type PostsNavigationProp = StackNavigationProp<RootStackParamList, 'Posts'>;
