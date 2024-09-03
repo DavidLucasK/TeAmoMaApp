@@ -33,7 +33,7 @@ const HeaderStyles = StyleSheet.create({
     middleicon: {
         width: 32,
         height: 32,
-        marginRight: 10,
+        marginRight: 15,
     },
 });
 

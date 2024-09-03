@@ -9,6 +9,7 @@ const PostsStyles = StyleSheet.create({
         height: '100%',
         textAlign: 'center',
         paddingHorizontal: 10,
+        paddingBottom: 40,
     },
     scrollContainer: {
         flexGrow: 1,
@@ -18,16 +19,15 @@ const PostsStyles = StyleSheet.create({
         width: '100%',
         display: 'flex',
         paddingHorizontal: '5%',
-        marginVertical: '10%',
+        marginBottom: 120,
         borderRadius: 30,
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
         backgroundColor: '#FFF',
+        overflow: 'hidden',
     },
     plusBtn: {
         display: 'flex',
         height: 40,
-        marginVertical: 15,
+        marginTop: 25,
     },
     plus: {
         width: '100%',
@@ -37,12 +37,8 @@ const PostsStyles = StyleSheet.create({
         paddingBottom: 0,
         resizeMode: 'contain',
     },
-    posts: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
     post: {
-        marginBottom: 64,
+        marginTop: 24,
         alignSelf: 'center',
     },
     user: {
@@ -55,10 +51,10 @@ const PostsStyles = StyleSheet.create({
         minWidth: 285,
         minHeight: 405, // Ajuste conforme necessário
         maxWidth: 285,
-        maxHeight: 255, // Ajuste conforme necessário
+        maxHeight: 405, // Ajuste conforme necessário
         marginBottom: 16,
         backgroundColor: '#000',
-        overflow: 'hidden', // Garante que o conteúdo não ultrapasse o
+        overflow: 'hidden', // Garante que o conteúdo não ultrapasse o contêiner
         borderWidth: 0,
         borderColor: '#000', // Cor da borda
         borderRadius: 10,
@@ -81,18 +77,20 @@ const PostsStyles = StyleSheet.create({
     },
     textBottom: {
         textAlign: 'left',
-        maxWidth: 285
+        maxWidth: 285,
+        fontFamily: 'Poppins_500Medium',
+        color: '#363636'
     },
     tempo: {
         fontFamily: 'Poppins_500Medium',
         fontSize: 12,
         color: '#585858'
     },
-    userBottom: {
-        fontFamily: 'Poppins_600SemiBold',
-        fontSize: 14,
-        color: '#000'
-    }
+    bordaBottom: {
+        borderBlockColor: '#ddd',
+        borderBottomWidth: 1,
+        marginTop: 20
+    },
 });
 
 export default PostsStyles;

@@ -13,6 +13,7 @@ import Profile from './src/screens/Profile'; // Importando o componente Profile
 import EarnPoints from './src/screens/EarnPoints';
 import Quiz from './src/screens/Quiz';
 import Posts from './src/screens/Posts';
+import CreatePost from './src/screens/CreatePost';
 
 const Stack = createStackNavigator();
 
@@ -85,6 +86,11 @@ const App: React.FC = () => {
                     <Stack.Screen 
                         name="Posts"
                         component={Posts}
+                        options={{ headerShown: false }} // Removendo o cabeçalho padrão
+                    />
+                    <Stack.Screen 
+                        name="CreatePost"
+                        component={CreatePost}
                         options={{ headerShown: false }} // Removendo o cabeçalho padrão
                     />
                 </Stack.Navigator>
