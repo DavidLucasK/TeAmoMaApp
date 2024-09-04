@@ -194,9 +194,11 @@ const CreatePost: React.FC = () => {
                                 Tirar Foto
                             </Text>
                             <Text style={CreatePostStyles.modalText} onPress={() => handleOptionSelect('gallery')}>
-                                Escolher da Galeria
+                                Galeria
                             </Text>
-                            <Button title="Cancelar" onPress={handleModalClose} />
+                            <TouchableOpacity onPress={handleModalClose}>
+                                <Text style={CreatePostStyles.cancelBtn}>Fechar</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>

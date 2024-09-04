@@ -25,7 +25,6 @@ const CreatePostStyles = StyleSheet.create({
     imageContainer: {
         width: '100%',
         height: '100%',
-        marginTop: -50,
         maxHeight: 320,
         marginBottom: 16,
         backgroundColor: '#00000024',
@@ -55,21 +54,6 @@ const CreatePostStyles = StyleSheet.create({
         textAlignVertical: 'top', // Alinha o texto ao topo
         backgroundColor: '#fff', // Fundo branco para o campo de texto
     },
-    createBtn: {
-        backgroundColor: '#e41d69',
-        padding: 15,
-        borderRadius: 10,
-        marginBottom: 10,
-        marginTop: 10,
-        width: '40%',
-        alignSelf: 'center',
-        alignItems: 'center',
-    },
-    createText: {
-        color: '#fff',
-        fontSize: 14,
-        fontFamily: 'Poppins_700Bold',
-    },
     camContainer: {
         display: 'flex',
     },
@@ -79,7 +63,11 @@ const CreatePostStyles = StyleSheet.create({
         resizeMode: 'contain',
     },
     modalContainer: {
-        flex: 1,
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -87,13 +75,44 @@ const CreatePostStyles = StyleSheet.create({
     modalContent: {
         backgroundColor: 'white',
         borderRadius: 10,
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingTop: 30,
+        paddingBottom: 20,
         width: '80%',
     },
     modalText: {
         fontSize: 18,
+        padding: 5,
         marginBottom: 10,
-        textAlign: 'left', // Alinha o texto à esquerda
+        fontFamily: 'Poppins_700Bold',
+        textAlign: 'center', // Alinha o texto à esquerda
+        backgroundColor: '#DDD',
+        borderRadius: 10
+    },
+    cancelBtn: {
+        fontFamily: 'Poppins_700Bold',
+        alignSelf: 'center',
+        color: '#FFF',
+        backgroundColor: '#ff2b83',
+        fontSize: 18,
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        borderRadius: 15,
+    },
+    createBtn: {
+        backgroundColor: '#ffffff',
+        padding: 15,
+        borderRadius: 10,
+        marginBottom: 10,
+        marginTop: 10,
+        width: '40%',
+        alignSelf: 'center',
+        alignItems: 'center',
+    },
+    createText: {
+        color: '#000',
+        fontSize: 14,
+        fontFamily: 'Poppins_700Bold',
     },
 });
 
