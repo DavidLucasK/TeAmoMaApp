@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, Animated, RefreshControl } from 'react-native';
 import PostsStyles from '../styles/PostsStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, useIsFocused, useFocusEffect } from '@react-navigation/native';
@@ -16,34 +16,40 @@ const Posts: React.FC = () => {
     const [lastPress, setLastPress] = useState(0);
     const [animations, setAnimations] = useState<{ [key: number]: { heart: Animated.Value; scale: Animated.Value } }>({});
     const [loading, setLoading] = useState(true); // Adiciona estado de carregamento
+    const [refreshing, setRefreshing] = useState(false); // Estado para controle de atualização
 
     const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
     // Função para buscar os posts da API
-const fetchPosts = async () => {
-    setLoading(true); // Define o carregamento como verdadeiro
-    try {
-        console.log('tentando pegar os posts');
-        const response = await axios.get(`${backendUrl}/posts`);
-        let posts = response.data;
+    const fetchPosts = async () => {
+        setLoading(true); // Define o carregamento como verdadeiro
+        try {
+            console.log('tentando pegar os posts');
+            const response = await axios.get(`${backendUrl}/posts`);
+            let posts = response.data;
 
-        // Filtra os posts para mostrar apenas aqueles onde o username é "Mazinha02"
-        posts = posts.filter((post: any) => post.username === "Avix");
+            // Filtra os posts para mostrar apenas aqueles onde o username é "Mazinha02"
+            posts = posts.filter((post: any) => post.username === "Mazinha02");
 
-        // Ordena os posts por data em ordem decrescente
-        const sortedPosts = posts.sort((a: any, b: any) => {
-            return new Date(b.data).getTime() - new Date(a.data).getTime();
-        });
+            // Ordena os posts por data em ordem decrescente
+            const sortedPosts = posts.sort((a: any, b: any) => {
+                return new Date(b.data).getTime() - new Date(a.data).getTime();
+            });
 
-        console.log(sortedPosts);
-        setPosts(sortedPosts);
-    } catch (error) {
-        console.error('Erro ao buscar posts:', error);
-    } finally {
-        setLoading(false); // Define o carregamento como falso
-    }
-};
+            console.log(sortedPosts);
+            setPosts(sortedPosts);
+        } catch (error) {
+            console.error('Erro ao buscar posts:', error);
+        } finally {
+            setLoading(false); // Define o carregamento como falso
+        }
+    };
 
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true);
+        await fetchPosts();
+        setRefreshing(false);
+    }, []);
 
     useFocusEffect(
         useCallback(() => {
@@ -153,7 +159,15 @@ const fetchPosts = async () => {
                 style={PostsStyles.main}
             >
                 <View style={PostsStyles.main}>
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                            />
+                        }
+                    >
                         <View style={PostsStyles.postsContainer}>
                             <TouchableOpacity style={PostsStyles.plusBtn} onPress={() => navigation.navigate('CreatePost')}>
                                 <Image style={PostsStyles.plus} source={require('./assets/plus.png')} />

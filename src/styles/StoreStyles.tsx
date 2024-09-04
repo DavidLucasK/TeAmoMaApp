@@ -126,7 +126,10 @@ const StoreStyles = StyleSheet.create({
     width: '70%',
     marginBottom: -50,
     marginTop: -50,
-  }
+  },
+  noItems: {
+    
+  },
 });
 
 export default StoreStyles;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient'; // Importando LinearGradient
@@ -19,7 +19,6 @@ interface Item {
 
 type ImageKeys = 'combo_lanche' | 'cinema' | 'massagem' | 'lovenight' | 'cupom' | 'presente' | 'assistir' | 'sobremesa';
 
-
 const Store: React.FC = () => {
   const [points, setPoints] = useState<number>(0);
   const [items, setItems] = useState<Item[]>([]); // Inicializa como um array vazio
@@ -27,6 +26,8 @@ const Store: React.FC = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [alertTitle, setAlertTitle] = useState<string>('');
   const [alertMessage, setAlertMessage] = useState<string>('');
+  const [refreshing, setRefreshing] = useState<boolean>(false); // Estado para controle de atualização
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation<StoreNavigationProp>();
 
   useEffect(() => {
@@ -55,7 +56,7 @@ const Store: React.FC = () => {
       console.error('Erro ao buscar pontos:', error);
     }
   };
-  
+
   const updatePoints = async (username: string, pointsEarned: number) => {
     try {
       const response = await axios.post(`${backendUrl}/update-points`, {
@@ -78,6 +79,7 @@ const Store: React.FC = () => {
   };
 
   const fetchItems = async () => {
+    setLoading(true);
     console.log('Iniciando a requisição para buscar itens...');
     try {
       const response = await axios.get(`${backendUrl}/items`, {
@@ -98,49 +100,49 @@ const Store: React.FC = () => {
           description: item.description,
           points: item.points_required,
           imageUrl: item.image_url, // Mapeia image_url para imageUrl
-        }
-      ));
+        }));
         setItems(formattedItems); // Atualiza o estado com os itens formatados
       } else {
         console.error('A resposta não contém um array de itens.');
       }
     } catch (error) {
       console.error('Erro ao buscar itens:', error);
+    } finally {
+      setLoading(false);
     }
   };
-  
+
   const handleRedemption = async (item: Item) => {
     const currentPoints = points;
 
     if (currentPoints >= item.points) {
-        try {
-            setIsRedeeming(true);
-            await updatePoints('amor', -item.points);
-            await insertRedemption('1', item.id, item.points);
-            console.log("Resgate feito com sucesso");
+      try {
+        setIsRedeeming(true);
+        await updatePoints('amor', -item.points);
+        await insertRedemption('1', item.id, item.points);
+        console.log("Resgate feito com sucesso");
 
-            // Exibir alerta personalizado
-            setAlertTitle("Parabéns gatinha");
-            setAlertMessage("Resgate feito com sucesso!");
-            setShowAlert(true);
-            await fetchPoints();
-            await fetchItems();
-        } catch (error) {
-            console.error('Erro ao processar resgate:', error);
-            setAlertTitle("Erro");
-            setAlertMessage("Algo deu errado durante o resgate. Tente novamente.");
-            setShowAlert(true);
-        } finally {
-            setIsRedeeming(false);
-        }
-    } else {
-        console.log("Erro: pontos insuficientes");
-        setAlertTitle("Oops");
-        setAlertMessage("Você não tem pontos suficientes espertinha kkk");
+        // Exibir alerta personalizado
+        setAlertTitle("Parabéns gatinha");
+        setAlertMessage("Resgate feito com sucesso!");
         setShowAlert(true);
+        await fetchPoints();
+        await fetchItems();
+      } catch (error) {
+        console.error('Erro ao processar resgate:', error);
+        setAlertTitle("Erro");
+        setAlertMessage("Algo deu errado durante o resgate. Tente novamente.");
+        setShowAlert(true);
+      } finally {
+        setIsRedeeming(false);
+      }
+    } else {
+      console.log("Erro: pontos insuficientes");
+      setAlertTitle("Oops");
+      setAlertMessage("Você não tem pontos suficientes espertinha kkk");
+      setShowAlert(true);
     }
-};
-
+  };
 
   const insertRedemption = async (userId: string, rewardId: string, pointsRequired: number) => {
     try {
@@ -180,6 +182,14 @@ const Store: React.FC = () => {
     return imageName && imageMap[imageName as ImageKeys]; // Cast para ImageKeys
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchPoints();
+    await fetchItems();
+    setRefreshing(false);
+  };
+
+
   return (
     <View style={StoreStyles.container}>
       <Header
@@ -191,76 +201,86 @@ const Store: React.FC = () => {
         onRightIconPress={() => navigation.navigate('Profile')}
         isStoreScreen={true}
       />
-      <View style={StoreStyles.pointsSection}>
-        <Text style={StoreStyles.pointsTitle}>Você tem:</Text>
-        <Text style={StoreStyles.points}>{points} LovePoints</Text>
-        <LinearGradient
-                colors={['transparent', '#00000057', '#FFFFFFFF']} // Gradiente esfumaçado
-                style={StoreStyles.border}
-            ></LinearGradient>
-        <TouchableOpacity onPress={() => navigation.navigate('EarnPoints')}>
-          <Text style={StoreStyles.howToEarn}>Como consigo LovePoints?</Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView style={StoreStyles.storeSection} showsVerticalScrollIndicator={false}>
-        {Array.isArray(items) && items.length > 0 ? ( 
-          items.map((item) => (
-            <View key={item.id}>
-              <Text style={StoreStyles.itemTitle}>{item.title}</Text>
-              <View style={StoreStyles.leftSide}>
-                <Image source={getImageSource(item.imageUrl)} style={StoreStyles.itemImage} />
-              </View>
-              <View style={StoreStyles.rightSide}>
-                <Text style={StoreStyles.itemDescription}>{item.description}</Text>
-                <Text style={StoreStyles.itemPoints}>LovePoints necessários: {item.points}</Text>
-                <TouchableOpacity
-                  style={StoreStyles.redeemButton}
-                  onPress={() => handleRedemption(item)}
-                  disabled={isRedeeming}
-                >
-                  <Text style={StoreStyles.redeemButtonText}>Resgatar</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ))
-        ) : (
-          <View style={StoreStyles.containerLoading}>
-            <Image
-                  source={require('./assets/loading.gif')} // Caminho para o seu GIF
-                  style={StoreStyles.loadingImage}
-                  resizeMode="contain" // Ajusta o modo de redimensionamento
-              />
-            <Image
-                  source={require('./assets/loading.gif')} // Caminho para o seu GIF
-                  style={StoreStyles.loadingImage}
-                  resizeMode="contain" // Ajusta o modo de redimensionamento
-              />
-            <Image
-                  source={require('./assets/loading.gif')} // Caminho para o seu GIF
-                  style={StoreStyles.loadingImage}
-                  resizeMode="contain" // Ajusta o modo de redimensionamento
-              />
-            <Image
-                  source={require('./assets/loading.gif')} // Caminho para o seu GIF
-                  style={StoreStyles.loadingImage}
-                  resizeMode="contain" // Ajusta o modo de redimensionamento
-              />
-            <Image
-                  source={require('./assets/loading.gif')} // Caminho para o seu GIF
-                  style={StoreStyles.loadingImage}
-                  resizeMode="contain" // Ajusta o modo de redimensionamento
-              />
+      <ScrollView
+        style={StoreStyles.storeSection}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
+        <View style={StoreStyles.pointsSection}>
+          <Text style={StoreStyles.pointsTitle}>Você tem:</Text>
+          <Text style={StoreStyles.points}>
+            {loading ? 'Carregando...' : `${points} LovePoints`}
+          </Text>
+          <LinearGradient
+            colors={['transparent', '#00000057', '#FFFFFFFF']} // Gradiente esfumaçado
+            style={StoreStyles.border}
+          ></LinearGradient>
+          <TouchableOpacity onPress={() => navigation.navigate('EarnPoints')}>
+            <Text style={StoreStyles.howToEarn}>Como consigo LovePoints?</Text>
+          </TouchableOpacity>
+        </View>
+        {loading ? (
+          <View>
+          <Text style={StoreStyles.itemTitle}>Carregando...</Text>
+          <View style={StoreStyles.leftSide}>
+            <Image source={require('./assets/loading.gif')} style={StoreStyles.itemImage} />
           </View>
+          <View style={StoreStyles.rightSide}>
+            <Text style={StoreStyles.itemDescription}>Carma aí que ta carregando minha fia</Text>
+            <Text style={StoreStyles.itemPoints}>Custa alguma coisa, carma ai uai...</Text>
+            <TouchableOpacity
+              style={StoreStyles.redeemButton}
+            >
+              <Text style={StoreStyles.redeemButtonText}>
+                Carregando...
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        ) : (
+          Array.isArray(items) && items.length > 0 ? (
+            items.map((item) => (
+              <View key={item.id}>
+                <Text style={StoreStyles.itemTitle}>{item.title}</Text>
+                <View style={StoreStyles.leftSide}>
+                  <Image source={getImageSource(item.imageUrl)} style={StoreStyles.itemImage} />
+                </View>
+                <View style={StoreStyles.rightSide}>
+                  <Text style={StoreStyles.itemDescription}>{item.description}</Text>
+                  <Text style={StoreStyles.itemPoints}>LovePoints necessários: {item.points}</Text>
+                  <TouchableOpacity
+                    style={StoreStyles.redeemButton}
+                    onPress={() => handleRedemption(item)}
+                    disabled={isRedeeming}
+                  >
+                    <Text style={StoreStyles.redeemButtonText}>
+                      {isRedeeming ? 'Resgatando...' : 'Resgatar'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))
+          ) : (
+            <Text style={StoreStyles.noItems}>Nenhum item disponível.</Text>
+          )
         )}
       </ScrollView>
-      <CustomAlert
-                visible={showAlert}
-                title={alertTitle}
-                message={alertMessage}
-                onClose={() => setShowAlert(false)}
-            />
+      {showAlert && (
+        <CustomAlert
+          title={alertTitle}
+          message={alertMessage}
+          visible={true}
+          onClose={() => setShowAlert(false)}
+        />
+      )}
     </View>
   );
+  
 };
 
 export default Store;

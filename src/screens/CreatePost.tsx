@@ -95,7 +95,7 @@ const CreatePost: React.FC = () => {
         }
     };
 
-    const usernameTeste = "Mazinha02";
+    const usernameTeste = "Avix";
 
     const createPost = async () => {
         if (!selectedImage || !postText) {
@@ -177,12 +177,12 @@ const CreatePost: React.FC = () => {
                                 value={postText}
                                 onChangeText={setPostText}
                             />
-                        </View>
-                        <TouchableOpacity onPress={createPost} style={CreatePostStyles.createBtn} disabled={uploading}>
+                            <TouchableOpacity onPress={createPost} style={CreatePostStyles.createBtn} disabled={uploading}>
                             <Text style={CreatePostStyles.createText}>
                                 {uploading ? 'Enviando...' : 'Criar Post'}
                             </Text>
                         </TouchableOpacity>
+                        </View>
                     </View>
                 </LinearGradient>
 

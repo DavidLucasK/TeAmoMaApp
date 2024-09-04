@@ -12,7 +12,7 @@ const CreatePostStyles = StyleSheet.create({
     },
     postsContainer: {
         width: '100%',
-        height: '70%',
+        height: '77%',
         display: 'flex',
         paddingHorizontal: '5%',
         borderRadius: 30,
@@ -101,7 +101,7 @@ const CreatePostStyles = StyleSheet.create({
         borderRadius: 15,
     },
     createBtn: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#ff0f6b',
         padding: 15,
         borderRadius: 10,
         marginBottom: 10,
@@ -111,7 +111,7 @@ const CreatePostStyles = StyleSheet.create({
         alignItems: 'center',
     },
     createText: {
-        color: '#000',
+        color: '#FFF',
         fontSize: 14,
         fontFamily: 'Poppins_700Bold',
     },
