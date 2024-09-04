@@ -46,6 +46,7 @@ const CreatePostStyles = StyleSheet.create({
         borderColor: '#ccc', // Cor da borda
         borderWidth: 2, // Largura da borda
         borderRadius: 10, // Bordas arredondadas
+        fontFamily: 'Poppins_500Medium',
         padding: 10,
         width: '100%',
         height: 'auto', // Altura do TextInput

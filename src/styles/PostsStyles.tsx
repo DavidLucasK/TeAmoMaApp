@@ -96,7 +96,10 @@ const PostsStyles = StyleSheet.create({
     },
     noPostsText: {
         fontFamily: 'Poppins_500Medium',
-        fontSize: 12,
+        textAlign: 'center',
+        fontSize: 16,
+        paddingTop: 200,
+        paddingBottom: 300,
         color: '#585858'
     },
     iconCam: {

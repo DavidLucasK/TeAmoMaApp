@@ -20,26 +20,30 @@ const Posts: React.FC = () => {
     const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
     // Função para buscar os posts da API
-    const fetchPosts = async () => {
-        setLoading(true); // Define o carregamento como verdadeiro
-        try {
-            console.log('tentando pegar os posts');
-            const response = await axios.get(`${backendUrl}/posts`);
-            const posts = response.data;
+const fetchPosts = async () => {
+    setLoading(true); // Define o carregamento como verdadeiro
+    try {
+        console.log('tentando pegar os posts');
+        const response = await axios.get(`${backendUrl}/posts`);
+        let posts = response.data;
 
-            // Ordena os posts por data em ordem decrescente
-            const sortedPosts = posts.sort((a: any, b: any) => {
-                return new Date(b.data).getTime() - new Date(a.data).getTime();
-            });
+        // Filtra os posts para mostrar apenas aqueles onde o username é "Mazinha02"
+        posts = posts.filter((post: any) => post.username === "Avix");
 
-            console.log(sortedPosts);
-            setPosts(sortedPosts);
-        } catch (error) {
-            console.error('Erro ao buscar posts:', error);
-        } finally {
-            setLoading(false); // Define o carregamento como falso
-        }
-    };
+        // Ordena os posts por data em ordem decrescente
+        const sortedPosts = posts.sort((a: any, b: any) => {
+            return new Date(b.data).getTime() - new Date(a.data).getTime();
+        });
+
+        console.log(sortedPosts);
+        setPosts(sortedPosts);
+    } catch (error) {
+        console.error('Erro ao buscar posts:', error);
+    } finally {
+        setLoading(false); // Define o carregamento como falso
+    }
+};
+
 
     useFocusEffect(
         useCallback(() => {
