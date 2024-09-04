@@ -91,6 +91,18 @@ const PostsStyles = StyleSheet.create({
         borderBottomWidth: 1,
         marginTop: 20
     },
+    loadingImage: {
+
+    },
+    noPostsText: {
+        fontFamily: 'Poppins_500Medium',
+        fontSize: 12,
+        color: '#585858'
+    },
+    iconCam: {
+        backgroundColor: 'red',
+        width: '100%'
+    },
 });
 
 export default PostsStyles;

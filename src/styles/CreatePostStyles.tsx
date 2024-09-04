@@ -25,12 +25,12 @@ const CreatePostStyles = StyleSheet.create({
     imageContainer: {
         width: '100%',
         height: '100%',
-        maxHeight: 280,
+        marginTop: -50,
+        maxHeight: 320,
         marginBottom: 16,
         backgroundColor: '#00000024',
-        overflow: 'hidden', // Garante que o conteúdo não ultrapasse o contêiner
-        borderWidth: 0,
         borderRadius: 10,
+        overflow: 'hidden', // Garante que o conteúdo não ultrapasse o contêiner
     },
     imageUploaded: {
         width: '100%',
@@ -39,34 +39,9 @@ const CreatePostStyles = StyleSheet.create({
     },
     photosContainer: {
         display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        top: 220,
+        justifyContent: 'center',
         width: '100%',
-    },
-    galleryBtn: {
-        backgroundColor: '#e41d69',
-        padding: 15,
-        borderRadius: 10,
-        marginBottom: 10,
-        alignItems: 'center',
-    },
-    textGallery: {
-        color: '#fff',
-        fontSize: 12,
-        fontFamily: 'Poppins_600SemiBold',
-    },
-    photoBtn: {
-        backgroundColor: '#e41d69',
-        padding: 15,
-        borderRadius: 10,
-        marginBottom: 10,
-        alignItems: 'center',
-    },
-    textPhoto: {
-        color: '#fff',
-        fontSize: 12,
-        fontFamily: 'Poppins_600SemiBold',
+        height: '100%'
     },
     textInput: {
         borderColor: '#ccc', // Cor da borda
@@ -75,6 +50,7 @@ const CreatePostStyles = StyleSheet.create({
         padding: 10,
         width: '100%',
         height: 'auto', // Altura do TextInput
+        minHeight: 150, // Altura do TextInput
         marginTop: 10,
         textAlignVertical: 'top', // Alinha o texto ao topo
         backgroundColor: '#fff', // Fundo branco para o campo de texto
@@ -93,6 +69,31 @@ const CreatePostStyles = StyleSheet.create({
         color: '#fff',
         fontSize: 14,
         fontFamily: 'Poppins_700Bold',
+    },
+    camContainer: {
+        display: 'flex',
+    },
+    iconCam: {
+        width: '30%',
+        alignSelf: 'center',
+        resizeMode: 'contain',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20,
+        width: '80%',
+    },
+    modalText: {
+        fontSize: 18,
+        marginBottom: 10,
+        textAlign: 'left', // Alinha o texto à esquerda
     },
 });
 

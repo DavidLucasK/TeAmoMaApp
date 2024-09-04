@@ -1,17 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, Animated } from 'react-native';
 import PostsStyles from '../styles/PostsStyles';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused, useFocusEffect } from '@react-navigation/native';
 import { PostsNavigationProp } from '../navigation';
 import Header from '../components/Header';
-import { opacity } from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
+import axios from 'axios';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 
 const Posts: React.FC = () => {
     const navigation = useNavigation<PostsNavigationProp>();
+    const isFocused = useIsFocused();
+    const [posts, setPosts] = useState<any[]>([]);
     const [likedPosts, setLikedPosts] = useState<number[]>([]);
     const [lastPress, setLastPress] = useState(0);
     const [animations, setAnimations] = useState<{ [key: number]: { heart: Animated.Value; scale: Animated.Value } }>({});
+    const [loading, setLoading] = useState(true); // Adiciona estado de carregamento
+
+    const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
+
+    // Função para buscar os posts da API
+    const fetchPosts = async () => {
+        setLoading(true); // Define o carregamento como verdadeiro
+        try {
+            console.log('tentando pegar os posts');
+            const response = await axios.get(`${backendUrl}/posts`);
+            const posts = response.data;
+
+            // Ordena os posts por data em ordem decrescente
+            const sortedPosts = posts.sort((a: any, b: any) => {
+                return new Date(b.data).getTime() - new Date(a.data).getTime();
+            });
+
+            console.log(sortedPosts);
+            setPosts(sortedPosts);
+        } catch (error) {
+            console.error('Erro ao buscar posts:', error);
+        } finally {
+            setLoading(false); // Define o carregamento como falso
+        }
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchPosts();
+        }, [])
+    );
 
     const toggleLike = (postId: number) => {
         if (likedPosts.includes(postId)) {
@@ -37,13 +71,13 @@ const Posts: React.FC = () => {
                 useNativeDriver: true,
             }),
             Animated.timing(scaleAnimation, {
-                toValue: 1.1, // Aumenta a escala
+                toValue: 1.1,
                 duration: 200,
                 useNativeDriver: true,
             }),
         ]).start(() => {
             Animated.timing(scaleAnimation, {
-                toValue: 1, // Retorna à escala original
+                toValue: 1,
                 duration: 120,
                 useNativeDriver: true,
             }).start(() => {
@@ -54,7 +88,7 @@ const Posts: React.FC = () => {
                 }).start(() => {
                     setAnimations((prev) => {
                         const newAnimations = { ...prev };
-                        delete newAnimations[postId]; // Remove a animação após o uso
+                        delete newAnimations[postId];
                         return newAnimations;
                     });
                 });
@@ -65,22 +99,37 @@ const Posts: React.FC = () => {
     const handleDoublePress = (postId: number) => {
         const time = new Date().getTime();
         if (time - lastPress < 300) {
-            toggleLike(postId); // Chama toggleLike sempre
-
+            toggleLike(postId);
             if (!likedPosts.includes(postId)) {
-                animateHeart(postId); // Passa o postId para a animação
+                animateHeart(postId);
             }
         }
         setLastPress(time);
     };
 
-    const posts = [
-        { id: 1, user: 'Mazinha02', tempo: '12 horas', imageSource: require('./assets/teste.png'), text: 'Oi amor te amo muito, tá?' },
-        { id: 2, user: 'Mazinha02', tempo: '15 horas', imageSource: require('./assets/teamo2.png'), text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro cum odit unde veritatis omnis optio fugit a. Corporis quia illum aspernatur omnis, distinctio assumenda sunt praesentium commodi. Corporis, eveniet quaerat!' },
-        { id: 3, user: 'Mazinha02', tempo: '20 horas', imageSource: require('./assets/sobremesa.png'), text: 'Texto post 2' },
-        { id: 4, user: 'Mazinha02', tempo: '23 horas', imageSource: require('./assets/cinema.png'), text: 'Texto post 3' },
-        { id: 5, user: 'Mazinha02', tempo: '1 dia', imageSource: require('./assets/teste.png'), text: 'Texto post 4' },
-    ];
+    const calculateTimeAgo = (postDate: string) => {
+        // Converte a string da data para um objeto Date
+        const postDateParsed = parseISO(postDate);
+        // Adiciona 8 horas à data do post
+        const adjustedPostDate = postDateParsed;
+        // Calcula o tempo passado desde a data ajustada do post
+        let timeAgo = formatDistanceToNow(adjustedPostDate, { addSuffix: true });
+
+        // Replace para mudar tudo que tiver em inglês para português
+        timeAgo = timeAgo
+            .replace('less than a', 'menos de um')
+            .replace('minutes', 'minutos')
+            .replace('minute', 'minuto')
+            .replace('hours', 'horas')
+            .replace('hour', 'hora')
+            .replace('days', 'dias')
+            .replace('day', 'dia')
+            .replace('ago', 'atrás')
+            .replace('in ', '')
+            .replace('about ', '');
+
+        return timeAgo;
+    };
 
     return (
         <View style={PostsStyles.container}>
@@ -101,54 +150,80 @@ const Posts: React.FC = () => {
             >
                 <View style={PostsStyles.main}>
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        <View style={PostsStyles.postsContainer} >
+                        <View style={PostsStyles.postsContainer}>
                             <TouchableOpacity style={PostsStyles.plusBtn} onPress={() => navigation.navigate('CreatePost')}>
                                 <Image style={PostsStyles.plus} source={require('./assets/plus.png')} />
                             </TouchableOpacity>
-                            {posts.map((post) => {
-                                const animation = animations[post.id];
-                                return (
-                                    <View key={post.id} style={PostsStyles.post}>
-                                        <Text style={PostsStyles.user}>{post.user}</Text>
-                                        <Text style={PostsStyles.tempo}>Há {post.tempo}</Text>
-                                        <View style={PostsStyles.imageContainer}>
-                                            <TouchableOpacity onPress={() => handleDoublePress(post.id)}>
-                                                <Image style={PostsStyles.imagePost} source={post.imageSource} />
-                                                {animation && (
-                                                    <Animated.View
-                                                        style={{
-                                                            position: 'absolute',
-                                                            top: '30%', // Ajuste a posição conforme necessário
-                                                            left: '30%',
-                                                            opacity: animation.heart,
-                                                            transform: [{ scale: animation.scale }],
-                                                        }}
-                                                    >
-                                                        <Image
-                                                            source={require('./assets/heartWhite.png')}
-                                                            style={{ width: 120, height: 120 }} // Ajuste o tamanho conforme necessário
-                                                        />
-                                                    </Animated.View>
-                                                )}
-                                            </TouchableOpacity>
-                                        </View>
-                                        <Text style={PostsStyles.textBottom}>{post.text}</Text>
-                                        <View style={PostsStyles.iconsContainer}>
-                                            <TouchableOpacity onPress={() => toggleLike(post.id)}>
-                                                <Image
-                                                    style={PostsStyles.iconsContainer}
-                                                    source={
-                                                        likedPosts.includes(post.id)
-                                                            ? require('./assets/heartFilled.png')
-                                                            : require('./assets/heartNoFill.png')
-                                                    }
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View style={PostsStyles.bordaBottom}></View>
+                            {loading ? ( // Verifica se está carregando
+                                <View style={PostsStyles.post}>
+                                    <Text style={PostsStyles.user}>Carregando...</Text>
+                                    <Text style={PostsStyles.tempo}>Carregando...</Text>
+                                    <View style={PostsStyles.imageContainer}>
+                                        <TouchableOpacity>
+                                            <View style={PostsStyles.loadingImage}/>
+                                        </TouchableOpacity>
                                     </View>
-                                );
-                            })}
+                                    <Text style={PostsStyles.textBottom}>Carregando...</Text>
+                                    <View style={PostsStyles.iconsContainer}>
+                                        <TouchableOpacity>
+                                            <Image
+                                                style={PostsStyles.iconsContainer}
+                                                source={require('./assets/heartNoFill.png')}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={PostsStyles.bordaBottom}></View>
+                                </View>
+                            ) : (
+                                posts.length > 0 ? (
+                                    posts.map((post: any) => {
+                                        const animation = animations[post.id];
+                                        return (
+                                            <View key={post.id} style={PostsStyles.post}>
+                                                <Text style={PostsStyles.user}>{post.username}</Text>
+                                                <Text style={PostsStyles.tempo}>{calculateTimeAgo(post.data)}</Text>
+                                                <View style={PostsStyles.imageContainer}>
+                                                    <TouchableOpacity onPress={() => handleDoublePress(post.id)}>
+                                                        <Image style={PostsStyles.imagePost} source={{ uri: post.nome_foto }} />
+                                                        {animation && (
+                                                            <Animated.View
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    top: '30%',
+                                                                    left: '30%',
+                                                                    opacity: animation.heart,
+                                                                    transform: [{ scale: animation.scale }],
+                                                                }}
+                                                            >
+                                                                <Image
+                                                                    source={require('./assets/heartWhite.png')}
+                                                                    style={{ width: 120, height: 120 }}
+                                                                />
+                                                            </Animated.View>
+                                                        )}
+                                                    </TouchableOpacity>
+                                                </View>
+                                                <Text style={PostsStyles.textBottom}>{post.desc_foto}</Text>
+                                                <View style={PostsStyles.iconsContainer}>
+                                                    <TouchableOpacity onPress={() => toggleLike(post.id)}>
+                                                        <Image
+                                                            style={PostsStyles.iconsContainer}
+                                                            source={
+                                                                likedPosts.includes(post.id)
+                                                                    ? require('./assets/heartFilled.png')
+                                                                    : require('./assets/heartNoFill.png')
+                                                            }
+                                                        />
+                                                    </TouchableOpacity>
+                                                </View>
+                                                <View style={PostsStyles.bordaBottom}></View>
+                                            </View>
+                                        );
+                                    })
+                                ) : (
+                                    <Text style={PostsStyles.noPostsText}>Nenhum post encontrado.</Text> // Mensagem quando não há posts
+                                )
+                            )}
                         </View>
                     </ScrollView>
                 </View>

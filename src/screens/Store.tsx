@@ -88,7 +88,6 @@ const Store: React.FC = () => {
 
       // Acessa diretamente response.data.items
       const items = response.data; // Aqui estamos pegando os itens da resposta
-      console.log('aqui', items);
 
       // Verifica se items é um array
       if (Array.isArray(items)) {

@@ -23,7 +23,7 @@
       "package": "com.davidlucask.TeAmo"
     },
     "web": {
-      "favicon": "src/screens/assets/HeartIcon512png"
+      "favicon": "src/screens/assets/HeartIcon512.png"
     },
     "plugins": [
       "expo-font"
