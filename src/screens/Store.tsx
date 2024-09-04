@@ -166,22 +166,6 @@ const Store: React.FC = () => {
     }
   };
 
-  const imageMap: Record<ImageKeys, any> = {
-    combo_lanche: require('./assets/combo_lanche.png'),
-    cinema: require('./assets/cinema.png'),
-    massagem: require('./assets/massagem.png'),
-    lovenight: require('./assets/lovenight.png'),
-    cupom: require('./assets/cupom.png'),
-    presente: require('./assets/presente.png'),
-    assistir: require('./assets/assistir.png'),
-    sobremesa: require('./assets/sobremesa.png'),
-  };
-
-  const getImageSource = (imageUrl: string): any => {
-    const imageName = imageUrl.split('/').pop()?.split('.')[0]; // Extrai o nome da imagem sem a extensão
-    return imageName && imageMap[imageName as ImageKeys]; // Cast para ImageKeys
-  };
-
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchPoints();
@@ -248,7 +232,7 @@ const Store: React.FC = () => {
               <View key={item.id}>
                 <Text style={StoreStyles.itemTitle}>{item.title}</Text>
                 <View style={StoreStyles.leftSide}>
-                  <Image source={getImageSource(item.imageUrl)} style={StoreStyles.itemImage} />
+                  <Image source={{ uri: item.imageUrl }} style={StoreStyles.itemImage} />
                 </View>
                 <View style={StoreStyles.rightSide}>
                   <Text style={StoreStyles.itemDescription}>{item.description}</Text>
