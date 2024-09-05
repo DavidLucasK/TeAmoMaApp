@@ -22,6 +22,8 @@
     "expo-font": "~12.0.9",
     "expo-image-picker": "^15.0.7",
     "expo-linear-gradient": "~13.0.2",
+    "expo-notifications": "~0.28.16",
+    "expo-permissions": "^14.4.0",
     "expo-splash-screen": "^0.27.5",
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
@@ -35,7 +37,8 @@
     "react-native-sweet-alert": "^3.5.0",
     "react-native-web": "~0.19.10",
     "sweetalert2": "^11.12.4",
-    "sweetalert2-react-content": "^5.0.7"
+    "sweetalert2-react-content": "^5.0.7",
+    "expo-device": "~6.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

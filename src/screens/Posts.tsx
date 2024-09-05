@@ -29,7 +29,7 @@ const Posts: React.FC = () => {
             let posts = response.data;
 
             // Filtra os posts para mostrar apenas aqueles onde o username é "Mazinha02"
-            posts = posts.filter((post: any) => post.username === "Mazinha02");
+            posts = posts.filter((post: any) => post.username === "Avix");
 
             // Ordena os posts por data em ordem decrescente
             const sortedPosts = posts.sort((a: any, b: any) => {
