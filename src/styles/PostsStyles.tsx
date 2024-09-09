@@ -110,7 +110,7 @@ const PostsStyles = StyleSheet.create({
         width: '100%'
     },
     loadingIcon: {
-        marginTop: 200,
+        marginTop: 50,
     },
 });
 

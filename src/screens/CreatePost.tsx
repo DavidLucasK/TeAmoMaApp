@@ -26,7 +26,6 @@ const CreatePost: React.FC = () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [12, 16],
             quality: 0.5,
         });
         if (!result.canceled) {
@@ -42,7 +41,6 @@ const CreatePost: React.FC = () => {
         }
         const result = await ImagePicker.launchCameraAsync({
             allowsEditing: true,
-            aspect: [12, 16],
             quality: 0.5,
         });
         if (!result.canceled) {
@@ -98,8 +96,8 @@ const CreatePost: React.FC = () => {
     const usernamezada = "Mazinha02";
 
     const createPost = async () => {
-        if (!selectedImage || !postText) {
-            Alert.alert('Erro', 'Por favor, insira uma imagem e um texto.');
+        if (!selectedImage) {
+            Alert.alert('Erro', 'Por favor, insira pelo menos uma imagem');
             return;
         }
 
