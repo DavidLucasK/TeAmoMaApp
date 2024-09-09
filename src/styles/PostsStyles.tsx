@@ -17,10 +17,12 @@ const PostsStyles = StyleSheet.create({
     },
     postsContainer: {
         width: '100%',
+        height: '100%',
         display: 'flex',
         paddingHorizontal: '5%',
         marginBottom: 120,
         borderRadius: 30,
+        paddingBottom: 100,
         backgroundColor: '#FFF',
         overflow: 'hidden',
     },
@@ -28,6 +30,7 @@ const PostsStyles = StyleSheet.create({
         display: 'flex',
         height: 40,
         marginTop: 25,
+        marginBottom: 25,
     },
     plus: {
         width: '100%',
@@ -63,7 +66,7 @@ const PostsStyles = StyleSheet.create({
         display: 'flex',
         width: 40,
         height: 40,
-        marginVertical: 10,
+        marginVertical: 2,
     },
     heart: {
         width: '100%',
@@ -105,6 +108,9 @@ const PostsStyles = StyleSheet.create({
     iconCam: {
         backgroundColor: 'red',
         width: '100%'
+    },
+    loadingIcon: {
+        marginTop: 200,
     },
 });
 

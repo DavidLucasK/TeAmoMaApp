@@ -95,7 +95,7 @@ const CreatePost: React.FC = () => {
         }
     };
 
-    const usernameTeste = "Mazinha02";
+    const usernamezada = "Mazinha02";
 
     const createPost = async () => {
         if (!selectedImage || !postText) {
@@ -112,7 +112,7 @@ const CreatePost: React.FC = () => {
                 await axios.post(`${backendUrl}/upload_post`, {
                     nome_foto: imagePath,
                     desc_foto: postText,
-                    username: usernameTeste
+                    username: usernamezada
                 });
                 Alert.alert('Sucesso', 'Post criado com sucesso!');
                 setSelectedImage(null);
