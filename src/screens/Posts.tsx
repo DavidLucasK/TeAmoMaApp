@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, Animated, RefreshControl, ActivityIndicator, FlatList } from 'react-native';
-import PostsStyles from '../styles/PostsStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import { PostsNavigationProp } from '../navigation';
 import Header from '../components/Header';
+import PostsStyles from '../styles/PostsStyles';
+import { PostsNavigationProp } from '../navigation';
 import axios from 'axios';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 interface Post {
