@@ -4,13 +4,11 @@ const StoreStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF'
-
 },
   pointsSection: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: 30,
   },
   pointsTitle: {
     fontFamily: 'Poppins_700Bold',
@@ -25,7 +23,30 @@ const StoreStyles = StyleSheet.create({
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
     zIndex: 3,
-},
+  },
+  borderImage: {
+    height: 17,
+    width: 360,
+    left: 17,
+    marginTop: -7,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    zIndex: 3,
+  },
+  borderRedeem: {
+    height: 17,
+    width: 125,
+    marginTop: -33,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    zIndex: 3,
+  },
+  borderHeader: {
+    height: 18,
+    width: 405,
+    marginTop: -10,
+    zIndex: 3,
+  },
   points: {
     fontSize: 32,
     fontFamily: 'Poppins_700Bold',
@@ -38,7 +59,7 @@ const StoreStyles = StyleSheet.create({
     zIndex: 2,
   },
   howToEarn: {
-    fontFamily: 'Poppins_700Bold',
+    fontFamily: 'Poppins_500Medium',
     color: '#000',
     fontSize: 18,
   },
@@ -100,7 +121,8 @@ const StoreStyles = StyleSheet.create({
     width: 360,
     height: 240,
     objectFit: 'cover',
-    borderRadius: 20,
+    borderRadius: 10,
+    elevation: 5,
   },
   itemTitle: {
     textAlign: 'center',
@@ -118,6 +140,10 @@ const StoreStyles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
     fontSize: 20,
   },
+  itemPoints2: {
+    fontFamily: 'Poppins_700Bold',
+    fontSize: 24,
+  },
   containerLoading: {
     width: '100%',
   },
@@ -130,6 +156,12 @@ const StoreStyles = StyleSheet.create({
   noItems: {
     
   },
+  bordaBottom: {
+    borderBlockColor: '#eee',
+    borderBottomWidth: 1.5,
+    marginTop: 10,
+    marginBottom: 20
+},
 });
 
 export default StoreStyles;

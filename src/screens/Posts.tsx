@@ -56,6 +56,7 @@ const Posts: React.FC = () => {
         console.log('updateLikes chamada');
         if (pendingLikes.length > 0) {
             try {
+                console.log("tem like pra fazer")
                 await axios.post(`${backendUrl}/like`, { likedPostIds: pendingLikes });
                 console.log('Likes atualizados:', pendingLikes);
     
@@ -81,8 +82,8 @@ const Posts: React.FC = () => {
     useEffect(() => {
         fetchPosts(1);
         const interval = setInterval(() => {
-            updateLikes(); // Atualiza likes pendentes a cada 1 minuto
-        }, 20000); // 1 minuto
+            updateLikes(); // Atualiza likes pendentes a cada 60 segundos
+        }, 60000); // 60 segundos
 
         return () => clearInterval(interval); // Limpa o intervalo quando o componente desmonta
     }, []);
@@ -107,15 +108,26 @@ const Posts: React.FC = () => {
 
     const toggleLike = (postId: number) => {
         if (likedPosts.includes(postId)) {
-            // Se o post já está curtido, removê-lo dos likes
-            setLikedPosts(likedPosts.filter((id) => id !== postId));
-            setPendingLikes(prev => prev.filter(id => id !== postId));
+            // Se o post já está curtido, removê-lo da lista de likes
+            setLikedPosts(prevLikes => prevLikes.filter(id => id !== postId));
+            setPendingLikes(prevPendingLikes => prevPendingLikes.filter(id => id !== postId));
         } else {
-            // Se o post não está curtido, adicioná-lo aos likes
-            setLikedPosts([...likedPosts, postId]);
-            setPendingLikes(prev => [...prev, postId]);
+            // Se o post não está curtido, adicioná-lo à lista de likes
+            setLikedPosts(prevLikes => [...prevLikes, postId]);
+            setPendingLikes(prevPendingLikes => [...prevPendingLikes, postId]);
         }
+    
+        // Aqui, você pode atualizar o estado do post se necessário
+        setPosts(prevPosts =>
+            prevPosts.map(post =>
+                post.id === postId
+                    ? { ...post, is_liked: !post.is_liked } // Alterna o estado de curtida diretamente no post
+                    : post
+            )
+        );
     };
+    
+    
 
     const animateHeart = (postId: number) => {
         const heartAnimation = new Animated.Value(0);
@@ -193,7 +205,7 @@ const Posts: React.FC = () => {
         const animation = animations[item.id];
         return (
             <View style={PostsStyles.post}>
-                <Text style={PostsStyles.user}>{item.username}</Text>
+                <Text style={PostsStyles.user} onPress={() => navigation.navigate('Profile')}>{item.username}</Text>
                 <Text style={PostsStyles.tempo}>{calculateTimeAgo(item.data)}</Text>
                 <View style={PostsStyles.imageContainer}>
                     <TouchableOpacity activeOpacity={0.7} onPress={() => handleDoublePress(item.id)}>
@@ -216,13 +228,13 @@ const Posts: React.FC = () => {
                         )}
                     </TouchableOpacity>
                 </View>
-                <Text style={PostsStyles.textBottom}>{item.desc_foto}</Text>
+                <Text style={PostsStyles.textBottom}><Text style={PostsStyles.usernameDesc} onPress={() => navigation.navigate('Profile')}>{item.username}</Text> {item.desc_foto}</Text>
                 <View style={PostsStyles.iconsContainer}>
                     <TouchableOpacity onPress={() => toggleLike(item.id)}>
                         <Image
                             style={PostsStyles.iconsContainer}
                             source={
-                                item.is_liked || likedPosts.includes(item.id)
+                                likedPosts.includes(item.id) || item.is_liked
                                     ? require('./assets/heartFilled.png')
                                     : require('./assets/heartNoFill.png')
                             }

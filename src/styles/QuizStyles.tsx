@@ -72,7 +72,9 @@ voltar: {
     paddingHorizontal: 40,
     backgroundColor: '#ffffff90',
     borderRadius: 5,
-    zIndex: 1, // Certifique-se de que o botão fique acima de outros elementos
+},
+voltarText: {
+    fontFamily: 'Poppins_600SemiBold',
 },
 correct: {
     backgroundColor: '#a4dbb1',

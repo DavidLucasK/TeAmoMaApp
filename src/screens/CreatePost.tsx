@@ -93,7 +93,7 @@ const CreatePost: React.FC = () => {
         }
     };
 
-    const usernamezada = "Avix";
+    const usernamezada = "Mazinha02";
 
     const createPost = async () => {
         if (!selectedImage) {

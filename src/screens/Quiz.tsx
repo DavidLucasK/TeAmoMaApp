@@ -182,9 +182,6 @@ const Quiz: React.FC = () => {
                 end={{ x: 1, y: 0 }}
                 style={QuizStyles.quizContainer} // Usando o estilo do cabeçalho
             >
-                <TouchableOpacity style={QuizStyles.voltar} onPress={() => navigation.navigate('EarnPoints')}>
-                    <Text>Voltar</Text>
-                </TouchableOpacity>
                 <View style={QuizStyles.card}>
                     <Image
                     source={require('./assets/loading.gif')} // Caminho para o seu GIF
@@ -230,7 +227,7 @@ const Quiz: React.FC = () => {
                 style={QuizStyles.quizContainer} // Usando o estilo do cabeçalho
             >
                 <TouchableOpacity style={QuizStyles.voltar} onPress={() => {navigation.navigate('EarnPoints')}}>
-                    <Text>Voltar</Text>
+                    <Text style={QuizStyles.voltarText}>Voltar</Text>
                 </TouchableOpacity>
                 <View style={QuizStyles.card}>
                     <Text style={QuizStyles.question}>{currentQuestion.pergunta}</Text>

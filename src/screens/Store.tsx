@@ -185,6 +185,10 @@ const Store: React.FC = () => {
         onRightIconPress={() => navigation.navigate('Profile')}
         isStoreScreen={true}
       />
+      <LinearGradient
+        colors={['transparent', '#00000030', '#FFFFFFFF']} // Gradiente esfumaçado
+        style={StoreStyles.borderHeader}
+      ></LinearGradient>
       <ScrollView
         style={StoreStyles.storeSection}
         showsVerticalScrollIndicator={false}
@@ -208,6 +212,7 @@ const Store: React.FC = () => {
             <Text style={StoreStyles.howToEarn}>Como consigo LovePoints?</Text>
           </TouchableOpacity>
         </View>
+        <View style={StoreStyles.bordaBottom}></View>
         {loading ? (
           <View>
           <Text style={StoreStyles.itemTitle}>Carregando...</Text>
@@ -233,10 +238,14 @@ const Store: React.FC = () => {
                 <Text style={StoreStyles.itemTitle}>{item.title}</Text>
                 <View style={StoreStyles.leftSide}>
                   <Image source={{ uri: item.imageUrl }} style={StoreStyles.itemImage} />
+                  <LinearGradient
+                    colors={['transparent', '#0000002b', '#FFFFFFFF']} // Gradiente esfumaçado
+                    style={StoreStyles.borderImage}
+                  ></LinearGradient>
                 </View>
                 <View style={StoreStyles.rightSide}>
                   <Text style={StoreStyles.itemDescription}>{item.description}</Text>
-                  <Text style={StoreStyles.itemPoints}>LovePoints necessários: {item.points}</Text>
+                  <Text style={StoreStyles.itemPoints2}>LovePoints necessários:{item.points}</Text>
                   <TouchableOpacity
                     style={StoreStyles.redeemButton}
                     onPress={() => handleRedemption(item)}
@@ -246,7 +255,12 @@ const Store: React.FC = () => {
                       {isRedeeming ? 'Resgatando...' : 'Resgatar'}
                     </Text>
                   </TouchableOpacity>
+                  <LinearGradient
+                    colors={['transparent', '#0000002b', '#FFFFFFFF']} // Gradiente esfumaçado
+                    style={StoreStyles.borderRedeem}
+                  ></LinearGradient>
                 </View>
+                <View style={StoreStyles.bordaBottom}></View>
               </View>
             ))
           ) : (

@@ -50,6 +50,11 @@ const PostsStyles = StyleSheet.create({
         color: '#ff0055',
         marginBottom: -10,
     },
+    usernameDesc: {
+        fontFamily: 'Poppins_700Bold',
+        fontSize: 14,
+        color: '#ff0055',
+    },
     imageContainer: {
         minWidth: 285,
         minHeight: 405, // Ajuste conforme necessário
