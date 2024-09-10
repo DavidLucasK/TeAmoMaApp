@@ -30,13 +30,14 @@ const Profile: React.FC = () => {
   const [uploading, setUploading] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   let userId = null;
+  const [points, setPoints] = useState<number>(0);
 
   const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
   useEffect(() => {
     const loadProfileData = async () => {
       try {
-        const userId = '1'; // User da Ma
+        const userId = '2'; // User da Ma
         const response = await axios.get(`${backendUrl}/get-profile/${userId}`);
         const profileData = response.data;
 
@@ -51,6 +52,7 @@ const Profile: React.FC = () => {
     };
 
     loadProfileData();
+    fetchPoints();
   }, []);
 
   const showImageOptions = () => {
@@ -144,7 +146,7 @@ const Profile: React.FC = () => {
     try {
       // Atualiza o perfil no backend
       await axios.post(`${backendUrl}/update-profile`, {
-        userId: 1, // Atualizando o profile do userId 1 = Mazinha02
+        userId: 2, // Atualizando o profile do userId 1 = Mazinha02
         name,
         email,
         phone,
@@ -165,6 +167,26 @@ const Profile: React.FC = () => {
     }
   
     setUploading(false);
+  };
+
+  const fetchPoints = async () => {
+    console.log('Iniciando a requisição para buscar pontos...');
+    try {
+      const response = await axios.get(`${backendUrl}/points`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error('Erro ao buscar pontos: ' + response.statusText);
+      }
+
+      console.log('Pontos recebidos:', response.data.points);
+      setPoints(response.data.points);
+    } catch (error: any) {
+      console.error('Erro ao buscar pontos:', error);
+    }
   };
 
   return (
@@ -209,6 +231,7 @@ const Profile: React.FC = () => {
                 </TouchableOpacity>
               </View>
               <View style={ProfileStyles.textContainer}>
+                <Text style={ProfileStyles.points}>Pontos: {points}</Text>
                 <Text style={ProfileStyles.info}>Nome de Usuário</Text>
                 <TextInput
                   style={ProfileStyles.textInput}

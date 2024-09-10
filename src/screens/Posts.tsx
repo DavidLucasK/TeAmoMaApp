@@ -11,23 +11,18 @@ interface Post {
     id: number;
     description: string;
     data: string; // Ajuste o tipo conforme o formato da data
-}
-
-interface PostsResponse {
-    posts: Post[];
-    currentPage: number;
-    totalPages: number;
-    totalPosts: number;
+    is_liked: boolean;
 }
 
 const Posts: React.FC = () => {
     const navigation = useNavigation<PostsNavigationProp>();
     const [likedPosts, setLikedPosts] = useState<number[]>([]);
+    const [pendingLikes, setPendingLikes] = useState<number[]>([]);
     const [lastPress, setLastPress] = useState(0);
     const [animations, setAnimations] = useState<{ [key: number]: { heart: Animated.Value; scale: Animated.Value } }>({});
     const [refreshing, setRefreshing] = useState(false);
     const [page, setPage] = useState(1);
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState<Post[]>([]);
     const [totalPages, setTotalPages] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -57,6 +52,41 @@ const Posts: React.FC = () => {
         }
     };
 
+    const updateLikes = async () => {
+        console.log('updateLikes chamada');
+        if (pendingLikes.length > 0) {
+            try {
+                await axios.post(`${backendUrl}/like`, { likedPostIds: pendingLikes });
+                console.log('Likes atualizados:', pendingLikes);
+    
+                // Atualize o estado dos posts após atualizar os likes
+                setPosts(prevPosts =>
+                    prevPosts.map(post =>
+                        pendingLikes.includes(post.id) ? { ...post, is_liked: true } : post
+                    )
+                );
+                setPendingLikes([]); // Limpa a lista de likes pendentes
+            } catch (error) {
+                console.error('Erro ao atualizar likes:', error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (pendingLikes.length > 0) {
+            updateLikes();
+        }
+    }, [pendingLikes]);
+
+    useEffect(() => {
+        fetchPosts(1);
+        const interval = setInterval(() => {
+            updateLikes(); // Atualiza likes pendentes a cada 1 minuto
+        }, 20000); // 1 minuto
+
+        return () => clearInterval(interval); // Limpa o intervalo quando o componente desmonta
+    }, []);
+
     const loadMorePosts = () => {
         if (!isLoading && hasMore) {
             fetchPosts(page + 1);
@@ -77,9 +107,13 @@ const Posts: React.FC = () => {
 
     const toggleLike = (postId: number) => {
         if (likedPosts.includes(postId)) {
+            // Se o post já está curtido, removê-lo dos likes
             setLikedPosts(likedPosts.filter((id) => id !== postId));
+            setPendingLikes(prev => prev.filter(id => id !== postId));
         } else {
+            // Se o post não está curtido, adicioná-lo aos likes
             setLikedPosts([...likedPosts, postId]);
+            setPendingLikes(prev => [...prev, postId]);
         }
     };
 
@@ -188,7 +222,7 @@ const Posts: React.FC = () => {
                         <Image
                             style={PostsStyles.iconsContainer}
                             source={
-                                likedPosts.includes(item.id)
+                                item.is_liked || likedPosts.includes(item.id)
                                     ? require('./assets/heartFilled.png')
                                     : require('./assets/heartNoFill.png')
                             }

@@ -15,7 +15,7 @@ const ProfileStyles = StyleSheet.create({
         backgroundColor: '#ffffff5b',
         borderRadius: 8,
         width: 340,
-        height: 500,
+        height: 530,
     },
     photoContainer: {
         alignItems: 'center',
@@ -23,8 +23,8 @@ const ProfileStyles = StyleSheet.create({
         marginTop: -100,
     },
     profileImage: {
-        width: 230,
-        height: 230,
+        width: 200,
+        height: 200,
         borderRadius: 250,
         marginBottom: 8,
         backgroundColor: '#79797957'
@@ -56,18 +56,14 @@ const ProfileStyles = StyleSheet.create({
         fontSize: 16,
         
     },
-    pointsContainer: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: 15,
-    },
     points: {
         fontSize: 24,
         padding: 5,
         marginLeft: 4,
+        marginTop: 15,
         fontFamily: 'Poppins_700Bold',
-        backgroundColor: '#e41d69',
-        color: 'white',
+        backgroundColor: '#FFF',
+        color: '#e41d69',
         paddingHorizontal: 15,
         borderRadius: 5,
     },
