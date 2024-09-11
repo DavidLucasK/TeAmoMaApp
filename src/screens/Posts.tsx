@@ -233,7 +233,7 @@ const Posts: React.FC = () => {
                 await axios.post(`${backendUrl}/comment`, {
                     id_post: commentingPostId,
                     comment_text: commentText,
-                    username: 'Mazinha02'
+                    username: 'Avix'
                 });
                 
                 console.log('Comentário publicado:', commentText);

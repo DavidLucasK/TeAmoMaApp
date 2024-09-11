@@ -106,7 +106,7 @@ const CreatePost: React.FC = () => {
         return () => clearInterval(intervalId);
     }, []);
 
-    const usernamezada = "Mazinha02";
+    const usernamezada = "Avix";
 
     const createPost = async () => {
         if (!selectedImage) {
