@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, TextInput, Modal, Button, StyleSheet, Alert, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import CreatePostStyles from '../styles/CreatePostStyles';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -14,6 +14,7 @@ const CreatePost: React.FC = () => {
     const [postText, setPostText] = useState<string>('');
     const [uploading, setUploading] = useState<boolean>(false);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [textIndex, setTextIndex] = useState(0);
 
     const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
@@ -93,7 +94,19 @@ const CreatePost: React.FC = () => {
         }
     };
 
-    const usernamezada = "Avix";
+    const texts = ['Enviando.  ', 'Enviando.. ', 'Enviando...'];
+
+    useEffect(() => {
+        // Função para atualizar o índice do texto
+        const intervalId = setInterval(() => {
+        setTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
+        }, 500); // Atualiza a cada 1 segundo
+
+        // Limpa o intervalo ao desmontar o componente
+        return () => clearInterval(intervalId);
+    }, []);
+
+    const usernamezada = "Mazinha02";
 
     const createPost = async () => {
         if (!selectedImage) {
@@ -176,10 +189,23 @@ const CreatePost: React.FC = () => {
                                 onChangeText={setPostText}
                             />
                             <TouchableOpacity onPress={createPost} style={CreatePostStyles.createBtn} disabled={uploading}>
-                            <Text style={CreatePostStyles.createText}>
-                                {uploading ? 'Enviando...' : 'Criar Post'}
-                            </Text>
-                        </TouchableOpacity>
+                                {uploading ? 
+                                <View>
+                                {texts.map((text, index) => (
+                                    <Text
+                                    key={index}
+                                    style={[
+                                        CreatePostStyles.text,
+                                        { display: textIndex === index ? 'flex' : 'none' },
+                                    ]}
+                                    >
+                                    {text}
+                                    </Text>
+                                ))}
+                            </View>
+                                : <Text style={CreatePostStyles.createText}>Criar Post</Text>
+                                }
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </LinearGradient>

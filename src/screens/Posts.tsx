@@ -1,18 +1,27 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, Animated, RefreshControl, ActivityIndicator, FlatList } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Animated, RefreshControl, ActivityIndicator, FlatList, Keyboard } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../components/Header';
+import CommentInput from '../components/CommentInput';
 import PostsStyles from '../styles/PostsStyles';
 import { PostsNavigationProp } from '../navigation';
 import axios from 'axios';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 interface Post {
     id: number;
-    description: string;
-    data: string; // Ajuste o tipo conforme o formato da data
+    username: string;
+    data: string;
+    nome_foto: string;
+    desc_foto: string;
     is_liked: boolean;
+    comments: Comment[];
 }
+
+interface Comment {
+    username: string;
+    comment_text: string;
+  }
 
 const Posts: React.FC = () => {
     const navigation = useNavigation<PostsNavigationProp>();
@@ -26,6 +35,11 @@ const Posts: React.FC = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+
+    //Adicionar comentario
+    const [isCommenting, setIsCommenting] = useState(false); // Controla se o campo de comentário está visível
+    const [commentText, setCommentText] = useState('');
+    const [commentingPostId, setCommentingPostId] = useState<number | null>(null);
 
     const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
@@ -41,6 +55,7 @@ const Posts: React.FC = () => {
             });
 
             const { posts: newPosts, totalPages: newTotalPages } = response.data;
+            console.log(response.data);
 
             setPosts(prevPosts => pageNum === 1 ? newPosts : [...prevPosts, ...newPosts]);
             setTotalPages(newTotalPages);
@@ -201,6 +216,44 @@ const Posts: React.FC = () => {
         return timeAgo;
     };
 
+    const handleAddCommentPress = (postId: number) => {
+        setCommentingPostId(postId);
+    };
+    
+      // Função para monitorar mudanças no campo de texto
+      const handleCommentChange = (text: string) => {
+        setCommentText(text);
+      };
+    
+      // Função para publicar o comentário
+      const handlePublishComment = async () => {
+        if (commentText.trim() !== '' && commentingPostId !== null) {
+            try {
+                // Enviar dados para o endpoint de comentário
+                await axios.post(`${backendUrl}/comment`, {
+                    id_post: commentingPostId,
+                    comment_text: commentText,
+                    username: 'Mazinha02'
+                });
+                
+                console.log('Comentário publicado:', commentText);
+                setCommentText(''); // Limpa o campo de texto após publicar
+                setIsCommenting(false); // Esconde o campo de comentário
+                await fetchPosts(1);
+            } catch (error) {
+                console.error('Erro ao publicar comentário:', error);
+            }
+        }
+    };
+
+    const handleOutsidePress = () => {
+        if (commentingPostId !== null) {
+            setCommentingPostId(null);
+            setCommentText('');
+            Keyboard.dismiss();
+        }
+    };
+
     const renderItem = ({ item }: { item: any }) => {
         const animation = animations[item.id];
         return (
@@ -229,6 +282,39 @@ const Posts: React.FC = () => {
                     </TouchableOpacity>
                 </View>
                 <Text style={PostsStyles.textBottom}><Text style={PostsStyles.usernameDesc} onPress={() => navigation.navigate('Profile')}>{item.username}</Text> {item.desc_foto}</Text>
+                {/* Seção de comentários */}
+                {item.comments && item.comments.length > 0 ? (
+                    item.comments.map((comment, index) => (
+                        <View key={index} style={PostsStyles.commentContainer}>
+                            <Text style={PostsStyles.comments}>
+                                <Text onPress={() => navigation.navigate('Profile')} style={PostsStyles.usernameComments}>{comment.username}</Text> {comment.comment_text}
+                            </Text>
+                        </View>
+                    ))
+                ) : (
+                    null
+                )}
+
+                {/* Adicionar novo comentário */}
+                <View>
+                    {commentingPostId === item.id ? (
+                        <View>
+                            <CommentInput
+                                commentText={commentText}
+                                onChangeText={handleCommentChange}
+                            />
+                            {commentText.trim() !== '' && (
+                                <TouchableOpacity onPress={handlePublishComment}>
+                                    <Text style={PostsStyles.publicarbtn}>Publicar</Text>
+                                </TouchableOpacity>
+                            )}
+                        </View>
+                    ) : (
+                        <TouchableOpacity onPress={() => handleAddCommentPress(item.id)}>
+                            <Text style={PostsStyles.addComments}>Adicione um comentário...</Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
                 <View style={PostsStyles.iconsContainer}>
                     <TouchableOpacity onPress={() => toggleLike(item.id)}>
                         <Image

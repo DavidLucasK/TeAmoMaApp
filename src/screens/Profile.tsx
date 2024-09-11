@@ -37,7 +37,7 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const loadProfileData = async () => {
       try {
-        const userId = '2'; // User da Ma = 1
+        const userId = '1'; // User da Ma = 1
         const response = await axios.get(`${backendUrl}/get-profile/${userId}`);
         const profileData = response.data;
 
@@ -146,7 +146,7 @@ const Profile: React.FC = () => {
     try {
       // Atualiza o perfil no backend
       await axios.post(`${backendUrl}/update-profile`, {
-        userId: 2, // Atualizando o profile do userId 1 = Mazinha02
+        userId: 1, // Atualizando o profile do userId 1 = Mazinha02
         name,
         email,
         phone,

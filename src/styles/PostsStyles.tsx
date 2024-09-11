@@ -117,6 +117,26 @@ const PostsStyles = StyleSheet.create({
     loadingIcon: {
         marginTop: 50,
     },
+    usernameComments: {
+        fontFamily: 'Poppins_700Bold',
+        fontSize: 12,
+        color: '#ff0055',
+    },
+    comments: {
+        fontFamily: 'Poppins_400Regular',
+        fontSize: 11,
+    },
+    addComments: {
+        fontFamily: 'Poppins_500Medium',
+        color: '#afafaf',
+        fontSize: 14,
+        marginVertical: 13,
+    },
+    publicarbtn: {
+        fontFamily: 'Poppins_600SemiBold',
+        color: '#ff0055',
+        fontSize: 16
+    },
 });
 
 export default PostsStyles;

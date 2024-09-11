@@ -107,14 +107,25 @@ const CreatePostStyles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 10,
         width: '40%',
+        maxHeight: 100,
         alignSelf: 'center',
         alignItems: 'center',
+    },
+    text: {
+        color: '#FFF',
+        fontSize: 14,
+        fontFamily: 'Poppins_700Bold',
     },
     createText: {
         color: '#FFF',
         fontSize: 14,
         fontFamily: 'Poppins_700Bold',
     },
+    loadingCreate: {
+        minWidth: '100%',
+        maxHeight: '50%',
+        resizeMode: 'contain',
+    }
 });
 
 export default CreatePostStyles;
