@@ -1,19 +1,8 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet} from 'react-native';
 
-const PostsStyles = StyleSheet.create({
+const IndividualPostStyles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    main: {
-        width: '100%',
-        height: '100%',
-        textAlign: 'center',
-        paddingHorizontal: 10,
-        paddingBottom: 40,
-    },
-    scrollContainer: {
-        flexGrow: 1,
-        alignItems: 'center',
     },
     postsContainer: {
         width: '100%',
@@ -67,27 +56,32 @@ const PostsStyles = StyleSheet.create({
         borderColor: '#000', // Cor da borda
         borderRadius: 10,
     },
+    iconsContainer:{
+        display: 'flex',
+        width: 40,
+        height: 40,
+        marginBottom: 15,
+    },
+    heart: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'contain',
+    },
     imagePost: {
         width: '100%',
         height: '100%',
         resizeMode: 'contain', // Usa o
     },
     textBottom: {
-        fontFamily: 'Poppins_500Medium',
-        color: '#363636',
         textAlign: 'left',
         maxWidth: 285,
-        marginBottom: 5,
+        fontFamily: 'Poppins_500Medium',
+        color: '#363636'
     },
     tempo: {
         fontFamily: 'Poppins_500Medium',
         fontSize: 12,
         color: '#585858'
-    },
-    bordaBottom: {
-        borderBlockColor: '#ddd',
-        borderBottomWidth: 1,
-        marginTop: 20
     },
     loadingImage: {
 
@@ -105,12 +99,15 @@ const PostsStyles = StyleSheet.create({
         width: '100%'
     },
     loadingIcon: {
-        marginTop: 50,
+        marginTop: 170,
     },
     usernameComments: {
         fontFamily: 'Poppins_700Bold',
         fontSize: 12,
         color: '#ff0055',
+    },
+    commentSection: {
+
     },
     commentContainer: {
         maxWidth: 285,
@@ -123,39 +120,13 @@ const PostsStyles = StyleSheet.create({
         fontFamily: 'Poppins_500Medium',
         color: '#afafaf',
         fontSize: 14,
-        marginVertical: 12,
-    },
-    seeAllComments: {
-        fontFamily: 'Poppins_400Regular',
-        color: '#afafaf',
-        fontSize: 14,
-        marginVertical: 4,
+        marginVertical: 13,
     },
     publicarbtn: {
         fontFamily: 'Poppins_600SemiBold',
         color: '#ff0055',
         fontSize: 16
     },
-    iconsContainer:{
-        display: 'flex',
-        flexDirection: 'row', // Organiza os ícones na horizontal
-        alignItems: 'center', // Alinha os ícones verticalmente no centro
-        justifyContent: 'flex-start', // Alinha os ícones no início da container
-        maxHeight: 50,
-        gap: 10,
-        marginLeft: -3,
-        marginBottom: 10,
-    },
-    heartIcon: {
-        width: 40,
-        height: 40,
-        resizeMode: 'contain'
-    },
-    commentIcon: {
-        width: 40,
-        height: 40,
-        resizeMode: 'contain'
-    },
 });
 
-export default PostsStyles;
+export default IndividualPostStyles;

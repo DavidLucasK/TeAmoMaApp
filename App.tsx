@@ -2,49 +2,67 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Importando AsyncStorage
 
-import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold, Poppins_600SemiBold } from '@expo-google-fonts/poppins'; // Importando as fontes Poppins
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 
-import LoadingScreen from './src/screens/LoadingScreen'; // Importando a tela de carregamento
-import Home from './src/screens/Home'; // Importando o componente Home
-import Store from './src/screens/Store'; // Importando o componente Store
-import Profile from './src/screens/Profile'; // Importando o componente Profile
-import EarnPoints from './src/screens/EarnPoints';
-import Quiz from './src/screens/Quiz';
-import Posts from './src/screens/Posts';
-import CreatePost from './src/screens/CreatePost';
+import LoadingScreen from './src/screens/LoadingScreen'; // Tela de carregamento
+import Home from './src/screens/Home'; // Tela Home
+import Store from './src/screens/Store'; // Tela Store
+import Profile from './src/screens/Profile'; // Tela Profile
+import EarnPoints from './src/screens/EarnPoints'; // Tela EarnPoints
+import Quiz from './src/screens/Quiz'; // Tela Quiz
+import Posts from './src/screens/Posts'; // Tela Posts
+import CreatePost from './src/screens/CreatePost'; // Tela CreatePost
+import IndividualPost from './src/screens/IndividualPost'; // Tela IndividualPost
+import Login from './src/screens/Login'; // Tela Login
+import { AppProvider } from './src/context/AppContext'; // AppProvider
 
 const Stack = createStackNavigator();
-const backendUrl = 'https://backendlogindl.vercel.app/api/auth'; // Certifique-se de que o backendUrl esteja correto
+const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
 const App: React.FC = () => {
-    const [isLoading, setIsLoading] = useState(true); // Estado para controlar a tela de carregamento
+    const [isLoading, setIsLoading] = useState(true); // Estado para controle de carregamento
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Estado de login
 
     const [fontsLoaded] = useFonts({
         Poppins_400Regular,
         Poppins_500Medium,
         Poppins_600SemiBold,
-        Poppins_700Bold, // Certifique-se de incluir todas as variantes que você deseja usar
+        Poppins_700Bold,
     });
 
-    const handleLoadingComplete = (status: boolean) => {
-        if (status) {
-            setIsLoading(false); // Oculta a tela de carregamento
-        }
-    };
+    useEffect(() => {
+        const checkLoginStatus = async () => {
+            try {
+                const token = await AsyncStorage.getItem('authToken'); // Verifica se o token está salvo
+                if (token) {
+                    setIsLoggedIn(true); // Define como logado se o token existir
+                }
+            } catch (error) {
+                console.error('Erro ao verificar o token:', error);
+            } finally {
+                setIsLoading(false); // Carregamento concluído
+            }
+        };
+
+        checkLoginStatus(); // Chama a função para verificar o login
+    }, []);
+
+    if (!fontsLoaded || isLoading) {
+        return <LoadingScreen onComplete={() => setIsLoading(false)} />; // Tela de carregamento enquanto carrega fontes ou checa o login
+    }
 
     return (
-        <NavigationContainer>
-            {isLoading ? (
-                <LoadingScreen onComplete={handleLoadingComplete} />
-            ) : (
+        <AppProvider>
+            <NavigationContainer>
                 <Stack.Navigator
-                    initialRouteName="Home"
+                    initialRouteName={isLoggedIn ? "Home" : "Login"} // Redireciona para Home ou Login
                     screenOptions={{
-                        gestureEnabled: false, // Desabilita os gestos de navegação
-                        cardStyleInterpolator: () => ({ // Retorna um estilo sem animação
+                        gestureEnabled: false,
+                        cardStyleInterpolator: () => ({
                             cardStyle: {
-                                opacity: 1, // Mantém a opacidade
+                                opacity: 1,
                             },
                         }),
                     }}
@@ -52,46 +70,56 @@ const App: React.FC = () => {
                     <Stack.Screen 
                         name="Home" 
                         component={Home} 
-                        options={{ headerShown: false }} // Removendo o cabeçalho padrão
+                        options={{ headerShown: false }} 
                     />
                     <Stack.Screen 
                         name="Store"
                         component={Store}
-                        options={{ headerShown: false }} // Removendo o cabeçalho padrão
+                        options={{ headerShown: false }} 
                     />
                     <Stack.Screen 
                         name="Profile"
                         component={Profile}
-                        options={{ headerShown: false }} // Removendo o cabeçalho padrão
+                        options={{ headerShown: false }} 
                     />
                     <Stack.Screen 
                         name="EarnPoints"
                         component={EarnPoints}
-                        options={{ headerShown: false }} // Removendo o cabeçalho padrão
+                        options={{ headerShown: false }} 
                     />
                     <Stack.Screen 
                         name="Quiz"
                         component={Quiz}
-                        options={{ headerShown: false }} // Removendo o cabeçalho padrão
+                        options={{ headerShown: false }} 
                     />
                     <Stack.Screen 
                         name="Posts"
                         component={Posts}
-                        options={{ headerShown: false }} // Removendo o cabeçalho padrão
+                        options={{ headerShown: false }} 
                     />
                     <Stack.Screen 
                         name="CreatePost"
                         component={CreatePost}
-                        options={{ headerShown: false }} // Removendo o cabeçalho padrão
+                        options={{ headerShown: false }} 
+                    />
+                    <Stack.Screen 
+                        name="IndividualPost"
+                        component={IndividualPost}
+                        options={{ headerShown: false }} 
+                    />
+                    <Stack.Screen 
+                        name="Login"
+                        component={Login}
+                        options={{ headerShown: false }} 
                     />
                 </Stack.Navigator>
-            )}
-            <StatusBar
-                barStyle="light-content" // Define o estilo do conteúdo da barra de status
-                backgroundColor="transparent" // Cor de fundo da barra de status
-                translucent={true} // Deixa a barra de status translúcida
-            />
-        </NavigationContainer>
+                <StatusBar
+                    barStyle="light-content"
+                    backgroundColor="transparent"
+                    translucent={true}
+                />
+            </NavigationContainer>
+        </AppProvider>
     );
 };
 

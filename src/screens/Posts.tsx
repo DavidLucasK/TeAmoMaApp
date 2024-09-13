@@ -15,6 +15,9 @@ interface Post {
     nome_foto: string;
     desc_foto: string;
     is_liked: boolean;
+    comment: string;
+    comment_text: string;
+    index: number;
     comments: Comment[];
 }
 
@@ -114,6 +117,7 @@ const Posts: React.FC = () => {
         fetchPosts(1);
     }, []);
 
+    //Função quando o user arrastar para cima para dar refresh na Page
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
         setPage(1);
@@ -121,6 +125,7 @@ const Posts: React.FC = () => {
         setRefreshing(false);
     }, []);
 
+    //Função que identifica os likes para mandar os likes serem feitos no servidor
     const toggleLike = (postId: number) => {
         if (likedPosts.includes(postId)) {
             // Se o post já está curtido, removê-lo da lista de likes
@@ -143,7 +148,7 @@ const Posts: React.FC = () => {
     };
     
     
-
+    //Função para fazer animação do coração de Like no meio da foto
     const animateHeart = (postId: number) => {
         const heartAnimation = new Animated.Value(0);
         const scaleAnimation = new Animated.Value(1);
@@ -185,6 +190,7 @@ const Posts: React.FC = () => {
         });
     };
 
+    //Função que identifica duplo clique na imagem dentro de um certo tempo e chama a animateHeart
     const handleDoublePress = (postId: number) => {
         const time = new Date().getTime();
         if (time - lastPress < 700) {
@@ -196,6 +202,7 @@ const Posts: React.FC = () => {
         setLastPress(time);
     };
 
+    //Função que calcular tempo atrás do post e dá replace nos textos para pt-BR
     const calculateTimeAgo = (postDate: string) => {
         const postDateParsed = parseISO(postDate);
         const adjustedPostDate = postDateParsed;
@@ -226,7 +233,8 @@ const Posts: React.FC = () => {
       };
     
       // Função para publicar o comentário
-      const handlePublishComment = async () => {
+    const handlePublishComment = async () => 
+    {
         if (commentText.trim() !== '' && commentingPostId !== null) {
             try {
                 // Enviar dados para o endpoint de comentário
@@ -246,15 +254,7 @@ const Posts: React.FC = () => {
         }
     };
 
-    const handleOutsidePress = () => {
-        if (commentingPostId !== null) {
-            setCommentingPostId(null);
-            setCommentText('');
-            Keyboard.dismiss();
-        }
-    };
-
-    const renderItem = ({ item }: { item: any }) => {
+    const renderItem = ({ item }: { item: Post }) => {
         const animation = animations[item.id];
         return (
             <View style={PostsStyles.post}>
@@ -281,20 +281,60 @@ const Posts: React.FC = () => {
                         )}
                     </TouchableOpacity>
                 </View>
-                <Text style={PostsStyles.textBottom}><Text style={PostsStyles.usernameDesc} onPress={() => navigation.navigate('Profile')}>{item.username}</Text> {item.desc_foto}</Text>
+                {/* Icons container começa aqui */}
+                <View style={PostsStyles.iconsContainer}>
+                    <TouchableOpacity onPress={() => toggleLike(item.id)}>
+                        <Image
+                            style={PostsStyles.heartIcon}
+                            source={
+                                likedPosts.includes(item.id) || item.is_liked
+                                    ? require('./assets/heartFilled.png')
+                                    : require('./assets/heartNoFill.png')
+                            }
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('IndividualPost', { postId: item.id })}>
+                        <Image source={require('./assets/comment.png')} style={PostsStyles.commentIcon}/>
+                    </TouchableOpacity>
+                </View>
+                {/* Icons container termina aqui */}
+                <Text style={PostsStyles.textBottom}>
+                    <Text style={PostsStyles.usernameDesc} onPress={() => navigation.navigate('Profile')}>
+                        {item.username}
+                    </Text>{' '}
+                    {item.desc_foto}
+                </Text>
                 {/* Seção de comentários */}
                 {item.comments && item.comments.length > 0 ? (
-                    item.comments.map((comment, index) => (
-                        <View key={index} style={PostsStyles.commentContainer}>
-                            <Text style={PostsStyles.comments}>
-                                <Text onPress={() => navigation.navigate('Profile')} style={PostsStyles.usernameComments}>{comment.username}</Text> {comment.comment_text}
-                            </Text>
-                        </View>
-                    ))
-                ) : (
-                    null
-                )}
-
+                    item.comments.length <= 2 ? (
+                        item.comments.map((comment, index) => (
+                            <View key={index} style={PostsStyles.commentContainer}>
+                                <Text style={PostsStyles.comments}>
+                                    <Text onPress={() => navigation.navigate('Profile')} style={PostsStyles.usernameComments}>
+                                        {comment.username}
+                                    </Text>{' '}
+                                    {comment.comment_text}
+                                </Text>
+                            </View>
+                        ))
+                    ) : (
+                        <>
+                            {item.comments.slice(0, 2).map((comment, index) => (
+                                <View key={index} style={PostsStyles.commentContainer}>
+                                    <Text style={PostsStyles.comments}>
+                                        <Text onPress={() => navigation.navigate('Profile')} style={PostsStyles.usernameComments}>
+                                            {comment.username}
+                                        </Text>{' '}
+                                        {comment.comment_text}
+                                    </Text>
+                                </View>
+                            ))}
+                            <TouchableOpacity onPress={() => navigation.navigate('IndividualPost', { postId: item.id })}>
+                                <Text style={PostsStyles.seeAllComments}>Ver todos {item.comments.length} os comentários</Text>
+                            </TouchableOpacity>
+                        </>
+                    )
+                ) : null}
                 {/* Adicionar novo comentário */}
                 <View>
                     {commentingPostId === item.id ? (
@@ -315,22 +355,11 @@ const Posts: React.FC = () => {
                         </TouchableOpacity>
                     )}
                 </View>
-                <View style={PostsStyles.iconsContainer}>
-                    <TouchableOpacity onPress={() => toggleLike(item.id)}>
-                        <Image
-                            style={PostsStyles.iconsContainer}
-                            source={
-                                likedPosts.includes(item.id) || item.is_liked
-                                    ? require('./assets/heartFilled.png')
-                                    : require('./assets/heartNoFill.png')
-                            }
-                        />
-                    </TouchableOpacity>
-                </View>
                 <View style={PostsStyles.bordaBottom}></View>
             </View>
         );
     };
+    
 
     return (
         <View style={PostsStyles.container}>

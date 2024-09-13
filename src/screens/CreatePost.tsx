@@ -7,6 +7,7 @@ import { CreatePostNavigationProp } from '../navigation';
 import Header from '../components/Header';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
+import { useAppContext } from '../context/AppContext';
 
 const CreatePost: React.FC = () => {
     const navigation = useNavigation<CreatePostNavigationProp>();
@@ -15,8 +16,14 @@ const CreatePost: React.FC = () => {
     const [uploading, setUploading] = useState<boolean>(false);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [textIndex, setTextIndex] = useState(0);
+    const { user } = useAppContext();
+    let userName = null;
 
     const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
+
+    //1 == Mazinha02
+    //2 == Avix
+    userName = user === 1 ? 'Mazinha02' : 'Avix';
 
     const pickImage = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -106,7 +113,6 @@ const CreatePost: React.FC = () => {
         return () => clearInterval(intervalId);
     }, []);
 
-    const usernamezada = "Avix";
 
     const createPost = async () => {
         if (!selectedImage) {
@@ -123,7 +129,7 @@ const CreatePost: React.FC = () => {
                 await axios.post(`${backendUrl}/upload_post`, {
                     nome_foto: imagePath,
                     desc_foto: postText,
-                    username: usernamezada
+                    username: userName
                 });
                 Alert.alert('Sucesso', 'Post criado com sucesso!');
                 setSelectedImage(null);

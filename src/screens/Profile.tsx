@@ -18,7 +18,7 @@ import { ProfileNavigationProp } from '../navigation';
 import Header from '../components/Header';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAppContext } from '../context/AppContext';
 
 const Profile: React.FC = () => {
   const navigation = useNavigation<ProfileNavigationProp>();
@@ -31,13 +31,16 @@ const Profile: React.FC = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   let userId = null;
   const [points, setPoints] = useState<number>(0);
+  const { user } = useAppContext();
 
   const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
   useEffect(() => {
     const loadProfileData = async () => {
       try {
-        const userId = '2'; // User da Ma = 1
+        //1 == Mazinha02
+        //2 == Avix
+        const userId = user === 1 ? '1' : '2';
         const response = await axios.get(`${backendUrl}/get-profile/${userId}`);
         const profileData = response.data;
 
@@ -146,7 +149,7 @@ const Profile: React.FC = () => {
     try {
       // Atualiza o perfil no backend
       await axios.post(`${backendUrl}/update-profile`, {
-        userId: 2, // Atualizando o profile do userId 1 = Mazinha02
+        userId, // Atualizando o profile do userId 1 = Avix
         name,
         email,
         phone,

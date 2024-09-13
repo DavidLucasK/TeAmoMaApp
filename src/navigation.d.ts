@@ -1,20 +1,17 @@
-// src/navigation.d.ts
-import { CompositeNavigationProp, NavigatorScreenParams } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-
-//Toda vez que criar uma tela nova tem que adicionar a navegação a partir daqui
 export type RootStackParamList = {
     Home: undefined;
     Store: undefined;
-    Profile: undefined; 
+    Profile: undefined;
     EarnPoints: undefined;
     Quiz: undefined;
     Posts: undefined;
     CreatePost: undefined;
+    Login: undefined;
+    IndividualPost: { postId: number };
 };
 
-//Aqui também
 export type HomeNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 export type StoreNavigationProp = StackNavigationProp<RootStackParamList, 'Store'>;
 export type ProfileNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
@@ -22,3 +19,6 @@ export type EarnPointsNavigationProp = StackNavigationProp<RootStackParamList, '
 export type QuizNavigationProp = StackNavigationProp<RootStackParamList, 'Quiz'>;
 export type PostsNavigationProp = StackNavigationProp<RootStackParamList, 'Posts'>;
 export type CreatePostNavigationProp = StackNavigationProp<RootStackParamList, 'CreatePost'>;
+export type LoginNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
+export type IndividualPostNavigationProp = StackNavigationProp<RootStackParamList, 'IndividualPost'>;
+export type IndividualPostRouteProp = StackNavigationProp<RootStackParamList, 'IndividualPost'>;
