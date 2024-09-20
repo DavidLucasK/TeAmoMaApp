@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const CreatePostStyles = StyleSheet.create({
+const CreateItemStyles = StyleSheet.create({
     container: {
         flex: 1,
     },
@@ -15,7 +15,7 @@ const CreatePostStyles = StyleSheet.create({
     },
     postsContainer: {
         width: '100%',
-        height: '77%',
+        height: '80%',
         display: 'flex',
         paddingHorizontal: '5%',
         borderRadius: 30,
@@ -24,6 +24,13 @@ const CreatePostStyles = StyleSheet.create({
         justifyContent: 'center', // Centraliza o conteúdo verticalmente
         elevation: 15,
         overflow: 'hidden',
+    },
+    titleCreate: {
+        fontSize: 18,
+        fontFamily: 'Poppins_700Bold',
+        textAlign: 'center', // Alinha o texto à esquerda
+        color: '#ff0f6b',
+        paddingTop: 0
     },
     imageContainer: {
         width: '100%',
@@ -52,10 +59,7 @@ const CreatePostStyles = StyleSheet.create({
         fontFamily: 'Poppins_500Medium',
         padding: 10,
         width: '100%',
-        height: 'auto', // Altura do TextInput
-        minHeight: 150, // Altura do TextInput
         marginTop: 10,
-        textAlignVertical: 'top', // Alinha o texto ao topo
         backgroundColor: '#fff', // Fundo branco para o campo de texto
     },
     camContainer: {
@@ -131,4 +135,4 @@ const CreatePostStyles = StyleSheet.create({
     }
 });
 
-export default CreatePostStyles;
+export default CreateItemStyles;

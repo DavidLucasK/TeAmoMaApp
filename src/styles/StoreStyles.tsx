@@ -4,7 +4,20 @@ const StoreStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF'
-},
+  },
+  plusBtn: {
+    display: 'flex',
+  },
+  plus: {
+    fontFamily: 'Poppins_700Bold',
+    fontSize: 20,
+    color: '#FFF',
+    backgroundColor: '#e41d69',
+    width: '100%',
+    padding: 5,
+    paddingHorizontal: 15,
+    borderRadius: 10
+  },
   pointsSection: {
     display: 'flex',
     flexDirection: 'column',

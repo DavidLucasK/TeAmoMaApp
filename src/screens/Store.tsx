@@ -212,6 +212,13 @@ const Store: React.FC = () => {
             <Text style={StoreStyles.howToEarn}>Como consigo LovePoints?</Text>
           </TouchableOpacity>
         </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <TouchableOpacity 
+              style={StoreStyles.plusBtn} 
+              onPress={() => navigation.navigate('CreateItem')}>
+              <Text style={StoreStyles.plus}>Criar Novo Item</Text>
+            </TouchableOpacity>
+          </View>
         <View style={StoreStyles.bordaBottom}></View>
         {loading ? (
           <View>

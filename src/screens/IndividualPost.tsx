@@ -49,7 +49,8 @@ const IndividualPost: React.FC = () => {
     //1 == Mazinha02
     //2 == Avix
 
-    userName = user === 1 ? 'Mazinha02' : 'Avix';
+    userName = user == '1' ? 'Mazinha02' : 'Avix';
+    console.log(user);
 
     const backendUrl = 'https://backendlogindl.vercel.app/api/auth'; // Atualize o URL do backend conforme necessário
 

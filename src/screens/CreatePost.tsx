@@ -23,7 +23,9 @@ const CreatePost: React.FC = () => {
 
     //1 == Mazinha02
     //2 == Avix
-    userName = user === 1 ? 'Mazinha02' : 'Avix';
+    userName = user == '1' ? 'Mazinha02' : 'Avix';
+    console.log(user);
+    console.log(userName);
 
     const pickImage = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -219,7 +221,7 @@ const CreatePost: React.FC = () => {
                 <Modal
                     visible={modalVisible}
                     transparent={true}
-                    animationType="slide"
+                    animationType="fade"
                     onRequestClose={handleModalClose}
                 >
                     <View style={CreatePostStyles.modalContainer}>

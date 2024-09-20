@@ -29,10 +29,8 @@ const Profile: React.FC = () => {
   const [phone, setPhone] = useState<string>('');
   const [uploading, setUploading] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  let userId = null;
   const [points, setPoints] = useState<number>(0);
   const { user } = useAppContext();
-
   const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
   useEffect(() => {
@@ -40,8 +38,8 @@ const Profile: React.FC = () => {
       try {
         //1 == Mazinha02
         //2 == Avix
-        const userId = user === 1 ? '1' : '2';
-        const response = await axios.get(`${backendUrl}/get-profile/${userId}`);
+        console.log(user);
+        const response = await axios.get(`${backendUrl}/get-profile/${user}`);
         const profileData = response.data;
 
         setProfileImage(profileData.profile_image || '');
@@ -149,7 +147,7 @@ const Profile: React.FC = () => {
     try {
       // Atualiza o perfil no backend
       await axios.post(`${backendUrl}/update-profile`, {
-        userId, // Atualizando o profile do userId 1 = Avix
+        user, // Atualizando o profile do userId 1 = Avix
         name,
         email,
         phone,
@@ -203,11 +201,11 @@ const Profile: React.FC = () => {
       >
         <Header
           leftIcon={require('./assets/store.png')}
-          middleIcon={require('./assets/posts.png')}
-          rightIcon={require('./assets/profile-user.png')}
           onLeftIconPress={() => navigation.navigate('Store')}
+          middleIcon={require('./assets/posts.png')}
           onMiddleIconPress={() => navigation.navigate('Posts')}
-          onRightIconPress={() => navigation.navigate('Profile')}
+          rightIcon={require('./assets/add-user.png')}
+          onRightIconPress={() => navigation.navigate('AddPartner')}
           isStoreScreen={false}
         />
         <LinearGradient

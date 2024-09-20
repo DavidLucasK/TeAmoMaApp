@@ -9,7 +9,9 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold, Poppi
 import LoadingScreen from './src/screens/LoadingScreen'; // Tela de carregamento
 import Home from './src/screens/Home'; // Tela Home
 import Store from './src/screens/Store'; // Tela Store
+import CreateItem from './src/screens/CreateItem'; // Tela CreateItem
 import Profile from './src/screens/Profile'; // Tela Profile
+import AddPartner from './src/screens/AddPartner'; // Tela AddPartner
 import EarnPoints from './src/screens/EarnPoints'; // Tela EarnPoints
 import Quiz from './src/screens/Quiz'; // Tela Quiz
 import Posts from './src/screens/Posts'; // Tela Posts
@@ -19,7 +21,6 @@ import Login from './src/screens/Login'; // Tela Login
 import { AppProvider } from './src/context/AppContext'; // AppProvider
 
 const Stack = createStackNavigator();
-const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
 const App: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true); // Estado para controle de carregamento
@@ -78,8 +79,18 @@ const App: React.FC = () => {
                         options={{ headerShown: false }} 
                     />
                     <Stack.Screen 
+                        name="CreateItem"
+                        component={CreateItem}
+                        options={{ headerShown: false }} 
+                    />
+                    <Stack.Screen 
                         name="Profile"
                         component={Profile}
+                        options={{ headerShown: false }} 
+                    />
+                    <Stack.Screen 
+                        name="AddPartner"
+                        component={AddPartner}
                         options={{ headerShown: false }} 
                     />
                     <Stack.Screen 

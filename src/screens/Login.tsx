@@ -1,4 +1,3 @@
-// src/screens/Login.tsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -38,15 +37,19 @@ const Login: React.FC = () => {
                 }
             );
     
-            const { data } = response
-            console.log('retornou', data )
-            console.log('o userId é:', data.userId )
+            const { data } = response;
+            console.log('retornou', data);
+            console.log('o userId é:', data.userId);
+
             setResult(data.message || 'Login bem-sucedido!');
             setResultColor(response.status === 200 ? 'green' : 'red');
     
             if (response.status === 200) {
+                await AsyncStorage.removeItem('userId');
                 await AsyncStorage.setItem('authToken', data.token);
-                setUser(data.userId); // Atualizar o estado do usuário no contexto
+                await AsyncStorage.setItem('userId', data.userId.toString()); // Converte userId para string
+                setUser(data.userId); // Atualiza o estado do usuário no contexto, convertendo para número
+                console.log(data.userId);
                 setTimeout(() => {
                     navigation.navigate('Home'); // Ajuste para a navegação real em seu app
                 }, 2000);
@@ -65,8 +68,7 @@ const Login: React.FC = () => {
 
     return (
         <View style={LoginStyles.container}>
-            <Image style={LoginStyles.logo} source={require('./assets/Logo-rounded.png')}
-                                />
+            <Image style={LoginStyles.logo} source={require('./assets/Logo-rounded.png')} />
             <Text style={LoginStyles.heading}>Entrar</Text>
             <View style={LoginStyles.form}>
                 <View style={LoginStyles.field}>
@@ -103,7 +105,7 @@ const Login: React.FC = () => {
                     <Text style={LoginStyles.textForget}>Esqueceu a senha?</Text>
                 </TouchableOpacity>
                 <View style={LoginStyles.rememberMe}>
-                    <TouchableOpacity onPress={() => setRememberMe}>
+                    <TouchableOpacity onPress={() => setRememberMe(!rememberMe)}>
                         <Text style={LoginStyles.rememberMeText}>Lembre-se de mim</Text>
                     </TouchableOpacity>
                 </View>
