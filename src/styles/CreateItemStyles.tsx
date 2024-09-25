@@ -37,20 +37,16 @@ const CreateItemStyles = StyleSheet.create({
         height: '100%',
         maxHeight: 320,
         marginBottom: 16,
-        backgroundColor: '#00000024',
+        backgroundColor: '#00000024', // Cor de fundo cinza
         borderRadius: 10,
-        overflow: 'hidden', // Garante que o conteúdo não ultrapasse o contêiner
+        justifyContent: 'center', // Centraliza o conteúdo verticalmente
+        alignItems: 'center', // Centraliza o conteúdo horizontalmente
+        overflow: 'hidden', // Impede que o conteúdo ultrapasse o contêiner
     },
     imageUploaded: {
         width: '100%',
         height: '100%',
         resizeMode: 'contain',
-    },
-    photosContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        width: '100%',
-        height: '100%'
     },
     textInput: {
         borderColor: '#ccc', // Cor da borda
@@ -62,13 +58,28 @@ const CreateItemStyles = StyleSheet.create({
         marginTop: 10,
         backgroundColor: '#fff', // Fundo branco para o campo de texto
     },
+    photosContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center', // Centraliza o conteúdo dentro do photosContainer
+        width: '100%',
+        height: '100%',
+    },
     camContainer: {
         display: 'flex',
+        alignItems: 'center', // Alinha o conteúdo no centro dentro do TouchableOpacity
     },
     iconCam: {
-        width: '30%',
-        alignSelf: 'center',
-        resizeMode: 'contain',
+        width: 100,
+        height: 100, 
+        resizeMode: 'contain', 
+    },
+    camText: {
+        fontSize: 16,
+        paddingHorizontal: 20,
+        fontFamily: 'Poppins_700Bold',
+        textAlign: 'center',
+        color: '#BBB', // Define a cor do texto (ajuste conforme necessário)
     },
     modalContainer: {
         position: 'absolute',
@@ -83,6 +94,7 @@ const CreateItemStyles = StyleSheet.create({
     modalContent: {
         backgroundColor: 'white',
         borderRadius: 10,
+        alignItems: 'center',
         paddingHorizontal: 20,
         paddingTop: 30,
         paddingBottom: 20,
@@ -91,6 +103,7 @@ const CreateItemStyles = StyleSheet.create({
     modalText: {
         fontSize: 18,
         padding: 5,
+        minWidth: 250,
         marginBottom: 10,
         fontFamily: 'Poppins_700Bold',
         textAlign: 'center', // Alinha o texto à esquerda

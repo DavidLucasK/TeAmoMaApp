@@ -8,6 +8,7 @@ import StoreStyles from '../styles/StoreStyles';
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
 import { StoreNavigationProp } from '../navigation'; // Importando o tipo de navegação
+import { useAppContext } from '../context/AppContext';
 
 interface Item {
   id: string;
@@ -17,8 +18,6 @@ interface Item {
   imageUrl: string;
 }
 
-type ImageKeys = 'combo_lanche' | 'cinema' | 'massagem' | 'lovenight' | 'cupom' | 'presente' | 'assistir' | 'sobremesa';
-
 const Store: React.FC = () => {
   const [points, setPoints] = useState<number>(0);
   const [items, setItems] = useState<Item[]>([]); // Inicializa como um array vazio
@@ -27,8 +26,10 @@ const Store: React.FC = () => {
   const [alertTitle, setAlertTitle] = useState<string>('');
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [refreshing, setRefreshing] = useState<boolean>(false); // Estado para controle de atualização
+  const [redeemingItemId, setRedeemingItemId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation<StoreNavigationProp>();
+  const { user } = useAppContext();
 
   useEffect(() => {
     fetchPoints();
@@ -37,10 +38,12 @@ const Store: React.FC = () => {
 
   const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
+  console.log(user)
+
   const fetchPoints = async () => {
     console.log('Iniciando a requisição para buscar pontos...');
     try {
-      const response = await axios.get(`${backendUrl}/points`, {
+      const response = await axios.get(`${backendUrl}/points/${user}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -57,10 +60,9 @@ const Store: React.FC = () => {
     }
   };
 
-  const updatePoints = async (username: string, pointsEarned: number) => {
+  const updatePoints = async (pointsEarned: number) => {
     try {
-      const response = await axios.post(`${backendUrl}/update-points`, {
-        username,
+      const response = await axios.post(`${backendUrl}/update-points/${user}`, {
         pointsEarned,
       }, {
         headers: {
@@ -82,7 +84,7 @@ const Store: React.FC = () => {
     setLoading(true);
     console.log('Iniciando a requisição para buscar itens...');
     try {
-      const response = await axios.get(`${backendUrl}/items`, {
+      const response = await axios.get(`${backendUrl}/items/${user}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -117,8 +119,9 @@ const Store: React.FC = () => {
 
     if (currentPoints >= item.points) {
       try {
+        setRedeemingItemId(item.id);
         setIsRedeeming(true);
-        await updatePoints('amor', -item.points);
+        await updatePoints(-item.points);
         await insertRedemption('1', item.id, item.points);
         console.log("Resgate feito com sucesso");
 
@@ -134,6 +137,7 @@ const Store: React.FC = () => {
         setAlertMessage("Algo deu errado durante o resgate. Tente novamente.");
         setShowAlert(true);
       } finally {
+        setRedeemingItemId(null);
         setIsRedeeming(false);
       }
     } else {
@@ -146,8 +150,7 @@ const Store: React.FC = () => {
 
   const insertRedemption = async (userId: string, rewardId: string, pointsRequired: number) => {
     try {
-      const response = await axios.post(`${backendUrl}/insert-redemption`, {
-        userId,
+      const response = await axios.post(`${backendUrl}/insert-redemption/${user}`, {
         rewardId,
         pointsRequired,
       }, {
@@ -215,8 +218,8 @@ const Store: React.FC = () => {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <TouchableOpacity 
               style={StoreStyles.plusBtn} 
-              onPress={() => navigation.navigate('CreateItem')}>
-              <Text style={StoreStyles.plus}>Criar Novo Item</Text>
+              onPress={() => navigation.navigate('EditStore')}>
+              <Text style={StoreStyles.plus}>Editar Loja do Parceiro</Text>
             </TouchableOpacity>
           </View>
         <View style={StoreStyles.bordaBottom}></View>
@@ -252,14 +255,14 @@ const Store: React.FC = () => {
                 </View>
                 <View style={StoreStyles.rightSide}>
                   <Text style={StoreStyles.itemDescription}>{item.description}</Text>
-                  <Text style={StoreStyles.itemPoints2}>LovePoints necessários:{item.points}</Text>
+                  <Text style={StoreStyles.itemPoints2}>LovePoints necessários: <Text style={{color: '#e41d69'}}>{item.points}</Text></Text>
                   <TouchableOpacity
                     style={StoreStyles.redeemButton}
                     onPress={() => handleRedemption(item)}
-                    disabled={isRedeeming}
+                    disabled={redeemingItemId === item.id}
                   >
                     <Text style={StoreStyles.redeemButtonText}>
-                      {isRedeeming ? 'Resgatando...' : 'Resgatar'}
+                      {redeemingItemId === item.id ? 'Resgatando...' : 'Resgatar'}
                     </Text>
                   </TouchableOpacity>
                   <LinearGradient

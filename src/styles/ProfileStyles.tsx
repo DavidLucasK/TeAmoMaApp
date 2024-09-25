@@ -8,14 +8,14 @@ const ProfileStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 20
+        paddingTop: 40
     },
     profileInfo: {
         display: 'flex',
         backgroundColor: '#ffffff5b',
         borderRadius: 8,
         width: 340,
-        height: 530,
+        height: 550,
     },
     photoContainer: {
         alignItems: 'center',
@@ -26,7 +26,6 @@ const ProfileStyles = StyleSheet.create({
         width: 200,
         height: 200,
         borderRadius: 250,
-        marginBottom: 8,
         backgroundColor: '#79797957'
     },
     changePhotoButton: {
@@ -34,7 +33,7 @@ const ProfileStyles = StyleSheet.create({
         padding: 7,
         paddingHorizontal: 15,
         borderRadius: 15,
-        marginTop: 20,
+        marginTop: 10,
         color: '#ff006a',
         fontFamily: 'Poppins_700Bold',
         fontSize: 16,
@@ -60,7 +59,6 @@ const ProfileStyles = StyleSheet.create({
         fontSize: 24,
         padding: 5,
         marginLeft: 4,
-        marginTop: 15,
         fontFamily: 'Poppins_700Bold',
         backgroundColor: '#FFF',
         color: '#e41d69',
@@ -79,7 +77,7 @@ const ProfileStyles = StyleSheet.create({
         borderRadius: 10,
     },
     updateButton: {
-        marginTop: 15,
+        marginTop: 10,
     },
     updateButtonText: {
         fontFamily: 'Poppins_700Bold',

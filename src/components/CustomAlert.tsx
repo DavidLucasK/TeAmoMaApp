@@ -12,7 +12,7 @@ const CustomAlert: React.FC<CustomAlertProps> = ({ visible, title, message, onCl
     return (
         <Modal
             transparent={true}
-            animationType="slide"
+            animationType="fade"
             visible={visible}
             onRequestClose={onClose}
         >
@@ -20,7 +20,7 @@ const CustomAlert: React.FC<CustomAlertProps> = ({ visible, title, message, onCl
                 <View style={styles.alertBox}>
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.message}>{message}</Text>
-                    <Button title="OK" onPress={onClose} />
+                    <Button color={'#e41d69'} title="OK" onPress={onClose} />
                 </View>
             </View>
         </Modal>

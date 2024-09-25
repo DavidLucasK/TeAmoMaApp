@@ -9,11 +9,13 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold, Poppi
 import LoadingScreen from './src/screens/LoadingScreen'; // Tela de carregamento
 import Home from './src/screens/Home'; // Tela Home
 import Store from './src/screens/Store'; // Tela Store
+import EditStore from './src/screens/EditStore'; // Tela EditStore
 import CreateItem from './src/screens/CreateItem'; // Tela CreateItem
 import Profile from './src/screens/Profile'; // Tela Profile
 import AddPartner from './src/screens/AddPartner'; // Tela AddPartner
 import EarnPoints from './src/screens/EarnPoints'; // Tela EarnPoints
 import Quiz from './src/screens/Quiz'; // Tela Quiz
+import EditQuiz from './src/screens/EditQuiz'; // Tela EditQuiz
 import Posts from './src/screens/Posts'; // Tela Posts
 import CreatePost from './src/screens/CreatePost'; // Tela CreatePost
 import IndividualPost from './src/screens/IndividualPost'; // Tela IndividualPost
@@ -79,6 +81,11 @@ const App: React.FC = () => {
                         options={{ headerShown: false }} 
                     />
                     <Stack.Screen 
+                        name="EditStore"
+                        component={EditStore}
+                        options={{ headerShown: false }} 
+                    />
+                    <Stack.Screen 
                         name="CreateItem"
                         component={CreateItem}
                         options={{ headerShown: false }} 
@@ -101,6 +108,11 @@ const App: React.FC = () => {
                     <Stack.Screen 
                         name="Quiz"
                         component={Quiz}
+                        options={{ headerShown: false }} 
+                    />
+                    <Stack.Screen 
+                        name="EditQuiz"
+                        component={EditQuiz}
                         options={{ headerShown: false }} 
                     />
                     <Stack.Screen 

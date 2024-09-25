@@ -1,6 +1,6 @@
 import { StyleSheet, Platform } from 'react-native';
 
-const EarnPointsStyles = StyleSheet.create({
+const EditQuizStyles = StyleSheet.create({
     container: {
         flex: 1,
     },
@@ -70,7 +70,7 @@ const EarnPointsStyles = StyleSheet.create({
         display: 'flex',
         position: 'absolute',
         maxWidth: '100%',
-        opacity: 1,
+        opacity: 0.1,
         alignSelf: 'flex-end',
         padding: 20
     },
@@ -80,4 +80,4 @@ const EarnPointsStyles = StyleSheet.create({
     },
 });
 
-export default EarnPointsStyles;
+export default EditQuizStyles;

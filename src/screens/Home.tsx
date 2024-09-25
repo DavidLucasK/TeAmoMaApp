@@ -192,6 +192,7 @@ const Home: React.FC = () => {
                                 style={HomeStyles.avatarImage}
                             />
                         </View>
+                        <TouchableOpacity onPress={() => navigation.navigate('Login')}><Text>oi</Text></TouchableOpacity>
                     </View>
                 </LinearGradient>
             </ScrollView>

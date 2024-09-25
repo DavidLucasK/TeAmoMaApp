@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Importa
 import { LinearGradient } from 'expo-linear-gradient'; // Importando LinearGradient
 import QuizStyles from '../styles/QuizStyles';
 import { QuizNavigationProp } from '../navigation';
+import { useAppContext } from '../context/AppContext';
 
 type OptionStyle = {
     backgroundColor: string;
@@ -28,6 +29,7 @@ const Quiz: React.FC = () => {
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
     const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
     const [userAnswers, setUserAnswers] = useState<{ isCorrect: boolean | null }[]>([]);
+    const { user } = useAppContext();
 
     useEffect(() => {
 
@@ -66,7 +68,7 @@ const Quiz: React.FC = () => {
 
     const fetchQuizStatus = async () => {
         try {
-            const response = await fetch(`${backendUrl}/quiz-status`, {
+            const response = await fetch(`${backendUrl}/quiz-status/${user}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,14 +86,14 @@ const Quiz: React.FC = () => {
     };
 
     const updatePoints = async () => {
+        console.log('o id do user é:',user)
         try {
-            const response = await fetch(`${backendUrl}/update-points`, {
+            const response = await fetch(`${backendUrl}/update-points/${user}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    username: 'amor',
                     pointsEarned: points,
                 }),
             });
@@ -102,7 +104,7 @@ const Quiz: React.FC = () => {
             setAlertMessage(`Você ganhou ${points} pontos.`);
             setShowAlert(true);
             await updateQuizStatus();
-            navigation.navigate('EarnPoints')//Está funcionando normal
+            navigation.navigate('EarnPoints')
         } catch (error) {
             console.error('Erro:', error);
         }
@@ -110,7 +112,7 @@ const Quiz: React.FC = () => {
 
     const updateQuizStatus = async () => {
         try {
-            const response = await fetch(`${backendUrl}/update-quiz-status`, {
+            const response = await fetch(`${backendUrl}/update-quiz-status/${user}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

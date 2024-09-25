@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppContext } from '../context/AppContext';
+import CustomAlert from '../components/CustomAlert';
 
 const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
@@ -19,10 +20,17 @@ const CreateItem = () => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [textIndex, setTextIndex] = useState(0);
 
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [alertTitle, setAlertTitle] = useState<string>('');
+    const [alertMessage, setAlertMessage] = useState<string>('');
+
     //Valores do item
     const [titleItem, setTitleItem] = useState<string>('');
     const [descItem, setDescItem] = useState<string>('');
     const [priceItem, setPriceItem] = useState<string>('');
+
+    const { user } = useAppContext();
+    const { partnerId } = useAppContext();
 
     const resizeImage = async (uri: string) => {
         const manipulatedImage = await ImageManipulator.manipulateAsync(
@@ -107,7 +115,7 @@ const CreateItem = () => {
             console.log('tentando criar item')
 
             // Criação do item
-            const response = await axios.post(`${backendUrl}/create_item`, {
+            const response = await axios.post(`${backendUrl}/create_item/${partnerId}`, {
                 title_item: titleItem,
                 desc_item: descItem,
                 points: priceItem,
@@ -118,7 +126,9 @@ const CreateItem = () => {
 
             // Verifica se a resposta foi bem-sucedida
             if (response.status === 201) {
-                Alert.alert('Sucesso', 'Item criado com sucesso!');
+                setAlertTitle('Sucesso');
+                setAlertMessage('Item criado com sucesso!');
+                setShowAlert(true);
                 navigation.navigate('Store'); // Redireciona para a tela da loja
             } else {
                 Alert.alert('Erro', response.data.error || 'Falha ao criar o item.');
@@ -180,22 +190,26 @@ const CreateItem = () => {
                 <View style={CreateItemStyles.main}>
                     <View style={CreateItemStyles.postsContainer}>
                         <Text style={CreateItemStyles.titleCreate}>Criar Item</Text>
-                        <View style={CreateItemStyles.imageContainer}>
-                            {selectedImage && (
+                        <TouchableOpacity activeOpacity={0.5} onPress={showImageOptions} style={CreateItemStyles.imageContainer}>
+                            {selectedImage ? (
+                                // Se houver uma imagem selecionada, exiba apenas a imagem
                                 <Image
                                     source={{ uri: selectedImage }}
                                     style={CreateItemStyles.imageUploaded}
                                 />
+                            ) : (
+                                // Se não houver imagem selecionada, exiba o botão de upload
+                                <View style={CreateItemStyles.photosContainer}>
+                                    <View style={CreateItemStyles.camContainer}>
+                                        <Image
+                                            source={require('./assets/camera.png')}
+                                            style={CreateItemStyles.iconCam}
+                                        />
+                                    </View>
+                                    <Text style={CreateItemStyles.camText}>Resolução 400X350</Text>
+                                </View>
                             )}
-                            <View style={CreateItemStyles.photosContainer}>
-                                <TouchableOpacity onPress={showImageOptions} style={CreateItemStyles.camContainer}>
-                                    <Image
-                                        source={require('./assets/camera.png')}
-                                        style={CreateItemStyles.iconCam}
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                        </TouchableOpacity>
                         <TextInput
                             style={CreateItemStyles.textInput}
                             placeholder="Título do item"
@@ -243,18 +257,25 @@ const CreateItem = () => {
             >
                 <View style={CreateItemStyles.modalContainer}>
                     <View style={CreateItemStyles.modalContent}>
-                        <Text style={CreateItemStyles.modalText} onPress={() => handleOptionSelect('camera')}>
-                            Tirar Foto
-                        </Text>
-                        <Text style={CreateItemStyles.modalText} onPress={() => handleOptionSelect('gallery')}>
-                            Galeria
-                        </Text>
-                        <Text style={CreateItemStyles.modalText} onPress={handleModalClose}>
-                            Cancelar
-                        </Text>
+                        
+                        <TouchableOpacity onPress={() => handleOptionSelect('camera')}>
+                            <Text style={CreateItemStyles.modalText}>Tirar Foto</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleOptionSelect('gallery')}>
+                            <Text style={CreateItemStyles.modalText}>Galeria</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity  onPress={handleModalClose}>
+                            <Text style={CreateItemStyles.cancelBtn}>Cancelar</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
+            <CustomAlert
+                visible={showAlert}
+                title={alertTitle}
+                message={alertMessage}
+                onClose={() => setShowAlert(false)}
+            />
         </View>
     );
 };

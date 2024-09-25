@@ -6,6 +6,7 @@ import EarnPointsStyles from '../styles/EarnPointsStyles';
 import CustomAlert from '../components/CustomAlert';
 import Header from '../components/Header';
 import { EarnPointsNavigationProp } from '../navigation'; // Importando o tipo de navegação
+import { useAppContext } from '../context/AppContext';
 
 interface HeaderProps {
     onLeftIconPress?: () => void;
@@ -23,9 +24,11 @@ const EarnPoints: React.FC = () => {
     const [quizStatus, setQuizStatus] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
 
+    const { user } = useAppContext();
+
     const fetchQuizStatus = async () => {
         try {
-            const response = await fetch(`${backendUrl}/quiz-status`, {
+            const response = await fetch(`${backendUrl}/quiz-status/${user}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -74,6 +77,12 @@ const EarnPoints: React.FC = () => {
                     <Text style={EarnPointsStyles.title}>Minigames</Text>
                     <View style={EarnPointsStyles.games}>
                         <View style={EarnPointsStyles.card}>
+                            <TouchableOpacity onPress={() => navigation.navigate('EditQuiz')} style={EarnPointsStyles.imagesGames}>
+                                <Image
+                                    source={require('./assets/editing.png')}
+                                    style={EarnPointsStyles.editIcon}
+                                />
+                            </TouchableOpacity>
                             <Text style={EarnPointsStyles.cardTitle}>Quiz</Text>
                             <Text style={EarnPointsStyles.cardText}>Responda perguntas e ganhe LovePoints!</Text>
                             <TouchableOpacity

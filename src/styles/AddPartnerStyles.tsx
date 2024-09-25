@@ -4,40 +4,33 @@ const AddPartnerStyles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    title: {
+        fontFamily: 'Poppins_700Bold',
+        color: '#FFF',
+        fontSize: 28,
+    },
     main: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 20
     },
     profileInfo: {
         display: 'flex',
         backgroundColor: '#ffffff5b',
         borderRadius: 8,
+        marginTop: -20,
         width: 340,
         height: 530,
     },
     photoContainer: {
+        marginTop: 20,
         alignItems: 'center',
-        marginBottom: 20,
-        marginTop: -100,
     },
     profileImage: {
         width: 200,
         height: 200,
         borderRadius: 250,
-        marginBottom: 8,
         backgroundColor: '#79797957'
-    },
-    changePhotoButton: {
-        backgroundColor: '#Fff',
-        padding: 7,
-        paddingHorizontal: 15,
-        borderRadius: 15,
-        marginTop: 20,
-        color: '#ff006a',
-        fontFamily: 'Poppins_700Bold',
-        fontSize: 16,
     },
     textContainer: {
         display: 'flex',
@@ -54,13 +47,12 @@ const AddPartnerStyles = StyleSheet.create({
     variable: {
         fontFamily: 'Poppins_700Bold',
         fontSize: 16,
-        
     },
     points: {
         fontSize: 24,
         padding: 5,
         marginLeft: 4,
-        marginTop: 15,
+        marginTop: 25,
         fontFamily: 'Poppins_700Bold',
         backgroundColor: '#FFF',
         color: '#e41d69',

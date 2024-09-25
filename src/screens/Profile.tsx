@@ -19,42 +19,64 @@ import Header from '../components/Header';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { useAppContext } from '../context/AppContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile: React.FC = () => {
   const navigation = useNavigation<ProfileNavigationProp>();
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [name, setName] = useState<string>('');
+  const [namePartner, setNamePartner] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
+  const [partnerId] = useState<string>('');
   const [uploading, setUploading] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [points, setPoints] = useState<number>(0);
   const { user } = useAppContext();
+  const { setPartnerId } = useAppContext();
   const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
-  useEffect(() => {
-    const loadProfileData = async () => {
-      try {
-        //1 == Mazinha02
-        //2 == Avix
-        console.log(user);
-        const response = await axios.get(`${backendUrl}/get-profile/${user}`);
-        const profileData = response.data;
+  // Dentro do seu `useEffect`, ao carregar os dados do perfil:
+useEffect(() => {
+  const loadProfileData = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/get-profile/${user}`);
+      const profileData = response.data;
 
-        setProfileImage(profileData.profile_image || '');
-        setName(profileData.name || '');
-        setEmail(profileData.email || '');
-        setPhone(profileData.phone || '');
-      } catch (error) {
-        console.error('Erro ao carregar perfil:', error);
-        Alert.alert('Erro', 'Não foi possível carregar os dados do perfil.');
+      setProfileImage(profileData.profile_image || '');
+      setName(profileData.name || '');
+      setEmail(profileData.email || '');
+      setPhone(profileData.phone || '');
+      setPartnerId(profileData.partner || '');
+
+      // Converte o partnerId para string antes de salvar
+      const partnerIdString = profileData.partner ? profileData.partner.toString() : '';
+      await AsyncStorage.setItem('partnerId', partnerIdString);
+    } catch (error) {
+      console.error('Erro ao carregar perfil:', error);
+      Alert.alert('Erro', 'Não foi possível carregar os dados do perfil.');
+    }
+  };
+
+  const loadPartnerData = async () => {
+    try {
+      const storedPartnerId = await AsyncStorage.getItem('partnerId');
+      if (storedPartnerId) {
+        const response = await axios.get(`${backendUrl}/get-profile/${storedPartnerId}`);
+        const partnerData = response.data;
+        setNamePartner(partnerData.name || '');
       }
-    };
+    } catch (error) {
+      console.error('Erro ao carregar perfil do parceiro:', error);
+      Alert.alert('Erro', 'Não foi possível carregar os dados do parceiro.');
+    }
+  };
 
-    loadProfileData();
-    fetchPoints();
-  }, []);
+  loadProfileData();
+  loadPartnerData();
+  fetchPoints();
+}, [partnerId]);
 
   const showImageOptions = () => {
     setModalVisible(true);
@@ -173,7 +195,7 @@ const Profile: React.FC = () => {
   const fetchPoints = async () => {
     console.log('Iniciando a requisição para buscar pontos...');
     try {
-      const response = await axios.get(`${backendUrl}/points`, {
+      const response = await axios.get(`${backendUrl}/points/${user}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -199,15 +221,27 @@ const Profile: React.FC = () => {
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
-        <Header
+      {namePartner ? 
+      <Header
           leftIcon={require('./assets/store.png')}
           onLeftIconPress={() => navigation.navigate('Store')}
           middleIcon={require('./assets/posts.png')}
           onMiddleIconPress={() => navigation.navigate('Posts')}
-          rightIcon={require('./assets/add-user.png')}
+          rightIcon={require('./assets/partner-user.png')}
           onRightIconPress={() => navigation.navigate('AddPartner')}
           isStoreScreen={false}
-        />
+      /> 
+      :
+      <Header
+      leftIcon={require('./assets/store.png')}
+      onLeftIconPress={() => navigation.navigate('Store')}
+      middleIcon={require('./assets/posts.png')}
+      onMiddleIconPress={() => navigation.navigate('Posts')}
+      rightIcon={require('./assets/add-user.png')}
+      onRightIconPress={() => navigation.navigate('AddPartner')}
+      isStoreScreen={false}
+      />
+      }
         <LinearGradient
           colors={['#e41d69', '#fe8277']}
           start={{ x: 0, y: 0 }}
@@ -256,6 +290,8 @@ const Profile: React.FC = () => {
                   value={phone}
                   onChangeText={setPhone}
                 />
+                <Text style={ProfileStyles.info}>Parceiro</Text>
+                <Text style={ProfileStyles.textInput}>{namePartner}</Text>
                 <TouchableOpacity
                   onPress={updateProfile}
                   style={ProfileStyles.updateButton}
