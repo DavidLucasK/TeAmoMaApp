@@ -175,6 +175,35 @@ const StoreStyles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20
 },
+<<<<<<< HEAD
+editContainer: {
+  display: 'flex',
+},
+editBtn: {
+  fontFamily: 'Poppins_700Bold',
+  fontSize: 20,
+  color: '#FFF',
+  backgroundColor: '#e41d69',
+  width: '100%',
+  padding: 5,
+  paddingHorizontal: 15,
+  borderRadius: 10,
+  marginTop: 30,
+},
+noItemsContainer: {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignContent: 'center',
+  marginTop: 120,
+},
+noItems1: {
+  textAlign: 'center',
+  fontFamily: 'Poppins_500Medium',
+  fontSize: 20,
+},
+=======
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
 });
 
 export default StoreStyles;

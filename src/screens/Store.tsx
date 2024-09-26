@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, Image, TouchableOpacity, ScrollView, RefreshControl, Alert } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient'; // Importando LinearGradient
 
@@ -9,6 +9,7 @@ import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
 import { StoreNavigationProp } from '../navigation'; // Importando o tipo de navegação
 import { useAppContext } from '../context/AppContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Item {
   id: string;
@@ -29,7 +30,7 @@ const Store: React.FC = () => {
   const [redeemingItemId, setRedeemingItemId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation<StoreNavigationProp>();
-  const { user } = useAppContext();
+  const { user, partnerId, setPartnerId } = useAppContext();
 
   useEffect(() => {
     fetchPoints();
@@ -39,6 +40,27 @@ const Store: React.FC = () => {
   const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
 
   console.log(user)
+  console.log(partnerId)
+
+  useFocusEffect(
+    useCallback(() => {
+      loadPartnerData(); // Chama a função para buscar itens
+    }, [])
+);
+
+const loadPartnerData = async () => {
+  try {
+    const storedPartnerId = await AsyncStorage.getItem('partnerId');
+    if (storedPartnerId) {
+      const response = await axios.get(`${backendUrl}/get-profile/${user}`);
+      const partnerData = response.data;
+      setPartnerId(partnerData.partner)
+    }
+  } catch (error) {
+    console.error('Erro ao carregar perfil do parceiro:', error);
+    Alert.alert('Erro', 'Não foi possível carregar os dados do parceiro.');
+  }
+};
 
   const fetchPoints = async () => {
     console.log('Iniciando a requisição para buscar pontos...');
@@ -217,9 +239,9 @@ const Store: React.FC = () => {
         </View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <TouchableOpacity 
-              style={StoreStyles.plusBtn} 
+              style={StoreStyles.editContainer} 
               onPress={() => navigation.navigate('EditStore')}>
-              <Text style={StoreStyles.plus}>Editar Loja do Parceiro</Text>
+              <Text style={StoreStyles.editBtn}>Editar Loja do Parceiro</Text>
             </TouchableOpacity>
           </View>
         <View style={StoreStyles.bordaBottom}></View>
@@ -274,7 +296,11 @@ const Store: React.FC = () => {
               </View>
             ))
           ) : (
-            <Text style={StoreStyles.noItems}>Nenhum item disponível.</Text>
+            <View style={StoreStyles.noItemsContainer}>
+              <Text style={StoreStyles.noItems1}>
+                Nenhum item disponível
+              </Text>
+            </View>
           )
         )}
       </ScrollView>

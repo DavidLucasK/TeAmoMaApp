@@ -19,7 +19,11 @@ const Login: React.FC = () => {
     const [resultColor, setResultColor] = useState<string>('black');
 
     const navigation = useNavigation<LoginNavigationProp>();
+<<<<<<< HEAD
+    const { setUser, setPartnerId } = useAppContext();
+=======
     const { setUser } = useAppContext();
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
 
     const handleLogin = async () => {
         const emailInput = email.trim();

@@ -1,10 +1,33 @@
 import { StyleSheet, Platform } from 'react-native';
 
-const EditStoreStyles = StyleSheet.create({
+const EditItemStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF'
   },
+  title: {
+    fontFamily: 'Poppins_700Bold',
+    color: '#e41d69',
+    fontSize: 28,
+    textAlign: 'center',
+},
+backContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    marginRight: 15,
+    marginVertical: 20,
+},
+backText: {
+    backgroundColor: '#e41d69',
+    color: '#fff',
+    fontFamily: 'Poppins_600SemiBold',
+    padding: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    textAlign: 'center',
+    fontSize: 20,
+},
   plusBtn: {
     display: 'flex',
     alignItems: 'center',
@@ -108,7 +131,7 @@ const EditStoreStyles = StyleSheet.create({
     fontFamily: 'Poppins_700Bold',
     fontSize: 20,
   },
-  storeSection: {
+  itemSection: {
     flexDirection: 'column',
     marginTop: 20,
   },
@@ -163,8 +186,9 @@ const EditStoreStyles = StyleSheet.create({
     paddingTop: 10,
   },
   itemPoints: {
-    fontFamily: 'Poppins_500Medium',
-    fontSize: 20,
+    fontFamily: 'Poppins_700Bold',
+    fontSize: 24,
+    color: '#e41d69',
   },
   itemPoints2: {
     fontFamily: 'Poppins_700Bold',
@@ -178,28 +202,6 @@ const EditStoreStyles = StyleSheet.create({
     width: '70%',
     marginBottom: -50,
     marginTop: -50,
-  },
-<<<<<<< HEAD
-  noItemsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignContent: 'center',
-    gap: 160,
-  },
-  noItems1: {
-    textAlign: 'center',
-    fontFamily: 'Poppins_500Medium',
-    fontSize: 24,
-  },
-  noItems: {
-    textAlign: 'center',
-    fontFamily: 'Poppins_700Bold',
-    fontSize: 24,
-=======
-  noItems: {
-    
->>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
   },
   bordaBottom: {
     borderBlockColor: '#eee',
@@ -278,23 +280,26 @@ buttonText1: {
     fontFamily: 'Poppins_600SemiBold',
     textAlign: 'center',
 },
-<<<<<<< HEAD
-iconsTop: {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'flex-end',
-  marginRight: 15,
-  gap: 10,
-},
-iconTrash: {
-=======
 iconTrash: {
     alignSelf: 'flex-end',
     marginRight: 20,
->>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     width: 24,
     height: 24,
 },
+containerBtn:{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+},
+saveBtn: {
+    backgroundColor: '#e41d69',
+    color: '#FFF',
+    fontFamily: 'Poppins_600SemiBold',
+    padding: 10,
+    borderRadius: 5,
+    textAlign: 'center',
+    alignItems: 'center',
+},
 });
 
-export default EditStoreStyles;
+export default EditItemStyles;

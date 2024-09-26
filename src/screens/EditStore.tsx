@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, Modal } from 'react-native';
 import EditStoreStyles from '../styles/EditStoreStyles';
 import CustomAlert from '../components/CustomAlert';
 import Header from '../components/Header';
 import { useAppContext } from '../context/AppContext';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { EditStoreNavigationProp } from '../navigation';
 import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
@@ -13,7 +13,7 @@ interface Item {
     id: string;
     title: string;
     description: string;
-    points: number;
+    points: string;
     imageUrl: string;
 }
 
@@ -33,9 +33,11 @@ const EditStore: React.FC = () => {
     const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
     const { user, partnerId } = useAppContext();
 
-    useEffect(() => {
-        fetchItems(); // Chama a função para buscar itens
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            fetchItems(); // Chama a função para buscar itens
+        }, [])
+    );
 
     const fetchItems = async () => {
         setLoading(true);
@@ -101,10 +103,10 @@ const EditStore: React.FC = () => {
     return (
         <View style={EditStoreStyles.container}>
             <Header
-                leftIcon={require('./assets/game.png')}
+                leftIcon={require('./assets/store.png')}
                 middleIcon={require('./assets/posts.png')}
                 rightIcon={require('./assets/profile-user.png')}
-                onLeftIconPress={() => navigation.navigate('EarnPoints')}
+                onLeftIconPress={() => navigation.navigate('Store')}
                 onMiddleIconPress={() => navigation.navigate('Posts')}
                 onRightIconPress={() => navigation.navigate('Profile')}
                 isStoreScreen={true}
@@ -141,10 +143,16 @@ const EditStore: React.FC = () => {
                     Array.isArray(items) && items.length > 0 ? (
                         items.map((item) => (
                             <View key={item.id}>
-                                <TouchableOpacity 
-                                    onPress={() => confirmDelete(item.id)}>
-                                    <Image style={EditStoreStyles.iconTrash} source={require('./assets/trash.png')} />
-                                </TouchableOpacity>
+                                <View style={EditStoreStyles.iconsTop}>
+                                    <TouchableOpacity 
+                                        onPress={() => navigation.navigate('EditItem', { itemId: item.id, itemTitle: item.title, itemImageUrl: item.imageUrl, itemDesc: item.description, itemPoints: item.points})}>
+                                        <Image style={EditStoreStyles.iconTrash} source={require('./assets/editing.png')} />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity 
+                                        onPress={() => confirmDelete(item.id)}>
+                                        <Image style={EditStoreStyles.iconTrash} source={require('./assets/trash.png')} />
+                                    </TouchableOpacity>
+                                </View>
                                 <Text style={EditStoreStyles.itemTitle}>{item.title}</Text>
                                 <View style={EditStoreStyles.leftSide}>
                                     <Image source={{ uri: item.imageUrl }} style={EditStoreStyles.itemImage} />
@@ -163,7 +171,10 @@ const EditStore: React.FC = () => {
                             </View>
                         ))
                     ) : (
-                        <Text style={EditStoreStyles.noItems}>Nenhum item disponível.</Text>
+                        <View style={EditStoreStyles.noItemsContainer}>
+                            <Text style={EditStoreStyles.noItems1}>Sem itens disponíveis</Text>
+                            <Text style={EditStoreStyles.noItems}>Crie um novo item pro seu parceiro!</Text>
+                        </View>
                     )
                 )}
             </ScrollView>
