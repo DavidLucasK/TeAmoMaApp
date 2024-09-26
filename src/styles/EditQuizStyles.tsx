@@ -78,29 +78,6 @@ const EditQuizStyles = StyleSheet.create({
         width: 24, // 25rem em pixels
         height: 24, // Ajuste conforme necessário
     },
-    questionContainer: {
-        backgroundColor: '#fff', // Cor de fundo do container de cada pergunta
-        padding: 15, // Espaçamento interno do container
-        marginVertical: 8, // Espaçamento entre os containers
-        marginHorizontal: 16, // Espaçamento nas laterais
-        borderRadius: 8, // Bordas arredondadas do container
-        shadowColor: '#000', // Cor da sombra (somente iOS)
-        shadowOffset: { width: 0, height: 2 }, // Deslocamento da sombra (somente iOS)
-        shadowOpacity: 0.1, // Opacidade da sombra (somente iOS)
-        shadowRadius: 4, // Raio da sombra (somente iOS)
-        elevation: 3, // Elevação (somente Android)
-      },
-      questionText: {
-        fontSize: 16, // Tamanho da fonte do texto da pergunta
-        fontWeight: 'bold', // Peso da fonte
-        color: '#333', // Cor do texto
-      },
-      noQuestionsText: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginTop: 20,
-        color: '#666',
-      },
 });
 
 export default EditQuizStyles;

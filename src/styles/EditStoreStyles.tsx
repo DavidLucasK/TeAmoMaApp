@@ -179,27 +179,8 @@ const EditStoreStyles = StyleSheet.create({
     marginBottom: -50,
     marginTop: -50,
   },
-<<<<<<< HEAD
-  noItemsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignContent: 'center',
-    gap: 160,
-  },
-  noItems1: {
-    textAlign: 'center',
-    fontFamily: 'Poppins_500Medium',
-    fontSize: 24,
-  },
-  noItems: {
-    textAlign: 'center',
-    fontFamily: 'Poppins_700Bold',
-    fontSize: 24,
-=======
   noItems: {
     
->>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
   },
   bordaBottom: {
     borderBlockColor: '#eee',
@@ -278,20 +259,9 @@ buttonText1: {
     fontFamily: 'Poppins_600SemiBold',
     textAlign: 'center',
 },
-<<<<<<< HEAD
-iconsTop: {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'flex-end',
-  marginRight: 15,
-  gap: 10,
-},
-iconTrash: {
-=======
 iconTrash: {
     alignSelf: 'flex-end',
     marginRight: 20,
->>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     width: 24,
     height: 24,
 },
