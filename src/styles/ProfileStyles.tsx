@@ -4,16 +4,20 @@ const ProfileStyles = StyleSheet.create({
     container: {
         flex: 1,
     },
+<<<<<<< HEAD
     storeSection: {
         flexDirection: 'column',
         marginTop: 20,
         
         overflow: 'hidden',
       },
+=======
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     main: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+<<<<<<< HEAD
         paddingTop: 35
     },
     profileInfo: {
@@ -28,6 +32,17 @@ const ProfileStyles = StyleSheet.create({
         paddingHorizontal: 25, // Adiciona padding horizontal para espaçamento interno
         marginBottom: 30, // Margem inferior para espaçamento
       },
+=======
+        paddingTop: 40
+    },
+    profileInfo: {
+        display: 'flex',
+        backgroundColor: '#ffffff5b',
+        borderRadius: 8,
+        width: 340,
+        height: 550,
+    },
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     photoContainer: {
         alignItems: 'center',
         marginBottom: 20,
@@ -45,7 +60,11 @@ const ProfileStyles = StyleSheet.create({
         paddingHorizontal: 15,
         borderRadius: 15,
         marginTop: 10,
+<<<<<<< HEAD
         color: '#e41d69',
+=======
+        color: '#ff006a',
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
         fontFamily: 'Poppins_700Bold',
         fontSize: 16,
     },
@@ -59,8 +78,12 @@ const ProfileStyles = StyleSheet.create({
     info: {
         fontFamily: 'Poppins_700Bold',
         fontSize: 16,
+<<<<<<< HEAD
         color: '#FFF',
         textAlign: 'center',
+=======
+        color: '#FFF'
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     },
     variable: {
         fontFamily: 'Poppins_700Bold',
@@ -89,11 +112,16 @@ const ProfileStyles = StyleSheet.create({
         borderRadius: 10,
     },
     updateButton: {
+<<<<<<< HEAD
         marginTop: 15,
+=======
+        marginTop: 10,
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     },
     updateButtonText: {
         fontFamily: 'Poppins_700Bold',
         backgroundColor: '#e41d69',
+<<<<<<< HEAD
         textAlign: 'center',
         color: 'white',
         padding: 10,
@@ -104,6 +132,8 @@ const ProfileStyles = StyleSheet.create({
         fontFamily: 'Poppins_700Bold',
         backgroundColor: '#ff567b',
         textAlign: 'center',
+=======
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
         color: 'white',
         padding: 10,
         paddingHorizontal: 15,
@@ -146,11 +176,14 @@ const ProfileStyles = StyleSheet.create({
         paddingVertical: 5,
         borderRadius: 15,
     },
+<<<<<<< HEAD
     infosContainer: {
         display: 'flex',
         justifyContent: 'center',
         alignContent: 'center'
     },
+=======
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
 });
 
 export default ProfileStyles;

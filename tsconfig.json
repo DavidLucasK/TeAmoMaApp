@@ -1,6 +1,7 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+<<<<<<< HEAD
     "strict": true,
     "target": "esnext",
     "jsx": "react-native",
@@ -8,5 +9,8 @@
     "skipLibCheck": true, // Ignora a verificação de bibliotecas, útil para evitar conflitos com dependências
     "noEmit": true, // Garante que nenhum arquivo seja emitido na compilação
     "isolatedModules": true // Isola os módulos para melhor compatibilidade com Babel
+=======
+    "strict": true
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
   }
 }

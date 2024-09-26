@@ -1,7 +1,12 @@
 {
   "expo": {
+<<<<<<< HEAD
     "name": "TeAmoMaAppAvix",
     "slug": "TeAmoMaAppAvix",
+=======
+    "name": "TeAmo",
+    "slug": "TeAmo",
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "src/screens/assets/HeartIcon1024.png",
@@ -18,16 +23,29 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "src/screens/assets/HeartIcon1080.png",
+<<<<<<< HEAD
         "backgroundColor": "#ffffff"
+=======
+        "backgroundColor": "#FFFFFF"
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
       },
       "package": "com.davidlucask.TeAmo"
     },
     "web": {
       "favicon": "src/screens/assets/HeartIcon512.png"
     },
+<<<<<<< HEAD
     "extra": {
       "eas": {
         "projectId": "6a5d7daa-63fe-4283-bbd1-4e49c0565db9"
+=======
+    "plugins": [
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c3656e6f-df8a-4642-bbc6-3a833810c546"
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
       }
     }
   }

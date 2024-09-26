@@ -175,6 +175,7 @@ const StoreStyles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20
 },
+<<<<<<< HEAD
 editContainer: {
   display: 'flex',
 },
@@ -201,6 +202,8 @@ noItems1: {
   fontFamily: 'Poppins_500Medium',
   fontSize: 20,
 },
+=======
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
 });
 
 export default StoreStyles;

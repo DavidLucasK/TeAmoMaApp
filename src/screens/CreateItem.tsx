@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { View, Text, Alert, Image, TouchableOpacity, TextInput, Modal, ScrollView } from 'react-native';
 import CreateItemStyles from '../styles/CreateItemStyles';
 import Header from '../components/Header';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
+=======
+import { View, Text, Alert, Image, TouchableOpacity, TextInput, Modal } from 'react-native';
+import CreateItemStyles from '../styles/CreateItemStyles';
+import Header from '../components/Header';
+import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator'; // Importando a biblioteca
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
 import { CreateItemNavigationProp } from '../navigation';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -19,11 +27,19 @@ const CreateItem = () => {
     const [uploading, setUploading] = useState<boolean>(false);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [textIndex, setTextIndex] = useState(0);
+<<<<<<< HEAD
+=======
+
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertTitle, setAlertTitle] = useState<string>('');
     const [alertMessage, setAlertMessage] = useState<string>('');
 
+<<<<<<< HEAD
     // Valores do item
+=======
+    //Valores do item
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     const [titleItem, setTitleItem] = useState<string>('');
     const [descItem, setDescItem] = useState<string>('');
     const [priceItem, setPriceItem] = useState<string>('');
@@ -111,6 +127,11 @@ const CreateItem = () => {
                 return;
             }
 
+<<<<<<< HEAD
+=======
+            console.log('tentando criar item')
+
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
             // Criação do item
             const response = await axios.post(`${backendUrl}/create_item/${partnerId}`, {
                 title_item: titleItem,
@@ -119,6 +140,11 @@ const CreateItem = () => {
                 image_url: imageUrl,
             });
 
+<<<<<<< HEAD
+=======
+            console.log(`${titleItem}, ${descItem}, ${priceItem}, ${imageUrl}`)
+
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
             // Verifica se a resposta foi bem-sucedida
             if (response.status === 201) {
                 setAlertTitle('Sucesso');
@@ -166,7 +192,11 @@ const CreateItem = () => {
     const texts = ['Enviando.  ', 'Enviando.. ', 'Enviando...'];
 
     return (
+<<<<<<< HEAD
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={CreateItemStyles.container}>
+=======
+        <View style={CreateItemStyles.container}>
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
             <Header
                 leftIcon={require('./assets/store.png')}
                 onLeftIconPress={() => navigation.navigate('Store')}
@@ -187,11 +217,19 @@ const CreateItem = () => {
                         <Text style={CreateItemStyles.titleCreate}>Criar Item</Text>
                         <TouchableOpacity activeOpacity={0.5} onPress={showImageOptions} style={CreateItemStyles.imageContainer}>
                             {selectedImage ? (
+<<<<<<< HEAD
+=======
+                                // Se houver uma imagem selecionada, exiba apenas a imagem
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
                                 <Image
                                     source={{ uri: selectedImage }}
                                     style={CreateItemStyles.imageUploaded}
                                 />
                             ) : (
+<<<<<<< HEAD
+=======
+                                // Se não houver imagem selecionada, exiba o botão de upload
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
                                 <View style={CreateItemStyles.photosContainer}>
                                     <View style={CreateItemStyles.camContainer}>
                                         <Image
@@ -221,7 +259,11 @@ const CreateItem = () => {
                             placeholder="Quantidade de pontos"
                             value={priceItem}
                             onChangeText={(text) => {
+<<<<<<< HEAD
                                 const numericValue = text.replace(/[^0-9]/g, '');
+=======
+                                const numericValue = text.replace(/[^0-9]/g, ''); // Garante que só números inteiros sejam permitidos
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
                                 setPriceItem(numericValue);
                             }}
                         />
@@ -237,26 +279,45 @@ const CreateItem = () => {
                                         </Text>
                                     ))}
                                 </View>
+<<<<<<< HEAD
                             : <Text style={CreateItemStyles.createText}>Criar</Text>}
+=======
+                            : <Text style={CreateItemStyles.createText}>Criar Item</Text>}
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
                         </TouchableOpacity>
                     </View>
                 </View>
             </LinearGradient>
             <Modal
                 visible={modalVisible}
+<<<<<<< HEAD
                 animationType="slide"
                 transparent={true}
+=======
+                transparent={true}
+                animationType="fade"
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
                 onRequestClose={handleModalClose}
             >
                 <View style={CreateItemStyles.modalContainer}>
                     <View style={CreateItemStyles.modalContent}>
+<<<<<<< HEAD
                         <TouchableOpacity onPress={() => handleOptionSelect('camera')}>
                             <Text style={CreateItemStyles.modalText}>Câmera</Text>
+=======
+                        
+                        <TouchableOpacity onPress={() => handleOptionSelect('camera')}>
+                            <Text style={CreateItemStyles.modalText}>Tirar Foto</Text>
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => handleOptionSelect('gallery')}>
                             <Text style={CreateItemStyles.modalText}>Galeria</Text>
                         </TouchableOpacity>
+<<<<<<< HEAD
                         <TouchableOpacity onPress={handleModalClose}>
+=======
+                        <TouchableOpacity  onPress={handleModalClose}>
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
                             <Text style={CreateItemStyles.cancelBtn}>Cancelar</Text>
                         </TouchableOpacity>
                     </View>
@@ -268,7 +329,11 @@ const CreateItem = () => {
                 message={alertMessage}
                 onClose={() => setShowAlert(false)}
             />
+<<<<<<< HEAD
         </ScrollView>
+=======
+        </View>
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     );
 };
 

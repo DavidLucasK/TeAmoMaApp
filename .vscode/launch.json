@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Attach to packager",
+        "request": "attach",
+        "type": "reactnative",
+        "port": 8081
+      },
+      {
+        "name": "Debug application",
+        "request": "launch",
+        "type": "reactnative",
+        "platform": "ios" // ou "android"
+      }
+    ]
+  }

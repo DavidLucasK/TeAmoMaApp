@@ -4,8 +4,13 @@ const CreateItemStyles = StyleSheet.create({
     container: {
         flex: 1,
     },
+<<<<<<< HEAD
     itemSection: {
         flexDirection: 'column',
+=======
+    drawContainer: {
+        
+>>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     },
     main: {
         width: '100%',
