@@ -4,24 +4,31 @@
     "slug": "TeAmoMaAppAvix",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+    "icon": "src/screens/assets/HeartIcon1024.png",
+    "userInterfaceStyle": "dark",
+    "updates": {
+      "fallbackToCacheTimeout": 0
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "src/screens/assets/HeartIcon1080.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.davidlucask.TeAmo"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "src/screens/assets/HeartIcon512.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6a5d7daa-63fe-4283-bbd1-4e49c0565db9"
+      }
     }
   }
 }
