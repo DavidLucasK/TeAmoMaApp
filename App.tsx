@@ -21,11 +21,6 @@ import CreatePost from './src/screens/CreatePost'; // Tela CreatePost
 import IndividualPost from './src/screens/IndividualPost'; // Tela IndividualPost
 import Login from './src/screens/Login'; // Tela Login
 import { AppProvider } from './src/context/AppContext'; // AppProvider
-<<<<<<< HEAD
-import EditItem from './src/screens/EditItem';
-import EditPerguntaQuiz from './src/screens/EditPerguntaQuiz';
-=======
->>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
 
 const Stack = createStackNavigator();
 
@@ -43,32 +38,18 @@ const App: React.FC = () => {
     useEffect(() => {
         const checkLoginStatus = async () => {
             try {
-<<<<<<< HEAD
-                const token = await AsyncStorage.getItem('authToken');
-                console.log("Token encontrado:", token);
-                if (token) {
-                    setIsLoggedIn(true);
-=======
                 const token = await AsyncStorage.getItem('authToken'); // Verifica se o token está salvo
                 if (token) {
                     setIsLoggedIn(true); // Define como logado se o token existir
->>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
                 }
             } catch (error) {
                 console.error('Erro ao verificar o token:', error);
             } finally {
-<<<<<<< HEAD
-                setIsLoading(false);
-            }
-        };
-        checkLoginStatus();
-=======
                 setIsLoading(false); // Carregamento concluído
             }
         };
 
         checkLoginStatus(); // Chama a função para verificar o login
->>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
     }, []);
 
     if (!fontsLoaded || isLoading) {
@@ -110,14 +91,6 @@ const App: React.FC = () => {
                         options={{ headerShown: false }} 
                     />
                     <Stack.Screen 
-<<<<<<< HEAD
-                        name="EditItem"
-                        component={EditItem}
-                        options={{ headerShown: false }} 
-                    />
-                    <Stack.Screen 
-=======
->>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
                         name="Profile"
                         component={Profile}
                         options={{ headerShown: false }} 
@@ -143,14 +116,6 @@ const App: React.FC = () => {
                         options={{ headerShown: false }} 
                     />
                     <Stack.Screen 
-<<<<<<< HEAD
-                        name="EditPerguntaQuiz"
-                        component={EditPerguntaQuiz}
-                        options={{ headerShown: false }} 
-                    />
-                    <Stack.Screen 
-=======
->>>>>>> f9dabbf32e9803731341ab7d9ac7172e962653dc
                         name="Posts"
                         component={Posts}
                         options={{ headerShown: false }} 

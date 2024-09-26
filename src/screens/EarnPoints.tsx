@@ -61,11 +61,9 @@ const EarnPoints: React.FC = () => {
     return (
         <View style={EarnPointsStyles.container}>
             <Header
-                leftIcon={require('./assets/editingWhite.png')}
-                middleIcon={require('./assets/store.png')}
+                leftIcon={require('./assets/store.png')}
                 rightIcon={require('./assets/profile-user.png')}
-                onLeftIconPress={() => navigation.navigate('EditQuiz')}
-                onMiddleIconPress={() => navigation.navigate('Store')} // Passando a função
+                onLeftIconPress={() => navigation.navigate('Store')} // Passando a função
                 onRightIconPress={() => navigation.navigate('Profile')}
                 isStoreScreen={false}
             />
@@ -79,6 +77,12 @@ const EarnPoints: React.FC = () => {
                     <Text style={EarnPointsStyles.title}>Minigames</Text>
                     <View style={EarnPointsStyles.games}>
                         <View style={EarnPointsStyles.card}>
+                            <TouchableOpacity onPress={() => navigation.navigate('EditQuiz')} style={EarnPointsStyles.imagesGames}>
+                                <Image
+                                    source={require('./assets/editing.png')}
+                                    style={EarnPointsStyles.editIcon}
+                                />
+                            </TouchableOpacity>
                             <Text style={EarnPointsStyles.cardTitle}>Quiz</Text>
                             <Text style={EarnPointsStyles.cardText}>Responda perguntas e ganhe LovePoints!</Text>
                             <TouchableOpacity

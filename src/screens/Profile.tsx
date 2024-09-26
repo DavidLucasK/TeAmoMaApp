@@ -29,58 +29,54 @@ const Profile: React.FC = () => {
   const [namePartner, setNamePartner] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
-  const [partnerId, setPartnerId] = useState<string>('');
+  const [partnerId] = useState<string>('');
   const [uploading, setUploading] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [points, setPoints] = useState<number>(0);
   const { user } = useAppContext();
+  const { setPartnerId } = useAppContext();
   const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
-  const [isProfileLoaded, setIsProfileLoaded] = useState<boolean>(false); // Adicione este estado
 
-  useEffect(() => {
-    const loadProfileData = async () => {
-      try {
-        const response = await axios.get(`${backendUrl}/get-profile/${user}`);
-        const profileData = response.data;
+  // Dentro do seu `useEffect`, ao carregar os dados do perfil:
+useEffect(() => {
+  const loadProfileData = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/get-profile/${user}`);
+      const profileData = response.data;
 
-        setProfileImage(profileData.profile_image || '');
-        setName(profileData.name || '');
-        setEmail(profileData.email || '');
-        setPhone(profileData.phone || '');
-        setPartnerId(profileData.partner || '');
+      setProfileImage(profileData.profile_image || '');
+      setName(profileData.name || '');
+      setEmail(profileData.email || '');
+      setPhone(profileData.phone || '');
+      setPartnerId(profileData.partner || '');
 
-        // Converte o partnerId para string antes de salvar
-        const partnerIdString = profileData.partner ? profileData.partner.toString() : '';
-        await AsyncStorage.setItem('partnerId', partnerIdString);
-
-        setIsProfileLoaded(true); // Marcar que o perfil foi carregado
-      } catch (error) {
-        console.error('Erro ao carregar perfil:', error);
-        Alert.alert('Erro', 'Não foi possível carregar os dados do perfil.');
-      }
-    };
-
-    loadProfileData();
-    fetchPoints();
-  }, [user]);
-
-  // Este useEffect será chamado apenas quando isProfileLoaded for true e o partnerId estiver definido
-  useEffect(() => {
-    if (isProfileLoaded && partnerId) {
-      const loadPartnerData = async () => {
-        try {
-          const response = await axios.get(`${backendUrl}/get-profile/${partnerId}`);
-          const partnerData = response.data;
-          setNamePartner(partnerData.name || '');
-        } catch (error) {
-          console.error('Erro ao carregar perfil do parceiro:', error);
-          Alert.alert('Erro', 'Não foi possível carregar os dados do parceiro.');
-        }
-      };
-
-      loadPartnerData();
+      // Converte o partnerId para string antes de salvar
+      const partnerIdString = profileData.partner ? profileData.partner.toString() : '';
+      await AsyncStorage.setItem('partnerId', partnerIdString);
+    } catch (error) {
+      console.error('Erro ao carregar perfil:', error);
+      Alert.alert('Erro', 'Não foi possível carregar os dados do perfil.');
     }
-  }, [isProfileLoaded, partnerId]); // Adicione `isProfileLoaded` e `partnerId` como dependências
+  };
+
+  const loadPartnerData = async () => {
+    try {
+      const storedPartnerId = await AsyncStorage.getItem('partnerId');
+      if (storedPartnerId) {
+        const response = await axios.get(`${backendUrl}/get-profile/${storedPartnerId}`);
+        const partnerData = response.data;
+        setNamePartner(partnerData.name || '');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar perfil do parceiro:', error);
+      Alert.alert('Erro', 'Não foi possível carregar os dados do parceiro.');
+    }
+  };
+
+  loadProfileData();
+  loadPartnerData();
+  fetchPoints();
+}, [partnerId]);
 
   const showImageOptions = () => {
     setModalVisible(true);
@@ -221,6 +217,10 @@ const Profile: React.FC = () => {
       style={ProfileStyles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
       {namePartner ? 
       <Header
           leftIcon={require('./assets/store.png')}
@@ -251,83 +251,82 @@ const Profile: React.FC = () => {
           <View style={ProfileStyles.main}>
             <View style={ProfileStyles.profileInfo}>
               <View style={ProfileStyles.photoContainer}>
-                  {profileImage ? (
-                    <Image
-                      source={{ uri: profileImage }}
-                      style={ProfileStyles.profileImage}
-                    />
-                  ) : (
-                    <Image
-                      style={ProfileStyles.profileImage}
-                    />
-                  )}
-                  <TouchableOpacity onPress={showImageOptions}>
-                    <Text style={ProfileStyles.changePhotoButton}>Mudar Foto</Text>
-                  </TouchableOpacity>
+                {profileImage ? (
+                  <Image
+                    source={{ uri: profileImage }}
+                    style={ProfileStyles.profileImage}
+                  />
+                ) : (
+                  <Image
+                    style={ProfileStyles.profileImage}
+                  />
+                )}
+                <TouchableOpacity onPress={showImageOptions}>
+                  <Text style={ProfileStyles.changePhotoButton}>Mudar Foto</Text>
+                </TouchableOpacity>
               </View>
-              <View>
-                <Text style={ProfileStyles.info}>Nome:</Text>
+              <View style={ProfileStyles.textContainer}>
+                <Text style={ProfileStyles.points}>Pontos: {points}</Text>
+                <Text style={ProfileStyles.info}>Nome de Usuário</Text>
                 <TextInput
                   style={ProfileStyles.textInput}
+                  placeholder="Nome"
                   value={name}
-                  onChangeText={(text) => setName(text)}
+                  onChangeText={setName}
                 />
-                <Text style={ProfileStyles.info}>Email:</Text>
+                <Text style={ProfileStyles.info}>Email</Text>
                 <TextInput
                   style={ProfileStyles.textInput}
+                  placeholder="Email"
+                  keyboardType="email-address"
                   value={email}
-                  onChangeText={(text) => setEmail(text)}
+                  onChangeText={setEmail}
                 />
-                <Text style={ProfileStyles.info}>Telefone:</Text>
+                <Text style={ProfileStyles.info}>Telefone</Text>
                 <TextInput
                   style={ProfileStyles.textInput}
+                  placeholder="Telefone"
+                  keyboardType="phone-pad"
                   value={phone}
-                  onChangeText={(text) => setPhone(text)}
+                  onChangeText={setPhone}
                 />
+                <Text style={ProfileStyles.info}>Parceiro</Text>
+                <Text style={ProfileStyles.textInput}>{namePartner}</Text>
+                <TouchableOpacity
+                  onPress={updateProfile}
+                  style={ProfileStyles.updateButton}
+                  disabled={uploading}
+                >
+                  <Text style={ProfileStyles.updateButtonText}>
+                    {uploading ? 'Atualizando...' : 'Atualizar Perfil'}
+                  </Text>
+                </TouchableOpacity>
               </View>
-              <Text style={ProfileStyles.info}>Parceiro</Text>
-              <Text style={ProfileStyles.textInput}>{namePartner}</Text>
-              <TouchableOpacity
-                style={ProfileStyles.updateButton}
-                onPress={updateProfile}
-                disabled={uploading}
-              >
-                <Text style={ProfileStyles.updateButtonText}>
-                  {uploading ? 'Atualizando...' : 'Atualizar Perfil'}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('Login')} style={ProfileStyles.updateButton}>
-                <Text style={ProfileStyles.logoutButtonText}>Logout</Text>
-              </TouchableOpacity>
             </View>
           </View>
         </LinearGradient>
-      <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={handleModalClose}
-      >
-        <View style={ProfileStyles.modalContainer}>
-          <View style={ProfileStyles.modalContent}>
-            <TouchableOpacity
-              onPress={() => handleOptionSelect('camera')}
-            >
-              <Text style={ProfileStyles.modalText}>Tirar Foto</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleOptionSelect('gallery')}
-            >
-              <Text style={ProfileStyles.modalText}>Galeria</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleModalClose}
-            >
-              <Text style={ProfileStyles.cancelBtn}>Cancelar</Text>
-            </TouchableOpacity>
+
+        <Modal
+          visible={modalVisible}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={handleModalClose}
+        >
+          <View style={ProfileStyles.modalContainer}>
+            <View style={ProfileStyles.modalContent}>
+              <Text style={ProfileStyles.modalText} onPress={() => handleOptionSelect('camera')}>
+                Tirar Foto
+              </Text>
+              <Text style={ProfileStyles.modalText} onPress={() => handleOptionSelect('gallery')}>
+                Galeria
+              </Text>
+              <TouchableOpacity onPress={handleModalClose}>
+                <Text style={ProfileStyles.cancelBtn}>Fechar</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
