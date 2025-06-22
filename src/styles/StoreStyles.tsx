@@ -1,180 +1,211 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+
+const clamp = (min: number, preferred: number, max: number) => {
+  return Math.min(Math.max(preferred, min), max);
+};
+
+// Escala proporcional para largura e altura
+const scaleWidth = (value: number) => (screenWidth / 375) * value; // Base iPhone 11 Pro
+const scaleHeight = (value: number) => (screenHeight / 812) * value;
+
+// Tamanhos de fontes responsivos
+const smallFont = clamp(12, screenWidth * 0.035, 16);
+const mediumFont = clamp(16, screenWidth * 0.045, 20);
+const largeFont = clamp(20, screenWidth * 0.055, 28);
+const xLargeFont = clamp(24, screenWidth * 0.065, 32);
+
+const horizontalPadding = scaleWidth(20);
 
 const StoreStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF'
+    backgroundColor: "#FFF",
   },
   plusBtn: {
-    display: 'flex',
+    display: "flex",
   },
   plus: {
-    fontFamily: 'Poppins_700Bold',
-    fontSize: 20,
-    color: '#FFF',
-    backgroundColor: '#e41d69',
-    width: '100%',
-    padding: 5,
-    paddingHorizontal: 15,
-    borderRadius: 10
+    fontFamily: "Poppins_700Bold",
+    fontSize: largeFont,
+    color: "#FFF",
+    backgroundColor: "#e41d69",
+    width: "100%",
+    padding: scaleHeight(5),
+    paddingHorizontal: scaleWidth(15),
+    borderRadius: scaleWidth(10),
   },
   pointsSection: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   pointsTitle: {
-    fontFamily: 'Poppins_700Bold',
-    fontSize: 24,
-    color: '#000',
-    marginBottom: 5,
-  },
-  border: {
-    height: 17,
-    width: 285,
-    marginTop: -19,
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    zIndex: 3,
+    fontFamily: "Poppins_700Bold",
+    fontSize: largeFont,
+    color: "#000",
+    marginBottom: scaleHeight(5),
   },
   borderImage: {
-    height: 17,
-    width: 360,
-    left: 17,
-    marginTop: -7,
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
+    height: scaleHeight(17),
+    width: scaleWidth(360),
+    left: scaleWidth(17),
+    marginTop: scaleHeight(-7),
+    borderBottomLeftRadius: scaleWidth(15),
+    borderBottomRightRadius: scaleWidth(15),
     zIndex: 3,
   },
   borderRedeem: {
-    height: 17,
-    width: 125,
-    marginTop: -33,
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    zIndex: 3,
-  },
-  borderHeader: {
-    height: 18,
-    width: 405,
-    marginTop: -10,
+    height: scaleHeight(17),
+    width: scaleWidth(125),
+    marginTop: scaleHeight(-33),
+    borderBottomLeftRadius: scaleWidth(15),
+    borderBottomRightRadius: scaleWidth(15),
     zIndex: 3,
   },
   points: {
-    fontSize: 32,
-    fontFamily: 'Poppins_700Bold',
-    backgroundColor: '#e41d69',
-    padding: 10,
-    color: 'white',
-    borderRadius: 5,
-    alignSelf: 'center',
-    marginBottom: 10,
-    zIndex: 2,
+    fontSize: xLargeFont,
+    fontFamily: "Poppins_700Bold",
+    color: "white",
   },
   howToEarn: {
-    fontFamily: 'Poppins_500Medium',
-    color: '#000',
-    fontSize: 18,
+    fontFamily: "Poppins_500Medium",
+    color: "#000",
+    fontSize: mediumFont,
   },
   rightSide: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   redeemButton: {
-    backgroundColor: '#e41d69',
-    color: 'white',
-    marginTop: 10,
-    padding: 7,
-    paddingHorizontal: 16,
-    borderRadius: 15,
-    marginBottom: 20,
+    backgroundColor: "#e41d69",
+    color: "white",
+    marginTop: scaleHeight(10),
+    paddingVertical: scaleHeight(7),
+    paddingHorizontal: scaleWidth(16),
+    borderRadius: scaleWidth(15),
+    marginBottom: scaleHeight(20),
   },
   redeemButtonText: {
-    color: '#fff',
-    fontFamily: 'Poppins_700Bold',
-    fontSize: 20,
+    color: "#fff",
+    fontFamily: "Poppins_700Bold",
+    fontSize: mediumFont,
   },
   storeSection: {
-    flexDirection: 'column',
-    marginTop: 20,
+    flexDirection: "column",
+    marginTop: scaleHeight(20),
   },
   storeSectionTitle: {
-    color: '#fff',
-    fontFamily: 'Poppins_700Bold',
+    color: "#fff",
+    fontFamily: "Poppins_700Bold",
+    fontSize: largeFont,
   },
   rewardItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '90%',
-    backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 15,
-    marginBottom: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "90%",
+    backgroundColor: "white",
+    padding: scaleWidth(15),
+    borderRadius: scaleWidth(15),
+    marginBottom: scaleHeight(15),
   },
   rewardDetails: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   rewardTitle: {
-    fontSize: 18,
-    fontFamily: 'Poppins_700Bold',
+    fontSize: mediumFont,
+    fontFamily: "Poppins_700Bold",
   },
   rewardDescription: {
-    marginVertical: 4,
+    marginVertical: scaleHeight(4),
+    fontSize: smallFont,
   },
   rewardPoints: {
-    marginVertical: 4,
+    marginVertical: scaleHeight(4),
+    fontSize: smallFont,
   },
-  leftSide: {
-  },
+  leftSide: {},
   itemImage: {
-    alignSelf: 'center',
-    width: 360,
-    height: 240,
-    objectFit: 'cover',
-    borderRadius: 10,
+    alignSelf: "center",
+    width: screenWidth - horizontalPadding * 2,
+    height: (screenWidth - horizontalPadding * 2) * 0.66,
+    objectFit: "cover",
+    borderRadius: scaleWidth(10),
     elevation: 5,
+    marginVertical: scaleHeight(10),
   },
   itemTitle: {
-    textAlign: 'center',
-    fontFamily: 'Poppins_700Bold',
-    fontSize: 28,
+    textAlign: "center",
+    fontFamily: "Poppins_700Bold",
+    fontSize: xLargeFont,
   },
   itemDescription: {
-    textAlign: 'center',
-    fontFamily: 'Poppins_500Medium',
-    fontSize: 16,
-    paddingHorizontal: 20,
-    paddingTop: 10,
+    textAlign: "center",
+    fontFamily: "Poppins_500Medium",
+    fontSize: mediumFont,
+    paddingHorizontal: horizontalPadding,
+    paddingTop: scaleHeight(10),
   },
   itemPoints: {
-    fontFamily: 'Poppins_500Medium',
-    fontSize: 20,
+    fontFamily: "Poppins_500Medium",
+    fontSize: mediumFont,
   },
   itemPoints2: {
-    fontFamily: 'Poppins_700Bold',
-    fontSize: 24,
+    fontFamily: "Poppins_700Bold",
+    fontSize: largeFont,
   },
   containerLoading: {
-    width: '100%',
+    width: "100%",
   },
   loadingImage: {
-    alignSelf: 'center',
-    width: '70%',
-    marginBottom: -50,
-    marginTop: -50,
-  },
-  noItems: {
-    
+    alignSelf: "center",
+    width: "70%",
+    marginBottom: scaleHeight(-50),
+    marginTop: scaleHeight(-50),
   },
   bordaBottom: {
-    borderBlockColor: '#eee',
+    borderBlockColor: "#eee",
     borderBottomWidth: 1.5,
-    marginTop: 10,
-    marginBottom: 20
-},
+    marginTop: scaleHeight(10),
+    marginBottom: scaleHeight(20),
+  },
+  loadingPoints: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loadingItems: {
+    marginVertical: scaleHeight(80),
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  containerNoItems: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: horizontalPadding,
+  },
+  noItems: {
+    fontWeight: "500",
+    fontSize: largeFont,
+    textAlign: "center",
+    color: "#838383",
+    paddingHorizontal: horizontalPadding,
+  },
+  pointsContainer: {
+    backgroundColor: "#e41d69",
+    paddingVertical: scaleHeight(10),
+    paddingHorizontal: horizontalPadding,
+    borderRadius: scaleWidth(5),
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: scaleHeight(10),
+    zIndex: 2,
+  },
 });
 
 export default StoreStyles;

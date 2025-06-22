@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
-import { LinearGradient } from 'expo-linear-gradient'; // Importando LinearGradient
-
-import StoreStyles from '../styles/StoreStyles';
-import Header from '../components/Header';
-import CustomAlert from '../components/CustomAlert';
-import { StoreNavigationProp } from '../navigation'; // Importando o tipo de navegação
-import { useAppContext } from '../context/AppContext';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+  ActivityIndicator,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
+import StoreStyles from "../styles/StoreStyles";
+import Header from "../components/Header";
+import CustomAlert from "../components/CustomAlert";
+import { StoreNavigationProp } from "../navigation";
+import { useAppContext } from "../context/AppContext";
+import Footer from "../components/Footer";
 
 interface Item {
   id: string;
@@ -19,120 +26,150 @@ interface Item {
 }
 
 const Store: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
   const [points, setPoints] = useState<number>(0);
-  const [items, setItems] = useState<Item[]>([]); // Inicializa como um array vazio
+  const [items, setItems] = useState<Item[]>([]);
   const [isRedeeming, setIsRedeeming] = useState<boolean>(false);
+  const [hasFetched, setHasFetched] = useState(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [alertTitle, setAlertTitle] = useState<string>('');
-  const [alertMessage, setAlertMessage] = useState<string>('');
-  const [refreshing, setRefreshing] = useState<boolean>(false); // Estado para controle de atualização
+  const [alertTitle, setAlertTitle] = useState<string>("");
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [refreshing, setRefreshing] = useState<boolean>(false);
   const [redeemingItemId, setRedeemingItemId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation<StoreNavigationProp>();
-  const { user } = useAppContext();
+  const { user, partnerId } = useAppContext();
+
+  const backendUrl = "https://backendlogindl.vercel.app/api/auth";
+
+  const icons = [
+    {
+      icon: require("./assets/profile-user.png"),
+      screen: "Profile",
+    },
+  ];
 
   useEffect(() => {
-    fetchPoints();
-    fetchItems(); // Chama a função para buscar itens
-  }, []);
-
-  const backendUrl = 'https://backendlogindl.vercel.app/api/auth';
-
-  console.log(user)
+    if (!hasFetched) {
+      fetchPoints();
+      fetchItems();
+      setHasFetched(true);
+    }
+  }, [hasFetched]);
 
   const fetchPoints = async () => {
-    console.log('Iniciando a requisição para buscar pontos...');
     try {
-      const response = await axios.get(`${backendUrl}/points/${user}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(`${backendUrl}/points/${user}`, {
+        headers: { "Content-Type": "application/json" },
       });
 
-      if (response.status !== 200) {
-        throw new Error('Erro ao buscar pontos: ' + response.statusText);
-      }
+      if (!response.ok) throw new Error("Erro ao buscar pontos");
 
-      console.log('Pontos recebidos:', response.data.points);
-      setPoints(response.data.points);
-    } catch (error: any) {
-      console.error('Erro ao buscar pontos:', error);
+      const data = await response.json();
+      setPoints(data.points);
+    } catch (error) {
+      console.error("Erro ao buscar pontos:", error);
     }
   };
 
   const updatePoints = async (pointsEarned: number) => {
     try {
-      const response = await axios.post(`${backendUrl}/update-points/${user}`, {
-        pointsEarned,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(`${backendUrl}/update-points/${user}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pointsEarned }),
       });
 
-      if (response.status === 200) {
-        console.log('Pontos atualizados com sucesso!');
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Erro ao atualizar pontos:", errorData.message);
       } else {
-        console.error('Erro ao atualizar pontos:', response.data.message);
+        console.log("Pontos atualizados com sucesso!");
       }
     } catch (error) {
-      console.error('Erro ao enviar a requisição:', error);
+      console.error("Erro ao enviar a requisição:", error);
     }
   };
 
   const fetchItems = async () => {
     setLoading(true);
-    console.log('Iniciando a requisição para buscar itens...');
     try {
-      const response = await axios.get(`${backendUrl}/items/${user}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(`${backendUrl}/items/${user}`, {
+        headers: { "Content-Type": "application/json" },
       });
 
-      // Acessa diretamente response.data.items
-      const items = response.data; // Aqui estamos pegando os itens da resposta
+      if (!response.ok) throw new Error("Erro ao buscar itens");
 
-      // Verifica se items é um array
-      if (Array.isArray(items)) {
-        console.log('Itens recebidos:', items);
-        const formattedItems = items.map(item => ({
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        const formattedItems = data.map((item) => ({
           id: item.id,
           title: item.name,
           description: item.description,
           points: item.points_required,
-          imageUrl: item.image_url, // Mapeia image_url para imageUrl
+          imageUrl: item.image_url,
         }));
-        setItems(formattedItems); // Atualiza o estado com os itens formatados
+        setItems(formattedItems);
       } else {
-        console.error('A resposta não contém um array de itens.');
+        console.error("A resposta não contém um array de itens.");
       }
     } catch (error) {
-      console.error('Erro ao buscar itens:', error);
+      console.error("Erro ao buscar itens:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRedemption = async (item: Item) => {
-    const currentPoints = points;
+  const getEmail = async () => {
+    try {
+      const response = await fetch(`${backendUrl}/get-profile/${partnerId}`);
+      if (!response.ok) throw new Error("Erro ao buscar perfil");
+      const partnerData = await response.json();
+      setEmail(partnerData.email);
+    } catch (error) {
+      console.error("Erro ao carregar perfil:", error);
+    }
+  };
 
-    if (currentPoints >= item.points) {
+  const insertRedemption = async (rewardId: string, pointsRequired: number) => {
+    await getEmail();
+    try {
+      const response = await fetch(`${backendUrl}/insert-redemption/${user}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rewardId,
+          pointsRequired,
+          userEmail: email,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Erro ao registrar resgate:", errorData.message);
+      } else {
+        console.log("Resgate registrado com sucesso!");
+      }
+    } catch (error) {
+      console.error("Erro ao enviar a requisição:", error);
+    }
+  };
+
+  const handleRedemption = async (item: Item) => {
+    if (points >= item.points) {
       try {
         setRedeemingItemId(item.id);
         setIsRedeeming(true);
         await updatePoints(-item.points);
-        await insertRedemption('1', item.id, item.points);
-        console.log("Resgate feito com sucesso");
-
-        // Exibir alerta personalizado
+        await insertRedemption(item.id, item.points);
         setAlertTitle("Parabéns gatinha");
         setAlertMessage("Resgate feito com sucesso!");
         setShowAlert(true);
         await fetchPoints();
         await fetchItems();
       } catch (error) {
-        console.error('Erro ao processar resgate:', error);
+        console.error("Erro ao processar resgate:", error);
         setAlertTitle("Erro");
         setAlertMessage("Algo deu errado durante o resgate. Tente novamente.");
         setShowAlert(true);
@@ -141,31 +178,9 @@ const Store: React.FC = () => {
         setIsRedeeming(false);
       }
     } else {
-      console.log("Erro: pontos insuficientes");
       setAlertTitle("Oops");
       setAlertMessage("Você não tem pontos suficientes espertinha kkk");
       setShowAlert(true);
-    }
-  };
-
-  const insertRedemption = async (userId: string, rewardId: string, pointsRequired: number) => {
-    try {
-      const response = await axios.post(`${backendUrl}/insert-redemption/${user}`, {
-        rewardId,
-        pointsRequired,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.status === 200) {
-        console.log('Resgate registrado com sucesso!');
-      } else {
-        console.error('Erro ao registrar resgate:', response.data.message);
-      }
-    } catch (error) {
-      console.error('Erro ao enviar a requisição:', error);
     }
   };
 
@@ -176,108 +191,101 @@ const Store: React.FC = () => {
     setRefreshing(false);
   };
 
-
   return (
     <View style={StoreStyles.container}>
-      <Header
-        leftIcon={require('./assets/game.png')}
-        middleIcon={require('./assets/posts.png')}
-        rightIcon={require('./assets/profile-user.png')}
-        onLeftIconPress={() => navigation.navigate('EarnPoints')}
-        onMiddleIconPress={() => navigation.navigate('Posts')}
-        onRightIconPress={() => navigation.navigate('Profile')}
-        isStoreScreen={true}
-      />
-      <LinearGradient
-        colors={['transparent', '#00000030', '#FFFFFFFF']} // Gradiente esfumaçado
-        style={StoreStyles.borderHeader}
-      ></LinearGradient>
+      <Header icons={icons as any} />
       <ScrollView
         style={StoreStyles.storeSection}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         <View style={StoreStyles.pointsSection}>
           <Text style={StoreStyles.pointsTitle}>Você tem:</Text>
-          <Text style={StoreStyles.points}>
-            {loading ? 'Carregando...' : `${points} LovePoints`}
-          </Text>
-          <LinearGradient
-            colors={['transparent', '#00000057', '#FFFFFFFF']} // Gradiente esfumaçado
-            style={StoreStyles.border}
-          ></LinearGradient>
-          <TouchableOpacity onPress={() => navigation.navigate('EarnPoints')}>
-            <Text style={StoreStyles.howToEarn}>Como consigo LovePoints?</Text>
+          <View style={StoreStyles.pointsContainer}>
+            {loading ? (
+              <ActivityIndicator size="large" color="#FFF" />
+            ) : (
+              <Text style={StoreStyles.points}>{points} LovePoints</Text>
+            )}
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("EarnPoints")}>
+            <Text style={StoreStyles.howToEarn}>
+              Clique aqui para pegar LovePoints.
+            </Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <TouchableOpacity 
-              style={StoreStyles.plusBtn} 
-              onPress={() => navigation.navigate('EditStore')}>
-              <Text style={StoreStyles.plus}>Editar Loja do Parceiro</Text>
-            </TouchableOpacity>
-          </View>
+
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <TouchableOpacity
+            style={StoreStyles.plusBtn}
+            onPress={() => navigation.navigate("EditStore")}
+          >
+            <Text style={StoreStyles.plus}>Editar Loja do Parceiro</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={StoreStyles.bordaBottom}></View>
+
         {loading ? (
           <View>
-          <Text style={StoreStyles.itemTitle}>Carregando...</Text>
-          <View style={StoreStyles.leftSide}>
-            <Image source={require('./assets/loading.gif')} style={StoreStyles.itemImage} />
+            <ActivityIndicator
+              style={StoreStyles.loadingItems}
+              size="large"
+              color="#e41d69"
+            />
           </View>
-          <View style={StoreStyles.rightSide}>
-            <Text style={StoreStyles.itemDescription}>Carma aí que ta carregando minha fia</Text>
-            <Text style={StoreStyles.itemPoints}>Custa alguma coisa, carma ai uai...</Text>
-            <TouchableOpacity
-              style={StoreStyles.redeemButton}
-            >
-              <Text style={StoreStyles.redeemButtonText}>
-                Carregando...
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        ) : (
-          Array.isArray(items) && items.length > 0 ? (
-            items.map((item) => (
-              <View key={item.id}>
-                <Text style={StoreStyles.itemTitle}>{item.title}</Text>
-                <View style={StoreStyles.leftSide}>
-                  <Image source={{ uri: item.imageUrl }} style={StoreStyles.itemImage} />
-                  <LinearGradient
-                    colors={['transparent', '#0000002b', '#FFFFFFFF']} // Gradiente esfumaçado
-                    style={StoreStyles.borderImage}
-                  ></LinearGradient>
-                </View>
-                <View style={StoreStyles.rightSide}>
-                  <Text style={StoreStyles.itemDescription}>{item.description}</Text>
-                  <Text style={StoreStyles.itemPoints2}>LovePoints necessários: <Text style={{color: '#e41d69'}}>{item.points}</Text></Text>
-                  <TouchableOpacity
-                    style={StoreStyles.redeemButton}
-                    onPress={() => handleRedemption(item)}
-                    disabled={redeemingItemId === item.id}
-                  >
-                    <Text style={StoreStyles.redeemButtonText}>
-                      {redeemingItemId === item.id ? 'Resgatando...' : 'Resgatar'}
-                    </Text>
-                  </TouchableOpacity>
-                  <LinearGradient
-                    colors={['transparent', '#0000002b', '#FFFFFFFF']} // Gradiente esfumaçado
-                    style={StoreStyles.borderRedeem}
-                  ></LinearGradient>
-                </View>
-                <View style={StoreStyles.bordaBottom}></View>
+        ) : Array.isArray(items) && items.length > 0 ? (
+          items.map((item) => (
+            <View key={item.id}>
+              <Text style={StoreStyles.itemTitle}>{item.title}</Text>
+              <View style={StoreStyles.leftSide}>
+                <Image
+                  source={{ uri: item.imageUrl }}
+                  style={StoreStyles.itemImage}
+                />
+                <LinearGradient
+                  colors={["transparent", "#0000002b", "#FFFFFFFF"]}
+                  style={StoreStyles.borderImage}
+                />
               </View>
-            ))
-          ) : (
-            <Text style={StoreStyles.noItems}>Nenhum item disponível.</Text>
-          )
+              <View style={StoreStyles.rightSide}>
+                <Text style={StoreStyles.itemDescription}>
+                  {item.description}
+                </Text>
+                <Text style={StoreStyles.itemPoints2}>
+                  LovePoints necessários:{" "}
+                  <Text style={{ color: "#e41d69" }}>{item.points}</Text>
+                </Text>
+                <TouchableOpacity
+                  style={StoreStyles.redeemButton}
+                  onPress={() => handleRedemption(item)}
+                  disabled={redeemingItemId === item.id}
+                >
+                  <Text style={StoreStyles.redeemButtonText}>
+                    {redeemingItemId === item.id ? "Resgatando..." : "Resgatar"}
+                  </Text>
+                </TouchableOpacity>
+                <LinearGradient
+                  colors={["transparent", "#0000002b", "#FFFFFFFF"]}
+                  style={StoreStyles.borderRedeem}
+                />
+              </View>
+              <View style={StoreStyles.bordaBottom}></View>
+            </View>
+          ))
+        ) : (
+          <View style={StoreStyles.containerNoItems}>
+            <Text style={StoreStyles.noItems}>
+              Peça ao parceiro para criar novos items!
+            </Text>
+          </View>
         )}
       </ScrollView>
+
       {showAlert && (
         <CustomAlert
           title={alertTitle}
@@ -286,9 +294,9 @@ const Store: React.FC = () => {
           onClose={() => setShowAlert(false)}
         />
       )}
+      <Footer />
     </View>
   );
-  
 };
 
 export default Store;

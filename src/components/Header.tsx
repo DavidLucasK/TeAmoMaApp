@@ -1,72 +1,63 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient'; // Importando LinearGradient
-import { HomeNavigationProp } from '../navigation'; // Importando os tipos de navegação
-import { useNavigation } from '@react-navigation/native'; // Importando useNavigation
+import React from "react";
+import { View, TouchableOpacity, Image, Text } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import { HomeNavigationProp, RootStackParamList } from "../navigation";
+import HeaderStyles from "../styles/HeaderStyles";
 
-import HeaderStyles from '../styles/HeaderStyles'; // Importando os estilos do cabeçalho
-
-interface HeaderProps {
-    leftIcon?: any; 
-    middleIcon?:any;
-    rightIcon?: any;
-    onLeftIconPress?: () => void;
-    onMiddleIconPress?: () => void;
-    onRightIconPress?: () => void;
-    isStoreScreen?: boolean;
+interface HeaderIcon {
+  icon: any;
+  screen?: keyof RootStackParamList;
+  onPress?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ leftIcon, middleIcon, rightIcon, onLeftIconPress, onMiddleIconPress, onRightIconPress, isStoreScreen }) => {
-    const navigation = useNavigation<HomeNavigationProp>(); // Usando o tipo de navegação
+interface HeaderProps {
+  icons: HeaderIcon[];
+}
 
-    const handleLogoPress = () => {
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'Home' }], // Redefine a navegação para a tela Home
-        });
-    };
+const Header: React.FC<HeaderProps> = ({ icons }) => {
+  const navigation = useNavigation<HomeNavigationProp>();
 
-    const handleLeftIconPress = () => {
-        if (isStoreScreen) {
-            if (onLeftIconPress) {
-                onLeftIconPress(); // Chama a função de callback se isStoreScreen for true e onLeftIconPress estiver definido
-            }
-        } else {
-            navigation.navigate('Store');
-        }
-    };
+  const handleIconPress = (icon: HeaderIcon) => {
+    if (icon.onPress) {
+      icon.onPress();
+    } else if (icon.screen) {
+      navigation.navigate(icon.screen as any);
+    }
+  };
 
-    return (
-        <LinearGradient
-            colors={['#e41d69', '#fe8277']}
-            start={{ x: 0, y: 0 }} // Início do gradiente (canto superior esquerdo)
-            end={{ x: 1, y: 0 }}
-            style={[HeaderStyles.header]} // Usando o estilo do cabeçalho
-        >
-            <View style={HeaderStyles.headerContent}>
-                <TouchableOpacity onPress={handleLogoPress}>
-                    <Text style={HeaderStyles.logo}>Te amo Ma</Text>
-                </TouchableOpacity>
-                <View style={HeaderStyles.icons}>
-                    {leftIcon && (
-                        <TouchableOpacity onPress={onLeftIconPress}>
-                            <Image source={leftIcon} style={HeaderStyles.icon} />
-                        </TouchableOpacity>
-                    )}
-                    {middleIcon && (
-                        <TouchableOpacity onPress={onMiddleIconPress}>
-                            <Image source={middleIcon} style={HeaderStyles.middleicon} />
-                        </TouchableOpacity>
-                    )}
-                    {rightIcon && (
-                        <TouchableOpacity onPress={onRightIconPress}>
-                            <Image source={rightIcon} style={HeaderStyles.icon} />
-                        </TouchableOpacity>
-                    )}
-                </View>
-            </View>
-        </LinearGradient>
-    );
+  const handleLogoPress = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Home" }],
+    });
+  };
+
+  return (
+    <LinearGradient
+      colors={["#e41d69", "#fe8277"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      style={HeaderStyles.header}
+    >
+      <View style={HeaderStyles.headerContent}>
+        <TouchableOpacity onPress={handleLogoPress}>
+          <Text style={HeaderStyles.logo}>LoveYou</Text>
+        </TouchableOpacity>
+
+        <View style={HeaderStyles.icons}>
+          {icons.map((iconItem, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleIconPress(iconItem)}
+            >
+              <Image source={iconItem.icon} style={HeaderStyles.icon} />
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    </LinearGradient>
+  );
 };
 
 export default Header;
