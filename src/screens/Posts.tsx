@@ -82,6 +82,7 @@ const Posts: React.FC = () => {
       setPosts((prevPosts) =>
         pageNum === 1 ? newPosts : [...prevPosts, ...newPosts]
       );
+      console.log(newPosts);
       setTotalPages(newTotalPages);
       setHasMore(pageNum < newTotalPages);
     } catch (error) {

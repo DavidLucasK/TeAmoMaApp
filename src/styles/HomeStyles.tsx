@@ -28,7 +28,7 @@ const HomeStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: horizontalPadding,
+    paddingHorizontal: horizontalPadding * 2,
     width: "100%",
   },
   homeText: {

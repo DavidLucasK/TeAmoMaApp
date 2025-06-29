@@ -29,6 +29,12 @@ const HeaderStyles = StyleSheet.create({
     height: 32,
     marginRight: 20,
   },
+  backText: {
+    fontFamily: "Poppins_700Bold",
+    color: "white",
+    fontSize: 14,
+    marginRight: 20,
+  },
 });
 
 export default HeaderStyles;

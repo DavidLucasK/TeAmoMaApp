@@ -20,20 +20,20 @@ const Footer: React.FC = () => {
       screen: "Home",
     },
     {
-      icon: require("../screens/assets/posts.png"),
-      screen: "Posts",
+      icon: require("../screens/assets/store.png"),
+      screen: "Store",
     },
     {
       icon: require("../screens/assets/plusWhite.png"),
       screen: "CreatePost",
     },
     {
-      icon: require("../screens/assets/game.png"),
-      screen: "EarnPoints",
+      icon: require("../screens/assets/posts.png"),
+      screen: "Posts",
     },
     {
-      icon: require("../screens/assets/store.png"),
-      screen: "Store",
+      icon: require("../screens/assets/game.png"),
+      screen: "EarnPoints",
     },
   ];
 

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Alert, Image } from "react-native";
+import { View, Text, Image, ScrollView, Alert } from "react-native";
 import AddPartnerStyles from "../styles/AddPartnerStyles";
 import { useNavigation } from "@react-navigation/native";
 import { AddPartnerNavigationProp } from "../navigation";
 import Header from "../components/Header";
 import { useAppContext } from "../context/AppContext";
 import { LinearGradient } from "expo-linear-gradient";
+import Footer from "../components/Footer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const icons = [
   {
@@ -17,29 +19,39 @@ const icons = [
 const AddPartner: React.FC = () => {
   const navigation = useNavigation<AddPartnerNavigationProp>();
   const backendUrl = "https://backendlogindl.vercel.app/api/auth";
-  const { partnerId } = useAppContext();
+  const { user, partnerId } = useAppContext();
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [namePartner, setNamePartner] = useState<string>("");
   const [emailPartner, setEmailPartner] = useState<string>("");
   const [phonePartner, setPhonePartner] = useState<string>("");
   const [pointsPartner, setPointsPartner] = useState<number>(0);
+  const [myName, setMyName] = useState<string>("");
 
   useEffect(() => {
     const loadPartnerData = async () => {
       try {
         const response = await fetch(`${backendUrl}/get-profile/${partnerId}`);
-        if (!response.ok) {
-          console.error("Erro ao buscar perfil do parceiro:", response.status);
-          return;
-        }
-        const partnerData = await response.json();
-        setProfileImage(partnerData.profile_image || "");
-        setNamePartner(partnerData.name || "");
-        setEmailPartner(partnerData.email || "");
-        setPhonePartner(partnerData.phone || "");
+        const profileData = await response.json();
+
+        setProfileImage(profileData.profile_image || "");
+        setNamePartner(profileData.name || "");
+        setEmailPartner(profileData.email || "");
+        setPhonePartner(profileData.phone || "");
       } catch (error) {
-        console.error("Erro ao carregar perfil do parceiro:", error);
+        console.error("Erro ao carregar perfil:", error);
+        Alert.alert("Erro", "Não foi possível carregar os dados do perfil.");
+      }
+    };
+
+    const loadMyName = async () => {
+      try {
+        const res = await fetch(`${backendUrl}/get-profile/${user}`);
+        const profileData = await res.json();
+        setMyName(profileData.name || "");
+      } catch (error) {
+        console.error("Erro ao carregar perfil:", error);
+        Alert.alert("Erro", "Não foi possível carregar os dados do perfil.");
       }
     };
 
@@ -63,21 +75,24 @@ const AddPartner: React.FC = () => {
 
     if (partnerId) {
       loadPartnerData();
+      loadMyName();
       fetchPoints();
     }
-  }, [partnerId]);
+  }, [partnerId, user]);
 
   return (
     <View style={AddPartnerStyles.container}>
-      <Header icons={icons as any} />
-      {partnerId ? (
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Header icons={icons as any} />
         <LinearGradient
           colors={["#e41d69", "#fe8277"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={AddPartnerStyles.main}
         >
-          <Text style={AddPartnerStyles.title}>Perfil do Parceiro</Text>
           <View style={AddPartnerStyles.main}>
             <View style={AddPartnerStyles.profileInfo}>
               <View style={AddPartnerStyles.photoContainer}>
@@ -90,6 +105,7 @@ const AddPartner: React.FC = () => {
                   <Image style={AddPartnerStyles.profileImage} />
                 )}
               </View>
+
               <View style={AddPartnerStyles.textContainer}>
                 <Text style={AddPartnerStyles.points}>
                   Pontos: {pointsPartner}
@@ -100,13 +116,14 @@ const AddPartner: React.FC = () => {
                 <Text style={AddPartnerStyles.textInput}>{emailPartner}</Text>
                 <Text style={AddPartnerStyles.info}>Telefone</Text>
                 <Text style={AddPartnerStyles.textInput}>{phonePartner}</Text>
+                <Text style={AddPartnerStyles.info}>Parceiro</Text>
+                <Text style={AddPartnerStyles.textInput}>{myName}</Text>
               </View>
             </View>
           </View>
         </LinearGradient>
-      ) : (
-        <Text>NÃO HÁ DADOS</Text>
-      )}
+      </ScrollView>
+      <Footer />
     </View>
   );
 };

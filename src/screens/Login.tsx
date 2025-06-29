@@ -49,13 +49,25 @@ const Login: React.FC = () => {
 
         // Salvar dados no AsyncStorage
         await AsyncStorage.removeItem("userId");
-        await AsyncStorage.setItem("authToken", data.token);
-        await AsyncStorage.setItem("userId", data.userId.toString());
-        await AsyncStorage.setItem("partnerId", data.partnerId.toString());
 
-        // Setar no contexto global
-        setUser(data.userId);
-        setPartnerId(data.partnerId);
+        // Salva token sempre
+        await AsyncStorage.setItem("authToken", data.token);
+
+        // Valida e salva userId
+        if (data.userId !== undefined && data.userId !== null) {
+          await AsyncStorage.setItem("userId", data.userId.toString());
+          setUser(data.userId);
+        } else {
+          console.warn("userId não retornado no login.");
+        }
+
+        // Valida e salva partnerId
+        if (data.partnerId !== undefined && data.partnerId !== null) {
+          await AsyncStorage.setItem("partnerId", data.partnerId.toString());
+          setPartnerId(data.partnerId);
+        } else {
+          console.warn("partnerId não retornado no login.");
+        }
 
         console.log("userId:", data.userId, "partnerId:", data.partnerId);
 

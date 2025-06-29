@@ -13,9 +13,10 @@ interface HeaderIcon {
 
 interface HeaderProps {
   icons: HeaderIcon[];
+  back?: boolean; // Torna opcional
 }
 
-const Header: React.FC<HeaderProps> = ({ icons }) => {
+const Header: React.FC<HeaderProps> = ({ icons, back }) => {
   const navigation = useNavigation<HomeNavigationProp>();
 
   const handleIconPress = (icon: HeaderIcon) => {
@@ -33,6 +34,10 @@ const Header: React.FC<HeaderProps> = ({ icons }) => {
     });
   };
 
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
   return (
     <LinearGradient
       colors={["#e41d69", "#fe8277"]}
@@ -41,20 +46,35 @@ const Header: React.FC<HeaderProps> = ({ icons }) => {
       style={HeaderStyles.header}
     >
       <View style={HeaderStyles.headerContent}>
-        <TouchableOpacity onPress={handleLogoPress}>
-          <Text style={HeaderStyles.logo}>LoveYou</Text>
-        </TouchableOpacity>
-
-        <View style={HeaderStyles.icons}>
-          {icons.map((iconItem, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => handleIconPress(iconItem)}
-            >
-              <Image source={iconItem.icon} style={HeaderStyles.icon} />
+        {back ? (
+          <View style={HeaderStyles.headerContent}>
+            <TouchableOpacity onPress={handleLogoPress}>
+              <Text style={HeaderStyles.logo}>LoveYou</Text>
             </TouchableOpacity>
-          ))}
-        </View>
+            <TouchableOpacity onPress={handleGoBack}>
+              <Text style={HeaderStyles.backText}>Voltar</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View>
+            <TouchableOpacity onPress={handleLogoPress}>
+              <Text style={HeaderStyles.logo}>LoveYou</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {!back && (
+          <View style={HeaderStyles.icons}>
+            {icons.map((iconItem, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleIconPress(iconItem)}
+              >
+                <Image source={iconItem.icon} style={HeaderStyles.icon} />
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </View>
     </LinearGradient>
   );
