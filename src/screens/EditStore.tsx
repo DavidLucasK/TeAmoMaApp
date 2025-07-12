@@ -133,7 +133,6 @@ const EditStore: React.FC = () => {
         <Text style={EditStoreStyles.plus}>Criar novo item</Text>
       </TouchableOpacity>
       <ScrollView
-        style={EditStoreStyles.storeSection}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -142,32 +141,60 @@ const EditStore: React.FC = () => {
         <View style={EditStoreStyles.bordaBottom}></View>
         {loading ? (
           <View>
-            <Image
-              style={EditStoreStyles.iconTrash}
-              source={require("./assets/trash.png")}
-            />
+            <View style={EditStoreStyles.iconsContainer}>
+              <TouchableOpacity>
+                <Image
+                  style={EditStoreStyles.iconTrash}
+                  source={require("./assets/editing.png")}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Image
+                  style={EditStoreStyles.iconTrash}
+                  source={require("./assets/trash.png")}
+                />
+              </TouchableOpacity>
+            </View>
             <Shimmer style={EditStoreStyles.textSkeleton} />
-            <View style={EditStoreStyles.leftSide}>
+            <View>
               <Shimmer style={EditStoreStyles.imagePlaceholder} />
             </View>
           </View>
         ) : Array.isArray(items) && items.length > 0 ? (
           items.map((item) => (
             <View key={item.id}>
-              <TouchableOpacity onPress={() => confirmDelete(item.id)}>
-                <Image
-                  style={EditStoreStyles.iconTrash}
-                  source={require("./assets/trash.png")}
-                />
-              </TouchableOpacity>
+              <View style={EditStoreStyles.iconsContainer}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("EditItemStore", {
+                      id: item.id,
+                      title: item.title,
+                      description: item.description,
+                      points: item.points,
+                      imageUrl: item.imageUrl,
+                    })
+                  }
+                >
+                  <Image
+                    style={EditStoreStyles.iconTrash}
+                    source={require("./assets/editing.png")}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => confirmDelete(item.id)}>
+                  <Image
+                    style={EditStoreStyles.iconTrash}
+                    source={require("./assets/trash.png")}
+                  />
+                </TouchableOpacity>
+              </View>
               <Text style={EditStoreStyles.itemTitle}>{item.title}</Text>
-              <View style={EditStoreStyles.leftSide}>
+              <View>
                 <Image
                   source={{ uri: item.imageUrl }}
                   style={EditStoreStyles.itemImage}
                 />
               </View>
-              <View style={EditStoreStyles.rightSide}>
+              <View>
                 <Text style={EditStoreStyles.itemDescription}>
                   {item.description}
                 </Text>

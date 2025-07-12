@@ -3,7 +3,7 @@ import { StyleSheet, Platform } from "react-native";
 const HeaderStyles = StyleSheet.create({
   header: {
     display: "flex",
-    height: 150,
+    height: 120,
     justifyContent: "center",
     alignItems: "center",
     paddingTop: 20,
@@ -32,7 +32,7 @@ const HeaderStyles = StyleSheet.create({
   backText: {
     fontFamily: "Poppins_700Bold",
     color: "white",
-    fontSize: 14,
+    fontSize: 18,
     marginRight: 20,
   },
 });

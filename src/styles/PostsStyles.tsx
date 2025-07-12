@@ -1,14 +1,26 @@
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+
+const clamp = (min: number, preferred: number, max: number) => {
+  return Math.min(Math.max(preferred, min), max);
+};
+
+const scaleWidth = (value: number) => (screenWidth / 375) * value;
+const scaleHeight = (value: number) => (screenHeight / 812) * value;
+
+const smallFont = clamp(12, screenWidth * 0.035, 16);
+const mediumFont = clamp(16, screenWidth * 0.045, 20);
+const largeFont = clamp(20, screenWidth * 0.055, 28);
 
 const PostsStyles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFF",
   },
   main: {
-    width: "100%",
-    height: "100%",
-    textAlign: "center",
-    paddingHorizontal: 5,
+    flex: 1,
+    paddingHorizontal: scaleWidth(10),
   },
   scrollContainer: {
     flexGrow: 1,
@@ -16,141 +28,122 @@ const PostsStyles = StyleSheet.create({
   },
   postsContainer: {
     width: "100%",
-    height: "100%",
-    display: "flex",
-    paddingHorizontal: "5%",
-    marginBottom: 120,
-    borderRadius: 30,
-    paddingBottom: 100,
+    paddingHorizontal: scaleWidth(15),
+    paddingBottom: scaleHeight(10),
+    marginBottom: scaleHeight(120),
+    borderRadius: scaleWidth(20),
     backgroundColor: "#FFF",
     overflow: "hidden",
   },
   plusBtn: {
-    display: "flex",
-    height: 40,
-    marginTop: 25,
-    marginBottom: 25,
+    height: scaleHeight(40),
+    marginVertical: scaleHeight(25),
+    alignItems: "center",
+    justifyContent: "center",
   },
   plus: {
     width: "100%",
     height: "100%",
-    alignSelf: "center",
-    marginBottom: 0,
-    paddingBottom: 0,
     resizeMode: "contain",
   },
   post: {
-    marginTop: 24,
+    marginTop: scaleHeight(24),
     alignSelf: "center",
   },
   user: {
     fontFamily: "Poppins_700Bold",
-    fontSize: 20,
+    fontSize: largeFont,
     color: "#ff0055",
-    marginBottom: -10,
+    marginBottom: scaleHeight(-10),
   },
   usernameDesc: {
     fontFamily: "Poppins_700Bold",
-    fontSize: 14,
+    fontSize: mediumFont,
     color: "#ff0055",
   },
   imageContainer: {
-    minWidth: 285,
-    minHeight: 405, // Ajuste conforme necessário
-    maxWidth: 285,
-    maxHeight: 405, // Ajuste conforme necessário
-    marginBottom: 16,
+    width: scaleWidth(285),
+    height: scaleHeight(405),
+    marginBottom: scaleHeight(16),
     backgroundColor: "#000",
-    overflow: "hidden", // Garante que o conteúdo não ultrapasse o contêiner
-    borderWidth: 0,
-    borderColor: "#000", // Cor da borda
-    borderRadius: 10,
+    borderRadius: scaleWidth(10),
+    overflow: "hidden",
   },
   imagePost: {
     width: "100%",
     height: "100%",
-    resizeMode: "contain", // Usa o
+    resizeMode: "contain",
   },
   textBottom: {
     fontFamily: "Poppins_500Medium",
+    fontSize: mediumFont,
     color: "#363636",
     textAlign: "left",
-    maxWidth: 285,
-    marginBottom: 5,
+    maxWidth: scaleWidth(285),
+    marginBottom: scaleHeight(5),
   },
   tempo: {
     fontFamily: "Poppins_500Medium",
-    fontSize: 12,
+    fontSize: smallFont,
     color: "#585858",
   },
   bordaBottom: {
-    borderBlockColor: "#ddd",
     borderBottomWidth: 1,
-    marginTop: 20,
+    borderColor: "#ddd",
+    marginTop: scaleHeight(20),
   },
-  loadingImage: {},
   noPostsText: {
     fontFamily: "Poppins_500Medium",
+    fontSize: mediumFont,
     textAlign: "center",
-    fontSize: 16,
-    paddingTop: 200,
-    paddingBottom: 300,
+    paddingTop: scaleHeight(200),
+    paddingBottom: scaleHeight(300),
     color: "#585858",
-  },
-  iconCam: {
-    backgroundColor: "red",
-    width: "100%",
-  },
-  loadingIcon: {
-    marginTop: 50,
   },
   usernameComments: {
     fontFamily: "Poppins_700Bold",
-    fontSize: 12,
+    fontSize: smallFont,
     color: "#ff0055",
   },
   commentContainer: {
-    maxWidth: 285,
+    maxWidth: scaleWidth(285),
   },
   comments: {
     fontFamily: "Poppins_400Regular",
-    fontSize: 11,
+    fontSize: smallFont,
   },
   addComments: {
     fontFamily: "Poppins_500Medium",
+    fontSize: mediumFont,
     color: "#afafaf",
-    fontSize: 14,
-    marginVertical: 12,
+    marginVertical: scaleHeight(12),
   },
   seeAllComments: {
     fontFamily: "Poppins_400Regular",
+    fontSize: mediumFont,
     color: "#afafaf",
-    fontSize: 14,
-    marginVertical: 4,
+    marginVertical: scaleHeight(4),
   },
   publicarbtn: {
     fontFamily: "Poppins_600SemiBold",
+    fontSize: mediumFont,
     color: "#ff0055",
-    fontSize: 16,
   },
   iconsContainer: {
-    display: "flex",
-    flexDirection: "row", // Organiza os ícones na horizontal
-    alignItems: "center", // Alinha os ícones verticalmente no centro
-    justifyContent: "flex-start", // Alinha os ícones no início da container
-    maxHeight: 50,
-    gap: 10,
-    marginLeft: -3,
-    marginBottom: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    gap: scaleWidth(10),
+    marginBottom: scaleHeight(10),
   },
   heartIcon: {
-    width: 40,
-    height: 40,
+    width: scaleWidth(40),
+    height: scaleWidth(40),
     resizeMode: "contain",
   },
   commentIcon: {
-    width: 40,
-    height: 40,
+    width: scaleWidth(40),
+    height: scaleWidth(40),
     resizeMode: "contain",
   },
   footer: {

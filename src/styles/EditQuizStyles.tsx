@@ -69,7 +69,7 @@ const EditQuizStyles = StyleSheet.create({
     elevation: 2,
   },
   questionText: {
-    fontSize: smallFont,
+    fontSize: mediumFont / 1.2,
     fontFamily: "Poppins_600SemiBold",
     color: "#333",
     marginVertical: scaleHeight(20),
@@ -83,6 +83,77 @@ const EditQuizStyles = StyleSheet.create({
   icon: {
     width: scaleWidth(20),
     height: scaleWidth(20),
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.459)", // Fundo do modal
+  },
+  modalContent: {
+    width: "80%",
+    backgroundColor: "#343a40",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+  modalConfirmationContent: {
+    width: "100%",
+    height: "90%",
+    marginTop: 120,
+    backgroundColor: "#343a40",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: "Poppins_600SemiBold",
+    marginBottom: 20,
+    color: "#FFF",
+    textAlign: "center",
+  },
+  modalTitleTime: {
+    fontSize: 28,
+    fontFamily: "Poppins_600SemiBold",
+    marginBottom: 20,
+    color: "#FFF",
+    textAlign: "center",
+  },
+  modalSubTitle: {
+    fontSize: 16,
+    fontFamily: "Poppins_500Medium",
+    marginBottom: 20,
+    color: "#FFF",
+    textAlign: "center",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  buttonCancel: {
+    backgroundColor: "#606c77",
+    fontFamily: "Poppins_600SemiBold",
+    padding: 10,
+    borderRadius: 5,
+    width: "48%",
+    alignItems: "center",
+  },
+  buttonConfirm: {
+    backgroundColor: "#e41d69",
+    fontFamily: "Poppins_600SemiBold",
+    padding: 10,
+    borderRadius: 5,
+    width: "48%",
+    alignItems: "center",
+  },
+  buttonText1: {
+    color: "white",
+    fontFamily: "Poppins_600SemiBold",
+    textAlign: "center",
   },
 });
 
